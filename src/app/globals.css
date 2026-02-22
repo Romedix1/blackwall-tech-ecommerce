@@ -20,11 +20,21 @@
   --color-warning: #f59e0b;
 
   --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
+
+  --text-20: 20px;
 }
 
 @layer base {
   body {
     @apply bg-background text-text-main font-mono;
     background-color: #09090b;
+  }
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before {
+    border-color: var(--color-border);
   }
 }
