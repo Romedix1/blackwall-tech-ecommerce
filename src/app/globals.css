@@ -52,6 +52,7 @@
 
 :root {
   --radius: 0.625rem;
+  --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
 }
 
 @layer base {
