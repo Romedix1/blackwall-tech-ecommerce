@@ -1,17 +1,27 @@
 import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 
 type SearchInputProps = {
   variant?: 'default' | 'navigation'
+  inputClassName?: string
+  containerClassName?: string
 }
 
-export default function SearchInput({ variant = 'default' }: SearchInputProps) {
+export default function SearchInput({
+  variant = 'default',
+  inputClassName,
+  containerClassName,
+}: SearchInputProps) {
   return (
-    <div className="relative hidden w-100 lg:block">
+    <div className={cn('relative hidden w-100 lg:block', containerClassName)}>
       <div className="relative">
         <Input
           placeholder=" "
           aria-label="Search in database"
-          className="peer bg-surface caret-accent h-10 rounded-none border py-2.5 pr-26 pl-4 text-sm placeholder-shown:caret-transparent focus-visible:ring-0"
+          className={cn(
+            'peer bg-surface caret-accent h-10 rounded-none border py-2.5 pr-26 pl-4 text-sm placeholder-shown:caret-transparent focus-visible:ring-0',
+            inputClassName,
+          )}
         />
 
         <div
