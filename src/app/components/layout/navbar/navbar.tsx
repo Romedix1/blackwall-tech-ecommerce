@@ -1,7 +1,8 @@
 import { NavbarSearch } from '@/app/components/layout/navbar/navbar-search'
 import { NavbarLogo } from './navbar-logo'
 import { NavbarActions } from '@/app/components/layout/navbar/navbar-actions'
-import { Search } from 'lucide-react'
+import { MobileSearchTrigger } from '@/app/components/layout/navbar/mobile-search-trigger'
+import { MobileMenuShell } from '@/app/components/layout/navbar/mobile-menu-shell'
 
 export const Navbar = () => {
   return (
@@ -14,18 +15,15 @@ export const Navbar = () => {
         <div className="flex w-full justify-end lg:justify-center">
           <NavbarSearch variant="navigation" />
 
-          <button className="terminal-hover lg:hidden">
-            <Search
-              aria-label="Open search"
-              className="h-5 w-5 sm:h-6 sm:w-6"
-            />
-          </button>
+          <MobileSearchTrigger />
         </div>
       </div>
 
       <div className="ml-3 flex justify-end lg:ml-0 lg:flex-1">
         <NavbarActions />
       </div>
+
+      <MobileMenuShell />
     </nav>
   )
 }

@@ -1,11 +1,10 @@
 'use client'
 
-import { MobileMenu } from '@/app/components/layout/navbar/navbar-mobile-menu'
+import { useMobileMenu } from '@/hooks/use-mobile-menu'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
 
 export const NavbarHamburgerMenu = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const { isOpen, toggle } = useMobileMenu()
 
   const colorStyle =
     'bg-text-main group-focus:bg-background group-hover:bg-background'
@@ -13,7 +12,7 @@ export const NavbarHamburgerMenu = () => {
   return (
     <>
       <button
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={toggle}
         className="group terminal-hover flex h-7 w-7 flex-col items-center justify-center"
       >
         <div
@@ -40,8 +39,6 @@ export const NavbarHamburgerMenu = () => {
           )}
         />
       </button>
-
-      {isOpen && <MobileMenu />}
     </>
   )
 }

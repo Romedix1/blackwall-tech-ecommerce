@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import {
+  findByLabelText,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { NavbarSearch } from '@/app/components/layout/navbar/navbar-search'
 import { Navbar } from '@/app/components/layout/navbar/navbar'
@@ -23,10 +30,10 @@ describe('Search Functionality', () => {
     const searchIcon = screen.getByLabelText('Open search')
     fireEvent.click(searchIcon)
 
-    const mobileMenu = screen.getByTestId('mobile-menu')
+    const mobileMenu = await screen.findByTestId('mobile-menu')
 
-    const { getByLabelText } = within(mobileMenu)
-    const mobileInput = getByLabelText('Search in database')
+    const { findByLabelText } = within(mobileMenu)
+    const mobileInput = await findByLabelText('Search in database')
 
     await waitFor(() => {
       expect(mobileInput).toHaveFocus()
