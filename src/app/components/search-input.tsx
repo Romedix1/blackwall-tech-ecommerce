@@ -8,6 +8,7 @@ type SearchInputProps = {
   inputClassName?: string
   containerClassName?: string
   id?: string
+  ariaLabel: string
 }
 
 export const SearchInput = ({
@@ -16,6 +17,7 @@ export const SearchInput = ({
   inputClassName,
   containerClassName,
   id: customId,
+  ariaLabel,
 }: SearchInputProps) => {
   const generateId = useId()
   const id = customId || generateId
@@ -28,7 +30,7 @@ export const SearchInput = ({
           ref={ref}
           type="search"
           placeholder=" "
-          aria-label="Search in database"
+          aria-label={ariaLabel}
           className={cn(
             'peer bg-surface caret-accent h-10 rounded-none border py-2.5 pr-26 pl-4 text-sm placeholder-shown:caret-transparent focus-visible:ring-0 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none',
             inputClassName,

@@ -5,9 +5,15 @@ import { Separator } from '@/components/ui/separator'
 
 export const MobileMenu = () => {
   return (
-    <div className="bg-background w fixed top-15 left-0 h-screen w-screen origin-top transition-transform duration-150 ease-linear lg:hidden">
+    <div
+      data-testid="mobile-menu"
+      className="bg-background w fixed top-15 left-0 h-screen w-screen origin-top transition-transform duration-150 ease-linear lg:hidden"
+    >
       <div className="flex w-full flex-col px-2 py-4">
-        <SearchInput containerClassName="w-full mb-2" />
+        <SearchInput
+          ariaLabel="Search in database"
+          containerClassName="w-full mb-2"
+        />
 
         <MobileSessionInfo />
 

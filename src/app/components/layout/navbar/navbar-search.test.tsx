@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { NavbarSearch } from '@/app/components/layout/navbar/navbar-search'
+import { Navbar } from '@/app/components/layout/navbar/navbar'
 
-describe('NavbarSearch Shortcut', () => {
+describe('Search Functionality', () => {
   it('should focus the input field when Ctrl+K is pressed', async () => {
     render(<NavbarSearch variant="navigation" />)
 
@@ -14,5 +15,21 @@ describe('NavbarSearch Shortcut', () => {
     fireEvent.keyDown(window, { key: 'k', ctrlKey: true })
 
     expect(searchInput).toHaveFocus()
+  })
+
+  it('should open mobile menu and focus input when search icon is clicked', async () => {
+    render(<Navbar />)
+
+    const searchIcon = screen.getByLabelText('Open search')
+    fireEvent.click(searchIcon)
+
+    const mobileMenu = screen.getByTestId('mobile-menu')
+
+    const { getByLabelText } = within(mobileMenu)
+    const mobileInput = getByLabelText('Search in database')
+
+    await waitFor(() => {
+      expect(mobileInput).toHaveFocus()
+    })
   })
 })

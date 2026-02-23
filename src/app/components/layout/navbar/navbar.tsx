@@ -15,7 +15,10 @@ export const Navbar = () => {
           <NavbarSearch variant="navigation" />
 
           <button className="terminal-hover lg:hidden">
-            <Search className="h-5 w-5 sm:h-6 sm:w-6" />
+            <Search
+              aria-label="Open search"
+              className="h-5 w-5 sm:h-6 sm:w-6"
+            />
           </button>
         </div>
       </div>
