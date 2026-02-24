@@ -12,6 +12,9 @@ export const NavbarHamburgerMenu = () => {
   return (
     <>
       <button
+        aria-expanded={isOpen}
+        aria-controls="mobile-menu"
+        aria-label={isOpen ? 'Close menu' : 'Open menu'}
         onClick={toggle}
         className="group terminal-hover flex h-7 w-7 flex-col items-center justify-center"
       >
