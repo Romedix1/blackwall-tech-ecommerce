@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(robotoMono.variable, 'antialiased')}>
         <Navbar />
-        {children}
+        <main className="px-4 xl:px-20">{children}</main>
       </body>
     </html>
   )

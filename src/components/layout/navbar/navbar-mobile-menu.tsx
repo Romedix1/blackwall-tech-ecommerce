@@ -2,8 +2,8 @@
 
 import { MobileNavLinks } from '@/components/layout/navbar/mobile-nav-links'
 import { MobileSessionInfo } from '@/components/layout/navbar/mobile-session-info'
-import { SearchInput } from '@/components/shared/search-input'
-import { Separator } from '@/components/ui/separator'
+import { SearchInput } from '@/components/shared'
+import { Separator } from '@/components/ui'
 import { useMobileMenu } from '@/hooks/use-mobile-menu'
 import { useEffect, useRef } from 'react'
 

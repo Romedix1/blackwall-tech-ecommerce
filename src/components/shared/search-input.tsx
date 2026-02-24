@@ -1,4 +1,4 @@
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { RefObject, useId } from 'react'
 

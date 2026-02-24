@@ -1,3 +1,9 @@
+import { Hero } from '@/app/_components'
+
 export default function Home() {
-  return <div className=""></div>
+  return (
+    <div className="">
+      <Hero />
+    </div>
+  )
 }

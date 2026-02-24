@@ -1,5 +1,5 @@
-import { LogOutButton } from '@/components/shared/log-out'
-import { Separator } from '@/components/ui/separator'
+import { LogOutButton } from '@/components/shared'
+import { Separator } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
