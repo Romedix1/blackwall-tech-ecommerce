@@ -51,6 +51,46 @@
 
   --animate-blink: blink 1.2s step-start infinite;
   --animate-glitch: glitch 1.2s both infinite;
+  --animate-logo: logo 1.2s both infinite;
+
+  @keyframes logo {
+    0%,
+    60%,
+    100% {
+      opacity: 1;
+      transform: translate(0, 0) skew(0deg);
+      text-shadow: none;
+    }
+    61% {
+      opacity: 0.8;
+      transform: translate(-3px, 2px) skewX(15deg);
+      text-shadow: 2px 0 #ef4444;
+    }
+    62% {
+      opacity: 1;
+      transform: translate(0, 0) skew(0deg);
+      text-shadow: none;
+    }
+    65% {
+      opacity: 0.5;
+      transform: translate(4px, -1px) skewX(-20deg);
+      text-shadow: -2px 0 #10b981;
+    }
+    66% {
+      opacity: 0.1;
+      transform: translate(0, 0);
+    }
+    67% {
+      opacity: 1;
+      transform: translate(-1px, -1px);
+      text-shadow:
+        1px 1px #ef4444,
+        -1px -1px #10b981;
+    }
+    90% {
+      transform: translate(1px, 1px) skewX(5deg);
+    }
+  }
 
   @keyframes blink {
     0%,
