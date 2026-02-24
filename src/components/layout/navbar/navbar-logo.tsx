@@ -10,7 +10,7 @@ export const NavbarLogo = () => {
       <span aria-hidden="true">
         Blackwall_
         <span className="text-accent group-hover:text-error-text group-focus:text-error-text">
-          store
+          tech
         </span>
       </span>
     </Link>
