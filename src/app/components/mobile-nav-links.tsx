@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export const MobileNavLinks = () => {
   const linkStyle =
-    'terminal-hover w-full px-2 py-1.5 outline-none uppercase group'
+    'terminal-hover w-full px-2 py-1.5 outline-none uppercase group active:bg-primary-active'
 
   return (
     <div className="mt-2 flex w-full flex-col gap-2">

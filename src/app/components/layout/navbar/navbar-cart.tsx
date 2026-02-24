@@ -5,7 +5,7 @@ export const NavbarCart = () => {
   return (
     <button
       className={cn(
-        'terminal-hover group flex items-center gap-2 lg:px-2 lg:py-1.5',
+        'terminal-hover group active:bg-primary-active flex cursor-pointer items-center gap-2 lg:px-2 lg:py-1.5',
       )}
     >
       <ShoppingCart className="h-5 w-5 shrink-0 sm:h-6 sm:w-6" />
