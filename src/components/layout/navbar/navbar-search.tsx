@@ -1,7 +1,6 @@
 'use client'
 
-import { SearchInput } from '@/components/shared/search-input'
-import { Search } from 'lucide-react'
+import { SearchInput } from '@/components/shared'
 import { useEffect, useRef } from 'react'
 
 type NavbarSearchProps = {

@@ -49,9 +49,11 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
 
-  --animate-blink: blink 1.2s step-start infinite;
+  --animate-blink: blink var(--blink-speed, 1.2s) step-start infinite;
   --animate-glitch: glitch 1.2s both infinite;
   --animate-logo: logo 1.2s both infinite;
+  --animate-typing: typing 2.4s steps(20, end) forwards;
+  --animate-hide-cursor: hide-cursor 0s forwards 4.2s;
 
   @keyframes logo {
     0%,
@@ -89,6 +91,23 @@
     }
     90% {
       transform: translate(1px, 1px) skewX(5deg);
+    }
+  }
+
+  @keyframes hide-cursor {
+    to {
+      opacity: 0;
+      visibility: hidden;
+      width: 0;
+    }
+  }
+
+  @keyframes typing {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
     }
   }
 
