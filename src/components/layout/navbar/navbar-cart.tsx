@@ -10,9 +10,7 @@ export const NavbarCart = () => {
     >
       <ShoppingCart className="h-5 w-5 shrink-0 sm:h-6 sm:w-6" />
 
-      <span className="font-mono text-[12px] font-bold sm:text-base">
-        [ 02 ]
-      </span>
+      <span className="font-mono text-xs font-bold sm:text-base">[ 02 ]</span>
       <span className="sr-only">Cart: 2 items</span>
     </button>
   )

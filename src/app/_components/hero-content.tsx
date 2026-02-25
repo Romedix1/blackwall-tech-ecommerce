@@ -23,7 +23,7 @@ export const HeroContent = () => {
         <h1 className="text-4xl font-bold tracking-[-4%] uppercase xl:text-[72px]">
           The apex of performance
         </h1>
-        <p className="text-text-second xl:text-20 text-[16px] leading-[160%] font-bold">
+        <p className="text-text-second text-[16px] leading-[160%] font-bold xl:text-xl">
           Precision engineered. Performance unleashed. Step into the next
           generation of hardware with the {"industry's"} leading graphics
           architecture, optimized for elite enthusiasts and creators.
