@@ -22,7 +22,7 @@ const ProductShadow = ({ className }: ProductShadowProps) => {
   )
 }
 
-export const CategoriesGrid = () => {
+export const CategoriesContainer = () => {
   const cardImageClass = 'z-30 absolute -right-[20%] xl:w-[650px] -bottom-[4%]'
 
   const CATEGORIES_CARDS = [
@@ -39,7 +39,7 @@ export const CategoriesGrid = () => {
             height={1200}
             sizes="(max-width: 1024px) 100vw, 1200px"
             priority
-            quality={95}
+            quality={80}
           />
           <BackgroundGlow className="bg-accent/30 top-[65%] left-[70%] h-[60%] w-[90%] rotate-20 blur-2xl group-hover:scale-125 group-focus:scale-125 lg:blur-[180px]" />
           <ProductShadow className="absolute top-[60%] left-[40%] z-20 h-[20%] w-[70%] rotate-24 lg:top-[60%] lg:rotate-26" />
@@ -62,7 +62,7 @@ export const CategoriesGrid = () => {
             height={1500}
             sizes="(max-width: 1024px) 100vw, 1500px"
             priority
-            quality={100}
+            quality={80}
           />
 
           <BackgroundGlow className="bg-accent/30 top-[80%] left-[60%] h-[70%] w-[95%] rotate-152 blur-2xl group-hover:scale-125 group-focus:scale-125 lg:top-[170%] lg:left-[60%] lg:h-[90%] lg:w-[130%] lg:rotate-155 xl:blur-[180px]" />
@@ -82,7 +82,7 @@ export const CategoriesGrid = () => {
             width={1200}
             height={1000}
             sizes="(max-width: 1024px) 100vw, 600px"
-            quality={90}
+            quality={80}
           />
 
           <BackgroundGlow className="bg-accent/30 top-[80%] left-[60%] h-[70%] w-[95%] rotate-152 blur-2xl group-hover:scale-125 group-focus:scale-125 xl:blur-[180px]" />
@@ -104,7 +104,7 @@ export const CategoriesGrid = () => {
             width={1200}
             height={1000}
             sizes="(max-width: 1024px) 100vw, 600px"
-            quality={90}
+            quality={80}
           />
 
           <BackgroundGlow className="bg-accent/30 top-[90%] left-[75%] h-[70%] w-[95%] rotate-152 blur-2xl group-hover:scale-125 group-focus:scale-125 xl:blur-[180px]" />

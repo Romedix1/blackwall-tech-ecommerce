@@ -16,7 +16,7 @@ export const HeroImage = () => {
           height={1200}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 1200px, 1600px"
           priority
-          quality={100}
+          quality={80}
         />
       </div>
     </div>
