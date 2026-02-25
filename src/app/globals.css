@@ -24,7 +24,6 @@
   --color-warning: #f59e0b;
 
   --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
-  --text-20: 20px;
 
   --color-foreground: var(--color-text-main);
   --color-card: var(--color-surface);

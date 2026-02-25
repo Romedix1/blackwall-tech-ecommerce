@@ -4,7 +4,7 @@ import GraphicCard from '@public/hero/graphic-card.png'
 
 export const HeroImage = () => {
   return (
-    <div className="relative mt-8 w-[500px]">
+    <div className="relative mt-8 w-125">
       <BackgroundGlow className="xl:h-72 xl:w-72 xl:-translate-y-2/6" />
 
       <div className="flex w-full justify-center xl:w-137.5">
