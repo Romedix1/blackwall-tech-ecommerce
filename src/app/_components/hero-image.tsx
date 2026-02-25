@@ -11,7 +11,12 @@ export const HeroImage = () => {
         <Image
           src={GraphicCard}
           alt="Graphic card"
-          className="relative z-20 sm:w-100 md:w-lg lg:w-102 xl:w-xl"
+          className="relative z-20 w-full scale-130 sm:w-100 md:w-lg lg:w-full xl:w-xl 2xl:scale-140"
+          width={1600}
+          height={1200}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 1200px, 1600px"
+          priority
+          quality={100}
         />
       </div>
     </div>
