@@ -11,7 +11,7 @@ export const BuildPcImage = () => {
   const { ref, isVisible } = useIsVisible()
 
   return (
-    <div className="relative mx-auto w-fit lg:mx-0">
+    <div ref={ref} className="relative mx-auto w-fit lg:mx-0">
       <Image
         alt="Computer visualization"
         className="relative z-20 block h-auto w-[288px] sm:w-137.5 lg:w-100 2xl:w-140"
@@ -48,10 +48,7 @@ export const BuildPcImage = () => {
         rotateToLeft={true}
       />
 
-      <div
-        ref={ref}
-        className="w-full px-4 py-3 text-right text-[10px] sm:text-sm 2xl:text-base"
-      >
+      <div className="w-full px-4 py-3 text-right text-[10px] sm:text-sm 2xl:text-base">
         <p className="uppercase">
           <span aria-hidden="true" className="text-text-second">
             {'// '}System_status: <span className="text-accent">Nominal</span>
