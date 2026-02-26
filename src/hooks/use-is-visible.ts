@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 
-export const useIsVisible = (options = { threshold: 0.2 }) => {
+export const useIsVisible = (options = { threshold: 1 }) => {
   const [isVisible, setIsVisible] = useState(false)
   const ref = useRef(null)
 
