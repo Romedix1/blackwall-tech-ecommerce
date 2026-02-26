@@ -124,8 +124,7 @@ export const CategoriesContainer = () => {
             className={category.className}
             key={`category-card-${index}`}
             index={index + 1}
-            name={category.name}
-            image={category.image}
+            category={category}
           />
         )
       })}

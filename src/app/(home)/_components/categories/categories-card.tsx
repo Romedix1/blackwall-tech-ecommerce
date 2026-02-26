@@ -2,18 +2,21 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 
+type CategoryType = {
+  name: string
+  image: ReactNode
+}
+
 type CategoriesCardProps = {
   index: number
   className?: string
-  name: string
-  image: ReactNode
+  category: CategoryType
 }
 
 export const CategoriesCard = ({
   index,
   className,
-  name,
-  image,
+  category,
 }: CategoriesCardProps) => {
   return (
     <Link
@@ -32,7 +35,7 @@ export const CategoriesCard = ({
             </p>
           </div>
           <h3 className="text-2xl font-bold uppercase xl:text-[32px]">
-            {name}
+            {category.name}
           </h3>
         </div>
 
@@ -41,7 +44,7 @@ export const CategoriesCard = ({
         </p>
       </div>
 
-      {image}
+      {category.image}
     </Link>
   )
 }
