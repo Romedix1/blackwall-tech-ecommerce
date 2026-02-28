@@ -3,8 +3,7 @@
 import { prisma } from '@/lib/prisma/prisma'
 import { RegisterSchema } from '@/lib/zod'
 import bcrypt from 'bcryptjs'
-import { redirect } from 'next/navigation'
-import { sendVerificationEmail } from '../../../api/send-confirmation-email/route'
+import { sendVerificationEmail } from '@/app/api/send-confirmation-email'
 
 type FormState =
   | {
