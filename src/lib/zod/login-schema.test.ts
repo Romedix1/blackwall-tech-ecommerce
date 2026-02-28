@@ -21,6 +21,10 @@ describe('Login schema', () => {
     const result = LoginSchema.safeParse(data)
 
     expect(result.success).toBe(false)
+
+    if (!result.success) {
+      expect(result.error.issues[0].message).toBe('Invalid email address')
+    }
   })
 
   it('should fail if password is empty', () => {
@@ -32,5 +36,9 @@ describe('Login schema', () => {
     const result = LoginSchema.safeParse(data)
 
     expect(result.success).toBe(false)
+
+    if (!result.success) {
+      expect(result.error.issues[0].message).toBe('Empty password')
+    }
   })
 })
