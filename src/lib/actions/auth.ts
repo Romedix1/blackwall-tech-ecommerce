@@ -106,7 +106,7 @@ export const LoginUser = async (
 
   if (!validatedData.success) {
     return {
-      error: 'Invalid data format',
+      error: validatedData.error.issues.map((issue) => issue.message),
       fields: rawData,
     }
   }
