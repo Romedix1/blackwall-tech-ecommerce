@@ -1,6 +1,10 @@
-import { TerminalInput } from '@/components/shared'
-import { Button } from '@/components/ui/button'
+'use client'
+
+import { ErrorText, TerminalInput } from '@/components/shared'
+import { Button } from '@/components/ui'
+import { RegisterUser } from '@/lib/actions'
 import Link from 'next/link'
+import { useActionState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { SiGmail } from 'react-icons/si'
 
@@ -23,9 +27,14 @@ const SOCIAL_PROVIDERS = [
 
 export const AuthForm = ({ mode }: AuthFormProps) => {
   const isLogin = mode === 'login'
+
+  const [state, formAction, isPending] = useActionState(RegisterUser, null)
   return (
     <section className="flex justify-center">
-      <form className="mt-16 flex w-full flex-col border p-6 uppercase md:my-40 md:w-150 md:p-10">
+      <form
+        action={formAction}
+        className="mt-16 flex w-full flex-col border p-6 uppercase md:my-40 md:w-150 md:p-10"
+      >
         <h1 className="mb-2 font-bold md:text-2xl">
           <span aria-hidden="true">
             <span className="whitespace-nowrap">
@@ -42,11 +51,11 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
         </h1>
         <p className="text-accent text-sm wrap-break-word md:text-base">
           <span aria-hidden="true" className="flex items-start break-all">
-            <span className="shrink-0">&gt; </span>
+            <span className="mr-2 shrink-0">&gt;</span>
             <span>
               {isLogin
                 ? `Waiting_for_credentials`
-                : 'Generating_new_encryption_keys...'}
+                : ' Generating_new_encryption_keys...'}
             </span>
           </span>
           <span className="sr-only">
@@ -59,6 +68,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
         <div className="my-8 flex flex-col gap-4">
           {!isLogin && (
             <TerminalInput
+              defaultValue={state?.fields?.username || ''}
               placeholder="Assign_callsign"
               type="text"
               name="username"
@@ -67,6 +77,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             />
           )}
           <TerminalInput
+            defaultValue={state?.fields?.email || ''}
             placeholder="Operative_id (Email)"
             type="email"
             name="email"
@@ -74,6 +85,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             ariaLabel="Insert email"
           />
           <TerminalInput
+            defaultValue={state?.fields?.password || ''}
             placeholder="Access_code: ******"
             type="password"
             name="password"
@@ -95,6 +107,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
           )}
           {!isLogin && (
             <TerminalInput
+              defaultValue={state?.fields?.confirmPassword || ''}
               placeholder="Verify_encryption"
               type="password"
               name="confirmPassword"
@@ -103,14 +116,28 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             />
           )}
         </div>
-        <Button type="submit">
+        <Button
+          disabled={isPending}
+          type="submit"
+          aria-label={isLogin ? 'login' : 'register'}
+        >
           <span aria-hidden="true">
             <span className="whitespace-nowrap">
-              [ {isLogin ? 'Initiate_uplink' : 'Generate_clearance'} ]
+              [{' '}
+              {isPending
+                ? 'Synchronizing... '
+                : isLogin
+                  ? 'Initiate_uplink'
+                  : 'Generate_clearance'}{' '}
+              ]
             </span>
           </span>
           <span className="sr-only">
-            {isLogin ? 'Log in to system' : 'Create account'}
+            {isPending
+              ? 'Processing request, please wait'
+              : isLogin
+                ? 'Log in to system'
+                : 'Create account'}
           </span>
         </Button>
 
@@ -136,6 +163,8 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             )
           })}
         </div>
+
+        {state?.error && <ErrorText text={state.error} />}
 
         <p className="text-text-second mt-6 text-sm sm:text-center md:mt-8">
           <span aria-hidden="true">
