@@ -3,7 +3,7 @@
 import { RegisterSuccess } from '@/app/(auth)/register/_components/register-success'
 import { ErrorText, TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
-import { RegisterUser } from '@/lib/actions'
+import { LoginUser, RegisterUser } from '@/lib/actions'
 import Link from 'next/link'
 import { useActionState } from 'react'
 import { FaGithub } from 'react-icons/fa'
@@ -29,7 +29,10 @@ const SOCIAL_PROVIDERS = [
 export const AuthForm = ({ mode }: AuthFormProps) => {
   const isLogin = mode === 'login'
 
-  const [state, formAction, isPending] = useActionState(RegisterUser, null)
+  const [state, formAction, isPending] = useActionState(
+    isLogin ? LoginUser : RegisterUser,
+    null,
+  )
 
   if (state?.success && state?.fields?.email) {
     return <RegisterSuccess email={state.fields.email} />

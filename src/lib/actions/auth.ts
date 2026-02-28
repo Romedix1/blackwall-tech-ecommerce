@@ -1,9 +1,12 @@
 'use server'
 
-import { prisma } from '@/lib/prisma/prisma'
+import { prisma } from '@/lib/prisma'
 import { RegisterSchema } from '@/lib/zod'
 import bcrypt from 'bcryptjs'
 import { sendVerificationEmail } from '@/app/api/send-confirmation-email'
+import { signIn } from '@/auth'
+import { LoginSchema } from '@/lib/zod/login-schema'
+import { AuthError } from 'next-auth'
 
 type FormState =
   | {
@@ -87,5 +90,59 @@ export const RegisterUser = async (
       console.error('[ Registration error ]:', error)
     }
     return { error: 'Protocol error: Registration failed', fields: rawData }
+  }
+}
+
+export const LoginUser = async (
+  prevState: FormState,
+  formData: FormData,
+): Promise<FormState> => {
+  const rawData = Object.fromEntries(formData.entries()) as Record<
+    string,
+    string
+  >
+
+  const validatedData = LoginSchema.safeParse(rawData)
+
+  if (!validatedData.success) {
+    return {
+      error: validatedData.error.issues.map((issue) => issue.message),
+      fields: rawData,
+    }
+  }
+
+  const { email, password } = validatedData.data
+  try {
+    await signIn('credentials', {
+      email,
+      password,
+      redirectTo: '/',
+    })
+
+    return { success: true, message: 'User logged in' }
+  } catch (error) {
+    if (error instanceof AuthError) {
+      if (error.type === 'CallbackRouteError') {
+        return {
+          error: 'Protocol error: email not verified',
+          fields: rawData,
+        }
+      }
+
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return {
+            error: 'Access denied: invalid credentials',
+            fields: rawData,
+          }
+        default:
+          return {
+            error: 'System failure: auth protocol error',
+            fields: rawData,
+          }
+      }
+    }
+
+    throw error
   }
 }
