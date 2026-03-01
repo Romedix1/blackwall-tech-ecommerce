@@ -28,7 +28,7 @@ describe('Login logic', () => {
     await user.type(emailInput, 'johny.silverhand@samurai.nc')
     await user.type(passwordInput, 'Samurai@2024')
 
-    user.click(submitButton)
+    await user.click(submitButton)
 
     expect(mockedLoginUser).toHaveBeenCalledTimes(1)
 
