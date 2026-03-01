@@ -41,12 +41,16 @@ export const RegisterUser = async (
     }
   }
 
-  const { username, email, password } = validatedData.data
+  const { username, email: rawEmail, password } = validatedData.data
+  const email = rawEmail.toLowerCase()
 
   try {
     const userExists = await prisma.user.findFirst({
       where: {
-        OR: [{ email: email }, { username: username }],
+        OR: [
+          { email: email },
+          { username: { equals: username, mode: 'insensitive' } },
+        ],
       },
     })
 
@@ -87,7 +91,7 @@ export const RegisterUser = async (
       })
 
       if (process.env.NODE_ENV === 'development') {
-        console.error('[ Registration error ]:', emailError)
+        console.error('[ SMTP error ]:', emailError)
       }
 
       return {
@@ -124,7 +128,9 @@ export const LoginUser = async (
     }
   }
 
-  const { email, password } = validatedData.data
+  const { email: rawEmail, password } = validatedData.data
+  const email = rawEmail.toLowerCase()
+
   try {
     await signIn('credentials', {
       email,

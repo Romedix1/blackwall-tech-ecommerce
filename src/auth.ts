@@ -18,7 +18,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return {
           id: profile.id.toString(),
           username: profile.name || profile.login,
-          email: profile.email,
+          email: profile.email?.toLowerCase(),
           role: 'user',
         }
       },
@@ -28,7 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return {
           id: profile.id.toString(),
           username: profile.name || profile.login,
-          email: profile.email,
+          email: profile.email.toLowerCase(),
           role: 'user',
         }
       },
@@ -39,7 +39,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (!validatedData.success) return null
 
-        const { email, password } = validatedData.data
+        const { email: rawEmail, password } = validatedData.data
+        const email = rawEmail.toLowerCase()
+
         const user = await prisma.user.findUnique({ where: { email } })
 
         if (!user || !user.password) return null
