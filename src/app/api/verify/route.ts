@@ -10,38 +10,47 @@ export async function GET(request: NextRequest) {
     redirect('/login?error=missing_token')
   }
 
-  let success = false
+  let redirectTo = ''
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { verificationToken: token },
+    const existingToken = await prisma.verificationToken.findUnique({
+      where: { token },
     })
 
-    if (!user) {
-      redirect('/login?error=invalid_token')
+    if (!existingToken) {
+      redirectTo = '/login?error=invalid_token'
+    } else if (new Date(existingToken.expires) < new Date()) {
+      redirectTo = '/login?error=token_expired'
+    } else {
+      const user = await prisma.user.findUnique({
+        where: { email: existingToken.identifier },
+      })
+
+      if (!user) {
+        redirectTo = '/login?error=user_not_found'
+      } else {
+        await prisma.$transaction([
+          prisma.user.update({
+            where: { id: user.id },
+            data: { emailVerified: new Date() },
+          }),
+          prisma.verificationToken.delete({
+            where: { id: existingToken.id },
+          }),
+        ])
+
+        redirectTo = '/'
+      }
     }
-
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        emailVerified: new Date(),
-        verificationToken: null,
-      },
-    })
-
-    success = true
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
       console.error('[ VERIFY_CRITICAL_ERROR ]:', error)
     }
-    redirect('/login?error=protocol_failure')
+    redirectTo = '/login?error=protocol_failure'
   }
 
-  if (success) {
-    redirect('/login')
-  } else {
-    redirect('/login?error=invalid_token')
-  }
+  redirect(redirectTo)
 }
 
 // TODO: ADD ALL ERRORS IN LOGIN PAGE
+// TODO: ADD EXPIRED TOKEN PAGE AND EMAIL RESEND

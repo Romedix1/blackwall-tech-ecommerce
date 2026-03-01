@@ -66,7 +66,16 @@ export const RegisterUser = async (
         username,
         email,
         password: hashedPassword,
-        verificationToken,
+      },
+    })
+
+    const expires = new Date(new Date().getTime() + 3600 * 12000)
+
+    await prisma.verificationToken.create({
+      data: {
+        identifier: email,
+        token: verificationToken,
+        expires: expires,
       },
     })
 
@@ -76,6 +85,10 @@ export const RegisterUser = async (
       await prisma.user.delete({
         where: { id: newUser.id },
       })
+
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[ Registration error ]:', emailError)
+      }
 
       return {
         error:

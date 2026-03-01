@@ -4,11 +4,15 @@ import { prisma } from '@/lib/prisma'
 import { LoginSchema } from '@/lib/zod/login-schema'
 import bcrypt from 'bcryptjs'
 import Credentials from 'next-auth/providers/credentials'
+import GitHub from 'next-auth/providers/github'
+import Google from 'next-auth/providers/google'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   providers: [
+    GitHub,
+    Google,
     Credentials({
       authorize: async (credentials) => {
         const validatedData = LoginSchema.safeParse(credentials)

@@ -1,6 +1,6 @@
 import { AuthForm } from '@/app/(auth)/_components'
 import { LoginUser } from '@/lib/actions'
-import { act, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 vi.mock('@/lib/actions/auth', () => ({

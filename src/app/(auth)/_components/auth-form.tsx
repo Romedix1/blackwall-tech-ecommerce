@@ -1,6 +1,7 @@
 'use client'
 
 import { RegisterSuccess } from '@/app/(auth)/register/_components/register-success'
+import { signIn } from 'next-auth/react'
 import { ErrorText, TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
 import { LoginUser, RegisterUser } from '@/lib/actions'
@@ -155,6 +156,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             const Icon = provider.icon
             return (
               <Button
+                onClick={() => signIn(provider.id, { redirectTo: '/' })}
                 key={provider.id}
                 variant="secondary"
                 type="button"
