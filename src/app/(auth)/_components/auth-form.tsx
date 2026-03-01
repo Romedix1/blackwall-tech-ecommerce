@@ -6,7 +6,7 @@ import { ErrorText, TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
 import { LoginUser, RegisterUser } from '@/lib/actions'
 import Link from 'next/link'
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { SiGmail } from 'react-icons/si'
 
@@ -28,12 +28,24 @@ const SOCIAL_PROVIDERS = [
 ]
 
 export const AuthForm = ({ mode }: AuthFormProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const isLogin = mode === 'login'
 
   const [state, formAction, isPending] = useActionState(
     isLogin ? LoginUser : RegisterUser,
     null,
   )
+
+  const handleLogin = async (provider: string) => {
+    setIsLoading(true)
+
+    try {
+      await signIn(provider, { redirectTo: '/' })
+    } catch (error) {
+      setIsLoading(false)
+    }
+  }
 
   if (state?.success && state?.fields?.email) {
     return <RegisterSuccess email={state.fields.email} />
@@ -156,8 +168,9 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             const Icon = provider.icon
             return (
               <Button
-                onClick={() => signIn(provider.id, { redirectTo: '/' })}
+                onClick={() => handleLogin(provider.id)}
                 key={provider.id}
+                disabled={isLoading}
                 variant="secondary"
                 type="button"
                 className="border-border flex h-auto flex-1 flex-col items-center gap-1 py-4"
