@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import {
-  findByLabelText,
   fireEvent,
   render,
   screen,
@@ -9,7 +8,14 @@ import {
 } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { NavbarSearch } from '@/components/layout/navbar/navbar-search'
-import { Navbar } from '@/components/layout/navbar/navbar'
+import { MobileSearchTrigger } from '@/components/layout/navbar/mobile-search-trigger'
+import { MobileMenuShell } from '@/components/layout/navbar/mobile-menu-shell'
+
+vi.mock('@/auth', () => ({
+  auth: vi.fn(),
+  signIn: vi.fn(),
+  signOut: vi.fn(),
+}))
 
 describe('Search Functionality', () => {
   it('should focus the input field when Ctrl+K is pressed', async () => {
@@ -25,7 +31,12 @@ describe('Search Functionality', () => {
   })
 
   it('should open mobile menu and focus input when search icon is clicked', async () => {
-    render(<Navbar />)
+    render(
+      <>
+        <MobileSearchTrigger />
+        <MobileMenuShell />
+      </>,
+    )
 
     const searchIcon = screen.getByLabelText('Open search')
     fireEvent.click(searchIcon)
