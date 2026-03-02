@@ -117,7 +117,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
           {isLogin && (
             <Link
               href="/forgot-password"
-              className="text-text-disabled hover:text-primary-hover focus:text-primary-hover self-end text-xs outline-none md:text-sm"
+              className="text-text-disabled text-hover self-end text-xs md:text-sm"
             >
               <span className="whitespace-nowrap" aria-hidden="true">
                 [ Recover_access_key ]
@@ -195,7 +195,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             &gt; {isLogin ? 'No_clearance' : 'Already_have_clearance'}?{' '}
             <span className="inline-block whitespace-nowrap">
               <Link
-                className="hover:text-primary-hover focus:text-primary-hover outline-none"
+                className="text-hover"
                 href={isLogin ? '/register' : '/login'}
               >
                 [ {isLogin ? 'Request_access' : 'Return_to_login'} ]
