@@ -39,7 +39,7 @@ export const CategoriesCard = ({
             </h3>
           </div>
 
-          <p className="text-accent text-sm font-medium uppercase">
+          <p className="text-accent text-right text-sm font-medium uppercase">
             <span aria-hidden="true">{'//'}</span> 44 items
           </p>
         </div>

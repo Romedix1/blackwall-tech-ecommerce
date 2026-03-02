@@ -1,4 +1,4 @@
-import { CategoriesContainer } from '@/app/(home)/_components/categories'
+import { CategoriesContainer } from '@/app/(home)/_components'
 import { Eyebrow } from '@/components/shared'
 
 export const CategoriesSection = () => {

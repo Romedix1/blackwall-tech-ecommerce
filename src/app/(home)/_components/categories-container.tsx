@@ -1,4 +1,4 @@
-import { CategoriesCard } from '@/app/(home)/_components/categories'
+import { CategoriesCard } from '@/app/(home)/_components/'
 import Image from 'next/image'
 import GraphicCard from '@public/hero/graphic-card.png'
 import KeyboardWithMouse from '@public/hero/keyboard-with-mouse.png'
