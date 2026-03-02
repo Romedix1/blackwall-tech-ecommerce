@@ -5,6 +5,7 @@ import { ReactNode } from 'react'
 type CategoryType = {
   name: string
   image: ReactNode
+  productCount: number
 }
 
 type CategoriesCardProps = {
@@ -40,7 +41,8 @@ export const CategoriesCard = ({
           </div>
 
           <p className="text-accent text-right text-sm font-medium uppercase">
-            <span aria-hidden="true">{'//'}</span> 44 items
+            <span aria-hidden="true">{'//'}</span> {category.productCount}{' '}
+            {category.productCount === 1 ? 'item' : 'items'}
           </p>
         </div>
 
