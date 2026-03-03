@@ -85,7 +85,7 @@ model Product {
   id            String   @id @default(uuid())
   name          String
   slug          String   @unique
-  image         String[]
+  badge         String?
   price         Float
   quantity      Int      @default(0)
   specification Json
