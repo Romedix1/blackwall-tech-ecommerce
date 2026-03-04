@@ -3,7 +3,7 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     name: 'GeForce RTX 5070 Windforce OC',
     slug: 'geforce-rtx-5070-wf-oc',
     badge: 'new gen',
-    price: 3499.0,
+    price: 649.0,
     quantity: 12,
     specification: [
       {
@@ -48,7 +48,7 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     name: 'GeForce RTX 4070 Super Dual',
     slug: 'geforce-rtx-4070-super',
     badge: 'stable',
-    price: 2849.0,
+    price: 599.0,
     quantity: 24,
     specification: [
       {
@@ -93,7 +93,7 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     name: 'GeForce RTX 4090 Phantom',
     slug: 'geforce-rtx-4090',
     badge: 'enthusiast',
-    price: 8999.0,
+    price: 1699.0,
     quantity: 5,
     specification: [
       {
@@ -138,7 +138,7 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     name: 'Radeon RX 7900 XTX Phantom Gaming',
     slug: 'radeon-rx-7900-xtx',
     badge: 'amd elite',
-    price: 4599.0,
+    price: 929.0,
     quantity: 9,
     specification: [
       {

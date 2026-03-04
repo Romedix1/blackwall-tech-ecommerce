@@ -89,7 +89,7 @@ model Product {
   price         Float
   quantity      Int      @default(0)
   specification Json
-  performance   Json
+  performance   Json?
   categoryId    String
   category      Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   createdAt     DateTime @default(now())
