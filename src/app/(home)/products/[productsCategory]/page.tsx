@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui'
 import { prisma } from '@/lib/prisma'
 import { mapUrlParamsToPrismaFilters } from '@/lib/filters'
 import { Prisma } from '../../../../../generated/prisma'
+import { SpecSection } from '@/types/specification'
 
 type SearchParamsType = Promise<{
   [key: string]: string | string[] | undefined
@@ -16,16 +17,6 @@ type SearchParamsType = Promise<{
 type PageProps = {
   params: Promise<{ productsCategory: string }>
   searchParams: SearchParamsType
-}
-
-type AttributeType = {
-  key: string
-  value: string
-}
-
-type SpecSection = {
-  label: string
-  attributes: AttributeType[]
 }
 
 type ProductSpecification = SpecSection[]
