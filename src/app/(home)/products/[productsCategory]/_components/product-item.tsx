@@ -1,3 +1,4 @@
+import { AddToCartButton } from '@/components/shared/add-to-cart-button'
 import { BackgroundGlow, Button } from '@/components/ui'
 import Image from 'next/image'
 
@@ -34,10 +35,8 @@ export const ProductItem = ({ product, category }: ProductItemProps) => {
         <h2 className="font-bold uppercase">{product.name}</h2>
         <p className="text-accent font-bold">$ {product.price.toFixed(2)}</p>
       </div>
-      <Button variant="primary">
-        <span aria-hidden="true">[ Add_to_cart ]</span>
-        <span className="sr-only">Add to cart</span>
-      </Button>
+
+      <AddToCartButton />
     </article>
   )
 }

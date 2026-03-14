@@ -1,3 +1,4 @@
+import { AddToCartButton } from '@/components/shared/add-to-cart-button'
 import { BackgroundGlow, Button } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { AttributeType, SpecSection } from '@/types'
@@ -75,10 +76,7 @@ export const BestSellersCard = ({ product }: BestSellersCardType) => {
             $ {Number(product.price).toFixed(2)}
           </p>
 
-          <Button variant="secondary">
-            <span aria-hidden="true">[ Add_to_cart ]</span>
-            <span className="sr-only">Add to cart</span>
-          </Button>
+          <AddToCartButton />
         </div>
       </Link>
     </article>

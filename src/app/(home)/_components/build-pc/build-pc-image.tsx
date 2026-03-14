@@ -2,9 +2,8 @@
 
 import Image from 'next/image'
 import pcImage from '@public/build-pc/pc.png'
-import { ImageCorner } from '@/app/(home)/_components/build-pc/ui'
 import { HardwarePointer } from '@/app/(home)/_components/build-pc/ui'
-import { BackgroundGlow } from '@/components/ui'
+import { BackgroundGlow, ImageCorner } from '@/components/ui'
 import { useIsVisible } from '@/hooks/use-is-visible'
 
 export const BuildPcImage = () => {

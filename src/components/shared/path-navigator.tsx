@@ -26,14 +26,7 @@ export const PathNavigator = ({
           </Link>
         </>
       )}
-      {productName && (
-        <>
-          <span aria-hidden="true" className="opacity-50">
-            /
-          </span>
-          <span className="">{productName}</span>
-        </>
-      )}
+      {productName && <span>{productName}</span>}
     </p>
   )
 }
