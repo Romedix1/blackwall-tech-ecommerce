@@ -10,7 +10,10 @@ export const DesktopMenuButton = ({ user }: OpenDesktopMenuProps) => {
   const { toggle } = useDesktopMenu()
 
   return (
-    <button className="max-w-36 truncate uppercase" onClick={toggle}>
+    <button
+      className="terminal-hover max-w-36 cursor-pointer truncate uppercase"
+      onClick={toggle}
+    >
       [ {user} ]
     </button>
   )
