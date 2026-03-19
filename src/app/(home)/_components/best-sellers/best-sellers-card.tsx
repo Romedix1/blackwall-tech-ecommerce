@@ -35,15 +35,8 @@ export const BestSellersCard = ({ product }: BestSellersCardType) => {
   )
   const displaySpecs = flatSpecs.slice(0, 3)
 
-  const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    addItem(product.slug, product.name, product.price, 1, product.image)
-  }
-
-  // TODO: ADD OVERFLOW HIDDEN
-
   return (
-    <article className="flex-1">
+    <article className="flex-1 overflow-hidden">
       <Link
         href={`/product/${product.slug}`}
         aria-label={`View details for ${product.name}`}
