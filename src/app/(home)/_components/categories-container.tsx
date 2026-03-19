@@ -1,5 +1,5 @@
 import { CategoriesCard } from '@/app/(home)/_components/'
-import { CATEGORY_UI_REGISTRY } from '@/app/(home)/_components/category-ui-registry'
+import { CATEGORY_UI_REGISTRY } from '@/app/(home)/_components'
 import { prisma } from '@/lib/prisma'
 
 export const CategoriesContainer = async () => {
