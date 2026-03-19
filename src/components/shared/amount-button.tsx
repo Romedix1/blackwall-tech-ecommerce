@@ -1,13 +1,14 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 type AmountButtonProps = {
   slug: string
-  className: string
-  handleUpdate: (slug: string, quantity: number) => void
-  quantity: number
+  className?: string
+  handleUpdate?: (slug: string, quantity: number) => void
+  quantity?: number
+  setQuantity?: Dispatch<SetStateAction<number>>
 }
 
 export const AmountButton = ({
@@ -15,21 +16,30 @@ export const AmountButton = ({
   slug,
   handleUpdate,
   quantity,
+  setQuantity,
 }: AmountButtonProps) => {
-  const [amount, setAmount] = useState(quantity)
+  const [amount, setAmount] = useState(quantity || 1)
+
+  const currentAmount = quantity !== undefined ? quantity : amount
 
   const BUTTON_STYLE = 'terminal-hover cursor-pointer select-none'
 
   const handleDecrement = () => {
-    if (amount > 1) {
-      setAmount((prev) => prev - 1)
-      handleUpdate(slug, amount)
+    if (currentAmount > 1) {
+      const newAmount = currentAmount - 1
+
+      setAmount(newAmount)
+      setQuantity?.(newAmount)
+      handleUpdate?.(slug, newAmount)
     }
   }
 
   const handleIncrement = () => {
-    setAmount((prev) => prev + 1)
-    handleUpdate(slug, amount)
+    const newAmount = currentAmount + 1
+
+    setAmount(newAmount)
+    setQuantity?.(newAmount)
+    handleUpdate?.(slug, newAmount)
   }
 
   return (
@@ -44,7 +54,7 @@ export const AmountButton = ({
         <span className="sr-only">-</span>
       </button>
 
-      {amount < 10 ? `0${amount}` : amount}
+      {currentAmount < 10 ? `0${currentAmount}` : currentAmount}
 
       <button onClick={handleIncrement} className={cn(BUTTON_STYLE)}>
         <span aria-hidden="true">[ + ]</span>

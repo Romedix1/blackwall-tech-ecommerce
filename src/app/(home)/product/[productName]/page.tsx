@@ -1,7 +1,7 @@
-import { AmountButton } from '@/app/(home)/product/[productName]/_components'
 import { PerformanceBenchmark } from '@/app/(home)/product/[productName]/_components'
 import { SpecificationList } from '@/app/(home)/product/[productName]/_components'
-import { PathNavigator } from '@/components/shared'
+import { ProductActions } from '@/app/(home)/product/[productName]/_components/product-actions'
+import { AmountButton, PathNavigator } from '@/components/shared'
 import { AddToCartButton } from '@/components/shared/add-to-cart-button'
 import { Separator } from '@/components/ui'
 import { ImageCorner } from '@/components/ui/image-corner'
@@ -81,10 +81,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
           <Separator className="my-4 lg:my-8" />
 
-          <div className="mb-12 flex flex-col items-stretch gap-4 lg:mb-0 lg:flex-row">
-            <AmountButton />
-            <AddToCartButton className="h-full w-full px-1.5 py-3.5" />
-          </div>
+          <ProductActions
+            slug={product.slug}
+            name={product.name}
+            price={product.price}
+            imageUrl={imageUrl}
+          />
         </div>
       </div>
 
