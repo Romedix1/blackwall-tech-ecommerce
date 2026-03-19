@@ -1,5 +1,6 @@
 import { AddToCartButton } from '@/components/shared/add-to-cart-button'
-import { BackgroundGlow, Button } from '@/components/ui'
+import { BackgroundGlow } from '@/components/ui'
+import { getImageUrl } from '@/lib/get-image-url'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -16,13 +17,20 @@ type ProductItemProps = {
 }
 
 export const ProductItem = ({ product, category }: ProductItemProps) => {
-  const imageUrl = `https://${process.env.SUPABASE_PROJECT_REF}.supabase.co/storage/v1/object/public/products/${category}/${product.slug}.webp`
+  const imageUrl = getImageUrl(category, product.slug)
+
+  const cartProduct = {
+    slug: product.slug,
+    name: product.name,
+    price: product.price,
+    image: imageUrl,
+  }
 
   return (
     <article>
       <Link
         href={`/product/${product.slug}`}
-        className="group hover:border-accent flex flex-col gap-6 border p-4"
+        className="group hover:border-accent focus:border-accent flex flex-col gap-6 border p-4 outline-none"
       >
         <div className="relative flex aspect-4/3 flex-col items-center justify-center">
           <Image
@@ -41,7 +49,7 @@ export const ProductItem = ({ product, category }: ProductItemProps) => {
           <p className="text-accent font-bold">$ {product.price.toFixed(2)}</p>
         </div>
 
-        <AddToCartButton />
+        <AddToCartButton product={cartProduct} />
       </Link>
     </article>
   )

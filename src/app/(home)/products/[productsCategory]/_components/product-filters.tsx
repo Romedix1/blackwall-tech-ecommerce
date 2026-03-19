@@ -3,7 +3,6 @@
 import { RadioInput } from '@/app/(home)/products/[productsCategory]/_components'
 import { PriceSlider } from '@/app/(home)/products/[productsCategory]/_components/price-slider'
 import { SearchProduct } from '@/app/(home)/products/[productsCategory]/_components/search-product'
-import { SearchInput } from '@/components/shared'
 import { Button } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'

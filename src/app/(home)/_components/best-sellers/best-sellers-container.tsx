@@ -24,10 +24,7 @@ export const BestSellersContainer = async () => {
   return (
     <div className="scrollbar-hide relative flex gap-3 overflow-x-scroll sm:gap-4">
       {bestSellers.map((product) => {
-        const imageUrl = getImageUrl(
-          product.category.slug.toLowerCase(),
-          product.slug,
-        )
+        const imageUrl = getImageUrl(product.category.slug, product.slug)
 
         return (
           <BestSellersCard

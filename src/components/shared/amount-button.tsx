@@ -29,8 +29,8 @@ export const AmountButton = ({
       const newAmount = currentAmount - 1
 
       setAmount(newAmount)
-      setQuantity?.(newAmount)
       handleUpdate?.(slug, newAmount)
+      setQuantity?.(newAmount)
     }
   }
 
@@ -38,8 +38,8 @@ export const AmountButton = ({
     const newAmount = currentAmount + 1
 
     setAmount(newAmount)
-    setQuantity?.(newAmount)
     handleUpdate?.(slug, newAmount)
+    setQuantity?.(newAmount)
   }
 
   return (

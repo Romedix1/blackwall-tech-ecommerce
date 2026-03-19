@@ -18,15 +18,22 @@ export const ProductActions = ({
   price,
   imageUrl,
 }: ProductActionsProps) => {
-  const [quantity, setQuantity] = useState(1)
+  const cartProduct = {
+    slug: slug,
+    name: name,
+    price: price,
+    image: imageUrl,
+  }
 
-  const { addItem } = useCart()
+  const [quantity, setQuantity] = useState(1)
 
   return (
     <div className="mb-12 flex flex-col items-stretch gap-4 lg:mb-0 lg:flex-row">
-      <AmountButton slug={slug} setQuantity={setQuantity} />
+      <AmountButton slug={slug} quantity={quantity} setQuantity={setQuantity} />
+
       <AddToCartButton
-        onClick={() => addItem(slug, name, price, quantity, imageUrl)}
+        quantity={quantity}
+        product={cartProduct}
         className="h-full w-full px-1.5 py-3.5"
       />
     </div>
