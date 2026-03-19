@@ -21,12 +21,14 @@ export const LogOutButton = () => {
 
   return (
     <button
+      className="text-error-text focus:bg-error-bg hover:bg-error-bg group cursor-pointer p-1 outline-none"
       disabled={isLoading}
       onClick={handleLogout}
-      className="text-error-text focus:border-error-text hover:border-error-text hover:animate-glitch focus:animate-glitch w-fit cursor-pointer border border-transparent px-2 text-left uppercase outline-none disabled:cursor-wait disabled:opacity-50 motion-reduce:animate-none motion-reduce:hover:animate-none motion-reduce:focus:animate-none"
     >
-      <span className="sr-only">Log out (sever connection)</span>
-      <span aria-hidden="true">[ sever_connection ]</span>
+      <div className="group-hover:animate-glitch group-focus:animate-glitch text-left uppercase outline-none disabled:cursor-wait disabled:opacity-50 motion-reduce:animate-none motion-reduce:hover:animate-none motion-reduce:focus:animate-none">
+        <span className="sr-only">Log out (sever connection)</span>
+        <span aria-hidden="true">[ sever_connection ]</span>
+      </div>
     </button>
   )
 }
