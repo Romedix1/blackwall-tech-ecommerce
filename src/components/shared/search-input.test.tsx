@@ -11,6 +11,7 @@ import { NavbarSearch } from '@/components/layout/navbar/navbar-search'
 import { MobileSearchTrigger } from '@/components/layout/navbar/mobile-search-trigger'
 import { MobileMenuShell } from '@/components/layout/navbar/mobile-menu-shell'
 import { SearchProduct } from '@/app/(home)/products/[productsCategory]/_components/search-product'
+import { SearchInDb } from '@/lib/actions/search'
 
 vi.mock('@/auth', () => ({
   auth: vi.fn(),
@@ -28,7 +29,15 @@ vi.mock('next/navigation', () => ({
   usePathname: vi.fn(() => '/'),
 }))
 
+vi.mock('@/actions/search.ts', () => ({
+  SearchInDb: vi.fn(),
+}))
+
 describe('Search Functionality', () => {
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
   it('should focus the navigation input field when Ctrl+K is pressed', async () => {
     render(<NavbarSearch variant="navigation" />)
 
@@ -78,5 +87,80 @@ describe('Search Functionality', () => {
     fireEvent.keyDown(window, { key: '/' })
 
     expect(searchInput).toHaveFocus()
+  })
+
+  it('should fetch products from db', async () => {
+    const { SearchInDb } = await import('@/lib/actions/search')
+    vi.mocked(SearchInDb).mockResolvedValue({
+      products: [
+        { name: 'RTX 5090 Blackwall Edition', slug: 'rtx-5090-blackwall' },
+      ],
+      categories: [],
+    })
+
+    render(
+      <SearchProduct
+        device="desktop"
+        searchValue="rtx"
+        setSearchValue={vi.fn()}
+      />,
+    )
+
+    const fetchedProduct = await screen.findByText('RTX 5090 Blackwall Edition')
+
+    expect(fetchedProduct).toBeInTheDocument()
+    expect(SearchInDb).toHaveBeenCalledWith('rtx')
+
+    expect(SearchInDb).toHaveBeenCalledTimes(1)
+  })
+
+  it('should fetch categories from db', async () => {
+    const { SearchInDb } = await import('@/lib/actions/search')
+    vi.mocked(SearchInDb).mockResolvedValue({
+      products: [],
+      categories: [{ name: 'processors', slug: 'cpu' }],
+    })
+
+    render(
+      <SearchProduct
+        device="desktop"
+        searchValue="proc"
+        setSearchValue={vi.fn()}
+      />,
+    )
+
+    const fetchedProduct = await screen.findByText('processors')
+
+    expect(fetchedProduct).toBeInTheDocument()
+    expect(SearchInDb).toHaveBeenCalledWith('proc')
+
+    expect(SearchInDb).toHaveBeenCalledTimes(1)
+  })
+
+  it('should fetch categories and products from db', async () => {
+    const { SearchInDb } = await import('@/lib/actions/search')
+    vi.mocked(SearchInDb).mockResolvedValue({
+      products: [
+        { name: 'RTX 5090 Blackwall Edition', slug: 'rtx-5090-blackwall' },
+      ],
+      categories: [{ name: 'Graphics Cards', slug: 'gpu' }],
+    })
+
+    render(
+      <SearchProduct
+        device="desktop"
+        searchValue="rtx"
+        setSearchValue={vi.fn()}
+      />,
+    )
+
+    const fetchedProduct = await screen.findByText('RTX 5090 Blackwall Edition')
+    const fetchedCategory = await screen.findByText('Graphics Cards')
+
+    expect(fetchedProduct).toBeInTheDocument()
+    expect(fetchedCategory).toBeInTheDocument()
+
+    expect(SearchInDb).toHaveBeenCalledWith('rtx')
+    expect(SearchInDb).toHaveBeenCalledTimes(1)
   })
 })
