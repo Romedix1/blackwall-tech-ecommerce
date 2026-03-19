@@ -36,6 +36,8 @@ export const BestSellersCard = ({ product }: BestSellersCardType) => {
     addItem(product.slug, product.name, product.price, 1, product.image)
   }
 
+  // TODO: ADD OVERFLOW HIDDEN
+
   return (
     <article className="flex-1">
       <Link
