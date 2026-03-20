@@ -2,7 +2,7 @@
 
 import { ShoppingCart } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useCart } from '@/hooks/use-cart'
+import { useCart } from '@/hooks'
 
 export const NavbarCart = () => {
   const { toggle } = useCart()

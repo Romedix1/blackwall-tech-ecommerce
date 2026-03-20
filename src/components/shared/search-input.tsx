@@ -1,9 +1,9 @@
 'use client'
 
 import { Input, Separator } from '@/components/ui'
-import { useMobileMenu } from '@/hooks/use-mobile-menu'
-import { useDebounce } from '@/hooks/useDebounce'
-import { SearchInDb } from '@/lib/actions/search'
+import { useMobileMenu } from '@/hooks'
+import { useDebounce } from '@/hooks'
+import { SearchInDb } from '@/lib/actions'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import {

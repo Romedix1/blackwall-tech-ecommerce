@@ -2,16 +2,24 @@
 
 import { AmountButton } from '@/components/shared'
 import { Button, Separator } from '@/components/ui'
-import { useCart } from '@/hooks/use-cart'
+import { useCart } from '@/hooks'
 import { cn } from '@/lib/utils'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 
 export const CartOverlay = () => {
   const { isOpen, toggle, updateQuantity, removeItem } = useCart()
 
+  const { status } = useSession()
+  const isAuth = status === 'authenticated'
+
   const items = useCart((state) => state.items)
   const total =
     items?.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0
+
+  const handleRemove = (slug: string) => {
+    removeItem(slug, isAuth)
+  }
 
   return (
     <>
@@ -86,7 +94,7 @@ export const CartOverlay = () => {
                       />
 
                       <button
-                        onClick={() => removeItem(item.slug)}
+                        onClick={() => handleRemove(item.slug)}
                         className="text-error-text hover:text-error-text/60 focus:text-error-text/60 cursor-pointer text-xs font-bold tracking-widest uppercase outline-none 2xl:text-sm"
                       >
                         <span aria-hidden="true">[ Remove ]</span>

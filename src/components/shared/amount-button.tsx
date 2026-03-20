@@ -1,13 +1,14 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { Dispatch, SetStateAction } from 'react'
 
 type AmountButtonProps = {
   slug: string
   className?: string
-  handleUpdate?: (slug: string, quantity: number) => void
-  quantity?: number
+  handleUpdate?: (slug: string, quantity: number, isAuth: boolean) => void
+  quantity: number
   setQuantity?: Dispatch<SetStateAction<number>>
 }
 
@@ -18,27 +19,13 @@ export const AmountButton = ({
   quantity,
   setQuantity,
 }: AmountButtonProps) => {
-  const [amount, setAmount] = useState(quantity || 1)
-
-  const currentAmount = quantity !== undefined ? quantity : amount
-
   const BUTTON_STYLE = 'terminal-hover cursor-pointer select-none'
 
-  const handleDecrement = () => {
-    if (currentAmount > 1) {
-      const newAmount = currentAmount - 1
+  const { status } = useSession()
+  const isAuth = status === 'authenticated'
 
-      setAmount(newAmount)
-      handleUpdate?.(slug, newAmount)
-      setQuantity?.(newAmount)
-    }
-  }
-
-  const handleIncrement = () => {
-    const newAmount = currentAmount + 1
-
-    setAmount(newAmount)
-    handleUpdate?.(slug, newAmount)
+  const handleUpdateQuantity = (newAmount: number) => {
+    handleUpdate?.(slug, newAmount, isAuth)
     setQuantity?.(newAmount)
   }
 
@@ -49,14 +36,20 @@ export const AmountButton = ({
         className,
       )}
     >
-      <button onClick={handleDecrement} className={cn(BUTTON_STYLE)}>
+      <button
+        onClick={() => quantity > 1 && handleUpdateQuantity(quantity - 1)}
+        className={cn(BUTTON_STYLE)}
+      >
         <span aria-hidden="true">[ - ]</span>
         <span className="sr-only">-</span>
       </button>
 
-      {currentAmount < 10 ? `0${currentAmount}` : currentAmount}
+      {quantity < 10 ? `0${quantity}` : quantity}
 
-      <button onClick={handleIncrement} className={cn(BUTTON_STYLE)}>
+      <button
+        onClick={() => handleUpdateQuantity(quantity + 1)}
+        className={cn(BUTTON_STYLE)}
+      >
         <span aria-hidden="true">[ + ]</span>
         <span className="sr-only">+</span>
       </button>

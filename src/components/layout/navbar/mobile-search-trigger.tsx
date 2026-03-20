@@ -1,7 +1,7 @@
 'use client'
 
 import { Search } from 'lucide-react'
-import { useMobileMenu } from '@/hooks/use-mobile-menu'
+import { useMobileMenu } from '@/hooks'
 
 export const MobileSearchTrigger = () => {
   const onOpen = useMobileMenu((state) => state.onOpen)

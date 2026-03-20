@@ -1,7 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui'
-import { useCart } from '@/hooks/use-cart'
+import { useCart } from '@/hooks'
+import { useSession } from 'next-auth/react'
 import { MouseEvent } from 'react'
 
 type ProductType = {
@@ -9,6 +10,7 @@ type ProductType = {
   name: string
   price: number
   image: string
+  quantity?: number
 }
 
 type AddToCartButtonProps = {
@@ -24,9 +26,20 @@ export const AddToCartButton = ({
 }: AddToCartButtonProps) => {
   const { addItem } = useCart()
 
-  const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
+  const { status } = useSession()
+  const isAuth = status === 'authenticated'
+
+  const handleAddToCart = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    addItem(product.slug, product.name, product.price, quantity, product.image)
+
+    addItem(
+      product.slug,
+      product.name,
+      product.price,
+      quantity,
+      product.image,
+      isAuth,
+    )
   }
 
   return (

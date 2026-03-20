@@ -1,3 +1,4 @@
+import { saveCartInDb } from '@/lib/actions/cart'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -21,8 +22,32 @@ type CartStore = {
     imgSrc: string,
     isLoggedIn?: boolean,
   ) => Promise<void>
-  updateQuantity: (slug: string, quantity: number) => void
-  removeItem: (slug: string) => void
+  updateQuantity: (
+    slug: string,
+    quantity: number,
+    isLoggedIn?: boolean,
+  ) => Promise<void>
+  removeItem: (slug: string, isLoggedIn?: boolean) => Promise<void>
+}
+
+let timeoutId: ReturnType<typeof setTimeout>
+
+const debouncedSaveToDb = (items: CartItem[]) => {
+  clearTimeout(timeoutId)
+
+  timeoutId = setTimeout(async () => {
+    try {
+      const itemsToSave = items.map((item) => ({
+        slug: item.slug,
+        quantity: item.quantity,
+      }))
+      await saveCartInDb(itemsToSave)
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[ CART_SYNC_ERROR ]: ', error)
+      }
+    }
+  }, 1000)
 }
 
 export const useCart = create<CartStore>()(
@@ -59,12 +84,10 @@ export const useCart = create<CartStore>()(
           })
         }
 
-        if (isLoggedIn) {
-          try {
-          } catch {}
-        }
+        if (isLoggedIn) debouncedSaveToDb(get().items)
       },
-      updateQuantity: (slug: string, quantity: number) => {
+
+      updateQuantity: async (slug, quantity, isLoggedIn = false) => {
         set((state) => ({
           items: state.items.map((item) =>
             item.slug === slug
@@ -72,11 +95,16 @@ export const useCart = create<CartStore>()(
               : item,
           ),
         }))
+
+        if (isLoggedIn) debouncedSaveToDb(get().items)
       },
-      removeItem: (slug: string) => {
+
+      removeItem: async (slug, isLoggedIn = false) => {
         set((state) => ({
           items: state.items.filter((item) => item.slug !== slug),
         }))
+
+        if (isLoggedIn) debouncedSaveToDb(get().items)
       },
     }),
     {

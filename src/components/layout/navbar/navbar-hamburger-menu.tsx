@@ -1,6 +1,6 @@
 'use client'
 
-import { useMobileMenu } from '@/hooks/use-mobile-menu'
+import { useMobileMenu } from '@/hooks'
 import { cn } from '@/lib/utils'
 
 export const NavbarHamburgerMenu = () => {

@@ -1,6 +1,6 @@
 import { AddToCartButton } from '@/components/shared/add-to-cart-button'
 import { BackgroundGlow } from '@/components/ui'
-import { getImageUrl } from '@/lib/get-image-url'
+import { getImageUrl } from '@/lib'
 import Image from 'next/image'
 import Link from 'next/link'
 
