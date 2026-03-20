@@ -1,4 +1,4 @@
-import { mapUrlParamsToPrismaFilters } from '@/lib/filters'
+import { mapUrlParamsToPrismaFilters } from '@/lib'
 import { describe, it, expect } from 'vitest'
 
 describe('mapUrlParamsToPrismaFilters', () => {

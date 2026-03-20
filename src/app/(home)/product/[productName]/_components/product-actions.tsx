@@ -2,7 +2,6 @@
 
 import { AmountButton } from '@/components/shared'
 import { AddToCartButton } from '@/components/shared/add-to-cart-button'
-import { useCart } from '@/hooks/use-cart'
 import { useState } from 'react'
 
 type ProductActionsProps = {

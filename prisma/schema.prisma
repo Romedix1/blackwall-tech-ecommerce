@@ -61,6 +61,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   Product       Product[]
+  Cart          Cart?
 }
 
 model VerificationToken {
@@ -82,17 +83,40 @@ model Category {
 }
 
 model Product {
-  id            String   @id @default(uuid())
+  id            String     @id @default(uuid())
   name          String
-  slug          String   @unique
+  slug          String     @unique
   badge         String?
   price         Float
-  quantity      Int      @default(0)
+  quantity      Int        @default(0)
   specification Json
   performance   Json?
   categoryId    String
-  category      Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  createdAt     DateTime @default(now())
+  category      Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt     DateTime   @default(now())
   createdById   String?
-  creator       User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  creator       User?      @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  CartItem      CartItem[]
+}
+
+model CartItem {
+  id          String   @id @default(uuid())
+  quantity    Int      @default(1)
+  cartId      String
+  cart        Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productSlug String
+  product     Product  @relation(fields: [productSlug], references: [slug], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([cartId, productSlug])
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  createdBy User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }

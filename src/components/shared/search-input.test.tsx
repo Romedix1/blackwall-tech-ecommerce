@@ -12,7 +12,7 @@ import { MobileSearchTrigger } from '@/components/layout/navbar/mobile-search-tr
 import { MobileMenuShell } from '@/components/layout/navbar/mobile-menu-shell'
 import { SearchProduct } from '@/app/(home)/products/[productsCategory]/_components/search-product'
 import { SearchInput } from '@/components/shared/search-input'
-import { SearchInDb } from '@/lib/actions/search'
+import { SearchInDb } from '@/lib/actions'
 
 vi.mock('@/auth', () => ({
   auth: vi.fn(),

@@ -1,6 +1,6 @@
 import { BestSellersCard } from '@/app/(home)/_components/best-sellers'
 import { prisma } from '@/lib/prisma'
-import { getImageUrl } from '@/lib/get-image-url'
+import { getImageUrl } from '@/lib'
 import { SpecSection } from '@/types'
 
 export const BestSellersContainer = async () => {

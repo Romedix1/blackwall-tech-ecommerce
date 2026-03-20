@@ -5,6 +5,8 @@ import { Roboto_Mono } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import { Footer } from '@/components/layout/footer'
 import { CartOverlay } from '@/components/layout'
+import { auth } from '@/auth'
+import { SessionProvider } from 'next-auth/react'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,18 +18,22 @@ const robotoMono = Roboto_Mono({
   variable: '--font-mono',
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await auth()
+
   return (
     <html lang="en">
       <body className={cn(robotoMono.variable, 'antialiased')}>
-        <Navbar />
-        <CartOverlay />
-        <main className="px-4 xl:px-20">{children}</main>
-        <Footer />
+        <SessionProvider session={session}>
+          <Navbar />
+          <CartOverlay />
+          <main className="px-4 xl:px-20">{children}</main>
+          <Footer />
+        </SessionProvider>
       </body>
     </html>
   )

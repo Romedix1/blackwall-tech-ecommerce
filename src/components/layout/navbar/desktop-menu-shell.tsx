@@ -1,7 +1,7 @@
 'use client'
 
 import { DesktopMenu } from '@/components/layout/navbar/navbar-desktop-menu'
-import { useDesktopMenu } from '@/hooks/use-desktop-menu'
+import { useDesktopMenu } from '@/hooks'
 
 export const DesktopMenuShell = () => {
   const { isOpen } = useDesktopMenu()

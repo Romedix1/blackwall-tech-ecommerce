@@ -1,5 +1,3 @@
-'use client'
-
 import { AddToCartButton } from '@/components/shared/add-to-cart-button'
 import { BackgroundGlow } from '@/components/ui'
 import { cn } from '@/lib/utils'

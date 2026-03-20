@@ -4,7 +4,7 @@ import Image from 'next/image'
 import pcImage from '@public/build-pc/pc.png'
 import { HardwarePointer } from '@/app/(home)/_components/build-pc/ui'
 import { BackgroundGlow, ImageCorner } from '@/components/ui'
-import { useIsVisible } from '@/hooks/use-is-visible'
+import { useIsVisible } from '@/hooks'
 
 export const BuildPcImage = () => {
   const { ref, isVisible } = useIsVisible()

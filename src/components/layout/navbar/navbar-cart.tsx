@@ -2,10 +2,14 @@
 
 import { ShoppingCart } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useCart } from '@/hooks/use-cart'
+import { useCart } from '@/hooks'
 
 export const NavbarCart = () => {
   const { toggle } = useCart()
+
+  const { items } = useCart()
+
+  const total = items.reduce((total, item) => total + item.quantity, 0)
 
   return (
     <button
@@ -16,8 +20,10 @@ export const NavbarCart = () => {
     >
       <ShoppingCart className="h-5 w-5 shrink-0 sm:h-6 sm:w-6" />
 
-      <span className="font-mono text-xs font-bold sm:text-base">[ 02 ]</span>
-      <span className="sr-only">Cart: 2 items</span>
+      <span className="font-mono text-xs font-bold sm:text-base">
+        [ {total < 10 ? `0${total}` : total} ]
+      </span>
+      <span className="sr-only">Cart: {total} items</span>
     </button>
   )
 }

@@ -4,7 +4,7 @@ import { MobileNavLinks } from '@/components/layout/navbar'
 import { MobileSessionInfo } from '@/components/layout/navbar'
 import { SearchInput } from '@/components/shared'
 import { Separator } from '@/components/ui'
-import { useMobileMenu } from '@/hooks/use-mobile-menu'
+import { useMobileMenu } from '@/hooks'
 import { useEffect, useRef } from 'react'
 
 export const MobileMenu = () => {

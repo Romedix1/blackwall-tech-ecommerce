@@ -6,7 +6,7 @@ import { ProductItem } from '@/app/(home)/products/[productsCategory]/_component
 import { PathNavigator } from '@/components/shared'
 import { Separator } from '@/components/ui'
 import { prisma } from '@/lib/prisma'
-import { mapUrlParamsToPrismaFilters } from '@/lib/filters'
+import { mapUrlParamsToPrismaFilters } from '@/lib'
 import { Prisma } from '../../../../../generated/prisma'
 import { SpecSection } from '@/types/specification'
 

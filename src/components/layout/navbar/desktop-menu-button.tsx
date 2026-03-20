@@ -1,6 +1,6 @@
 'use client'
 
-import { useDesktopMenu } from '@/hooks/use-desktop-menu'
+import { useDesktopMenu } from '@/hooks'
 
 type OpenDesktopMenuProps = {
   user: string
