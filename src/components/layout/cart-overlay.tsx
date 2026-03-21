@@ -7,8 +7,9 @@ import { fetchCartFromDb } from '@/lib/actions'
 import { cn } from '@/lib/utils'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
-// TODO: ADD IMAGE LOADING SKELETON
+// TODO: ADD IMAGE/PRODUCT LOADING SKELETON
 export const CartOverlay = () => {
   const { isOpen, toggle, updateQuantity, removeItem, setCart } = useCart()
 
@@ -156,9 +157,11 @@ export const CartOverlay = () => {
             </p>
           </div>
 
-          <Button className="w-full py-4">
-            <span aria-hidden="true">[ Initialize_checkout ]</span>
-            <span className="sr-only">Initialize checkout</span>
+          <Button className="block w-full py-4 text-center" asChild>
+            <Link href={'/checkout'}>
+              <span aria-hidden="true">[ Initialize_checkout ]</span>
+              <span className="sr-only">Initialize checkout</span>
+            </Link>
           </Button>
         </div>
       </div>

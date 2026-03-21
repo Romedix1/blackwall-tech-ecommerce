@@ -20,8 +20,13 @@ export const NavbarCart = () => {
     >
       <ShoppingCart className="h-5 w-5 shrink-0 sm:h-6 sm:w-6" />
 
-      <span className="font-mono text-xs font-bold sm:text-base">
-        [ {total < 10 ? `0${total}` : total} ]
+      <span
+        className={cn(
+          'font-mono text-xs font-bold sm:text-base',
+          total > 99 && 'sm:text-xs',
+        )}
+      >
+        [ {total < 10 ? `0${total}` : total > 99 ? `99+` : total} ]
       </span>
       <span className="sr-only">Cart: {total} items</span>
     </button>
