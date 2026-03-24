@@ -1,10 +1,32 @@
 'use client'
 
 import { TerminalInput } from '@/components/shared'
-import { Button, Input } from '@/components/ui'
+import { Button } from '@/components/ui'
 import { useCart } from '@/hooks'
+import { checkout } from '@/lib/actions'
+import { useActionState } from 'react'
+import { CartItem } from '../../../../generated/prisma'
 
-export const CheckoutForm = () => {
+type draftDataType = {
+  fullName: string
+  shippingAddress: string
+  email: string
+  city: string
+  zipCode: string
+  phone: string
+}
+
+type CheckoutFormProps = {
+  userEmail: string | null | undefined
+  canceled: boolean
+  draftData: draftDataType | null
+}
+
+export const CheckoutForm = ({
+  userEmail,
+  canceled,
+  draftData,
+}: CheckoutFormProps) => {
   const items = useCart((state) => state.items)
 
   const total = items.reduce(
@@ -13,8 +35,16 @@ export const CheckoutForm = () => {
   )
 
   const tax = (total * 23) / 100
-
   const totalWithTax = total + tax
+
+  const payloadItems = items.map((item) => ({
+    productSlug: item.slug,
+    quantity: item.quantity,
+  }))
+
+  const checkoutWithItems = checkout.bind(null, payloadItems as CartItem[])
+
+  const [state, formAction, isPending] = useActionState(checkoutWithItems, null)
 
   return (
     <div className="bg-surface p-4 lg:w-115 lg:p-8 2xl:w-140">
@@ -24,6 +54,17 @@ export const CheckoutForm = () => {
         </span>
         <span className="sr-only">Uplink authorization</span>
       </h2>
+
+      {canceled && (
+        <div className="border-error-text text-error-text bg-error-bg/30 mb-6 border p-4 text-sm font-bold uppercase">
+          <span aria-hidden="true">
+            [ ! ] Uplink_aborted: Payment_cancelled_by_user
+          </span>
+          <span className="sr-only">
+            Uplink aborted: Payment cancelled by user
+          </span>
+        </div>
+      )}
 
       <p className="mb-6">
         <span aria-hidden="true" className="mr-2">
@@ -61,21 +102,38 @@ export const CheckoutForm = () => {
         </p>
       </div>
 
-      <form className="flex flex-col gap-6">
+      <form action={formAction} className="flex flex-col gap-6">
         <TerminalInput
+          defaultValue={state?.fields?.fullName || draftData?.fullName || ''}
           placeholder="Full_name"
           name="fullName"
           ariaLabel="Full name"
         />
         <TerminalInput
+          defaultValue={
+            state?.fields.shippingAddress || draftData?.shippingAddress || ''
+          }
           placeholder="Shipping_address"
-          ariaLabel="address"
-          name="address"
+          ariaLabel="Shipping address"
+          name="shippingAddress"
+        />
+
+        <TerminalInput
+          defaultValue={state?.fields?.email || draftData?.email || ''}
+          placeholder="Email"
+          ariaLabel="Email"
+          name="email"
         />
 
         <div className="grid w-full grid-cols-[2fr_1fr] gap-3 sm:grid-cols-[3fr_2fr]">
-          <TerminalInput placeholder="City" name="city" ariaLabel="City" />
           <TerminalInput
+            placeholder="City"
+            defaultValue={state?.fields.city || draftData?.city || ''}
+            name="city"
+            ariaLabel="City"
+          />
+          <TerminalInput
+            defaultValue={state?.fields.zipCode || draftData?.zipCode || ''}
             placeholder="Zip_code"
             name="zipCode"
             ariaLabel="Zip code"
@@ -84,15 +142,37 @@ export const CheckoutForm = () => {
 
         <TerminalInput
           type="tel"
+          defaultValue={state?.fields.phone || draftData?.phone || ''}
           placeholder="Phone_number"
           name="phone"
           ariaLabel="Phone number"
         />
 
-        <Button>
+        <Button disabled={isPending}>
           <span aria-hidden="true">[ Confirm_order ]</span>
           <span className="sr-only">Confirm order</span>
         </Button>
+
+        {state?.error && (
+          <div className="border-error-text text-error-text mt-6 border p-4 text-sm uppercase">
+            <p className="mb-2 font-bold">
+              <span aria-hidden="true">
+                [ ! ] Uplink_rejected: Data_corrupted
+              </span>
+              <span className="sr-only">Uplink rejected: Data corrupted</span>
+            </p>
+            <ul className="list-none">
+              {state.error.map((err: string, index: number) => (
+                <li key={index}>
+                  <span aria-hidden="true" className="mr-3">
+                    &gt;
+                  </span>
+                  {err}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </form>
 
       <p className="text-text-second mt-6 text-sm break-all uppercase">
