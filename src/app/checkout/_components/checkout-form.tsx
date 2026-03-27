@@ -104,9 +104,7 @@ export const CheckoutForm = ({
 
       <form action={formAction} className="flex flex-col gap-6">
         <TerminalInput
-          defaultValue={
-            state?.fields?.fullName || draftData?.fullName || userEmail || ''
-          }
+          defaultValue={state?.fields?.fullName || draftData?.fullName || ''}
           placeholder="Full_name"
           name="fullName"
           ariaLabel="Full name"
@@ -123,7 +121,9 @@ export const CheckoutForm = ({
         />
 
         <TerminalInput
-          defaultValue={state?.fields?.email || draftData?.email || ''}
+          defaultValue={
+            state?.fields?.email || draftData?.email || userEmail || ''
+          }
           placeholder="Email"
           ariaLabel="Email"
           name="email"
