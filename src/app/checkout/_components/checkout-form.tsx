@@ -156,9 +156,17 @@ export const CheckoutForm = ({
           className="pr-4"
         />
 
-        <Button disabled={isPending}>
-          <span aria-hidden="true">[ Confirm_order ]</span>
-          <span className="sr-only">Confirm order</span>
+        <Button
+          type="submit"
+          disabled={isPending}
+          aria-label={isPending ? 'Confirming' : 'Confirm order'}
+        >
+          <span aria-hidden="true">
+            [ {isPending ? 'Confirming' : 'Confirm_order'} ]
+          </span>
+          <span className="sr-only">
+            {isPending ? 'Confirming' : 'Confirm order'}
+          </span>
         </Button>
 
         {state?.error && (
