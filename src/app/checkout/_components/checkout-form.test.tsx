@@ -1,6 +1,7 @@
 import { CheckoutForm } from '@/app/checkout/_components/checkout-form'
 import { useCart } from '@/hooks'
 import { checkout } from '@/lib/actions'
+import { MockState } from '@/types/cart-mock-item'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
@@ -11,14 +12,6 @@ vi.mock('@/lib/actions', () => ({
 vi.mock('@/hooks', () => ({
   useCart: vi.fn((selector) => selector({ items: [] })),
 }))
-
-type MockState = {
-  slug: string
-  price: number
-  quantity: number
-  name: string
-  imgSrc: string
-}
 
 describe('Checkout form', () => {
   it('Should load user email', () => {

@@ -13,7 +13,7 @@ describe('Cart overlay component', () => {
     vi.clearAllMocks()
   })
 
-  it('should render empty state where there are o items', () => {
+  it('should render empty state where there are no items', () => {
     const mockState = {
       isOpen: true,
       toggle: vi.fn(),

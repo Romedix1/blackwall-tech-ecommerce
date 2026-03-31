@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma'
 import { cn } from '@/lib'
 import Stripe from 'stripe'
 import { StatusWatcher } from '@/app/checkout/success/_components/status-watcher'
+import { CartCleaner } from '@/app/checkout/success/_components/cart-cleaner'
 
 type CheckoutSuccessPageProps = {
   searchParams: Promise<{ session_id: string }>
@@ -35,6 +36,7 @@ export default async function CheckoutSuccessPage({
   if (!order?.id) {
     redirect('/')
   }
+
   const paymentIntent = session.payment_intent as Stripe.PaymentIntent
   const isPaid = session.payment_status === 'paid'
   const isProcessing =
@@ -93,6 +95,7 @@ export default async function CheckoutSuccessPage({
 
   return (
     <div className="container mx-auto mt-12 max-w-5xl border">
+      {isPaid && <CartCleaner />}
       {isProcessing && <StatusWatcher orderId={order.id} />}
 
       <div className="bg-surface flex items-center justify-between border border-b p-3">
