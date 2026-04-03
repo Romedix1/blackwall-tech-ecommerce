@@ -2,6 +2,7 @@
 
 import { AmountButton } from '@/components/shared'
 import { Button, Separator } from '@/components/ui'
+import { QuantityError } from '@/components/ui/quantity-error'
 import { useCart } from '@/hooks'
 import { fetchCartFromDb } from '@/lib/actions'
 import { cn } from '@/lib/utils'
@@ -126,6 +127,7 @@ export const CartOverlay = () => {
                       <AmountButton
                         quantity={item.quantity}
                         slug={item.slug}
+                        stock={item.stock ?? Infinity}
                         handleUpdate={updateQuantity}
                         className="w-fit justify-start border-none bg-transparent p-0 text-sm 2xl:text-base"
                       />
@@ -138,6 +140,10 @@ export const CartOverlay = () => {
                         <span className="sr-only">Remove</span>
                       </button>
                     </div>
+
+                    {item.stock !== undefined && item.quantity > item.stock && (
+                      <QuantityError stock={item.stock} />
+                    )}
                   </div>
                 )
               })

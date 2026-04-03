@@ -4,7 +4,7 @@ import { TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
 import { useCart } from '@/hooks'
 import { checkout } from '@/lib/actions'
-import { useActionState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { CartItem } from '../../../../generated/prisma'
 import { cn } from '@/lib'
 
@@ -28,6 +28,13 @@ export const CheckoutForm = ({
   canceled,
   draftData,
 }: CheckoutFormProps) => {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 0)
+    return () => clearTimeout(timer)
+  }, [])
+
   const items = useCart((state) => state.items)
 
   const total = items.reduce(
@@ -46,12 +53,31 @@ export const CheckoutForm = ({
   const checkoutWithItems = checkout.bind(null, payloadItems as CartItem[])
 
   const [state, formAction, isPending] = useActionState(checkoutWithItems, null)
+  const [orderToken] = useState(() => crypto.randomUUID())
 
   const isEmpty = items.length === 0
-  const canSubmit = !isEmpty && !isPending
+  const hasStockError = items.some((item) => {
+    return item.stock !== undefined && item.quantity > item.stock
+  })
+
+  const canSubmit = !isEmpty && !isPending && !hasStockError
 
   const hasError = !!state?.error
-  const showErrorMessage = hasError || (isEmpty && !isPending)
+  const showErrorMessage = hasError || (isEmpty && !isPending && isMounted)
+
+  if (!isMounted) {
+    return (
+      <div className="bg-surface flex h-96 animate-pulse items-center justify-center p-4 text-center uppercase lg:w-115 lg:p-8 2xl:w-140">
+        <span
+          aria-hidden="true"
+          className="text-accent font-bold tracking-wider break-all"
+        >
+          [ Establishing_secure_uplink... ]
+        </span>
+        <span className="sr-only">Loading secure checkout...</span>
+      </div>
+    )
+  }
 
   return (
     <div className="bg-surface p-4 lg:w-115 lg:p-8 2xl:w-140">
@@ -110,6 +136,13 @@ export const CheckoutForm = ({
       </div>
 
       <form action={formAction} className="flex flex-col gap-6">
+        <input
+          className="hidden"
+          name="orderToken"
+          value={orderToken}
+          readOnly
+        />
+
         <TerminalInput
           defaultValue={state?.fields?.fullName || draftData?.fullName || ''}
           placeholder="Full_name"
@@ -167,17 +200,23 @@ export const CheckoutForm = ({
           type="submit"
           disabled={!canSubmit}
           className={cn(
-            isPending ? 'cursor-wait!' : isEmpty && 'cursor-not-allowed!',
+            isPending
+              ? 'cursor-wait!'
+              : (isEmpty || hasStockError) && 'cursor-not-allowed!',
           )}
           aria-label={
-            isPending ? 'Confirming' : isEmpty ? 'Empty cart' : 'Confirm order'
+            isPending
+              ? 'Confirming'
+              : isEmpty || hasStockError
+                ? 'Empty cart'
+                : 'Confirm order'
           }
         >
           <span aria-hidden="true">
             [{' '}
             {isPending
               ? 'Confirming'
-              : isEmpty
+              : isEmpty || hasStockError
                 ? 'Cart_empty'
                 : 'Confirm_order'}{' '}
             ]

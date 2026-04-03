@@ -41,7 +41,7 @@ const mockCartItems: MockState[] = [
 ]
 
 describe('Checkout form', () => {
-  it('Should load user email', () => {
+  it('Should load user email', async () => {
     render(
       <CheckoutForm
         userEmail={'test@example.com'}
@@ -50,7 +50,7 @@ describe('Checkout form', () => {
       />,
     )
 
-    const emailInput = screen.getByLabelText('Email')
+    const emailInput = await screen.findByLabelText('Email')
 
     expect(emailInput).toHaveValue('test@example.com')
   })
@@ -75,28 +75,28 @@ describe('Checkout form', () => {
 
     const user = userEvent.setup()
 
-    const submitButton = screen.getByRole('button', { name: 'Confirm order' })
+    const submitButton = await screen.findByRole('button', {
+      name: 'Confirm order',
+    })
     await user.click(submitButton)
 
-    await waitFor(() => {
-      expect(
-        screen.getByText('[ ! ] Uplink_rejected: Data_corrupted'),
-      ).toBeInTheDocument()
+    expect(
+      await screen.findByText('[ ! ] Uplink_rejected: Data_corrupted'),
+    ).toBeInTheDocument()
 
-      expectedErrors.forEach((errorMessage) => {
-        expect(screen.getByText(errorMessage)).toBeInTheDocument()
-      })
-    })
+    for (const errorMessage of expectedErrors) {
+      expect(await screen.findByText(errorMessage)).toBeInTheDocument()
+    }
   })
 
-  it('Should show cancel error when order is canceled', () => {
+  it('Should show cancel error when order is canceled', async () => {
     render(<CheckoutForm userEmail={null} canceled={true} draftData={null} />)
 
-    const cancelError = screen.getByText(/Payment cancelled/)
+    const cancelError = await screen.findByText(/Payment cancelled/)
     expect(cancelError).toBeInTheDocument()
   })
 
-  it('Should load draftData after failure', () => {
+  it('Should load draftData after failure', async () => {
     const mockData = {
       fullName: 'David Martinez',
       shippingAddress: 'Apt 404 H10',
@@ -110,15 +110,23 @@ describe('Checkout form', () => {
       <CheckoutForm userEmail={null} canceled={true} draftData={mockData} />,
     )
 
-    expect(screen.getByLabelText('Full name')).toHaveValue('David Martinez')
-    expect(screen.getByLabelText('Shipping address')).toHaveValue('Apt 404 H10')
-    expect(screen.getByLabelText('Email')).toHaveValue('netrunner@cyber.net')
-    expect(screen.getByLabelText('City')).toHaveValue('Night City')
-    expect(screen.getByLabelText('Zip code')).toHaveValue('NC-2077')
-    expect(screen.getByLabelText('Phone number')).toHaveValue('000-0000-000')
+    expect(await screen.findByLabelText('Full name')).toHaveValue(
+      'David Martinez',
+    )
+    expect(await screen.findByLabelText('Shipping address')).toHaveValue(
+      'Apt 404 H10',
+    )
+    expect(await screen.findByLabelText('Email')).toHaveValue(
+      'netrunner@cyber.net',
+    )
+    expect(await screen.findByLabelText('City')).toHaveValue('Night City')
+    expect(await screen.findByLabelText('Zip code')).toHaveValue('NC-2077')
+    expect(await screen.findByLabelText('Phone number')).toHaveValue(
+      '000-0000-000',
+    )
   })
 
-  it('Should calculate cart (subtotal, tax, total) correctly', () => {
+  it('Should calculate cart (subtotal, tax, total) correctly', async () => {
     vi.mocked(useCart).mockImplementationOnce((selector) =>
       selector({
         isOpen: false,
@@ -148,9 +156,9 @@ describe('Checkout form', () => {
 
     render(<CheckoutForm userEmail={null} canceled={false} draftData={null} />)
 
-    expect(screen.getByText('$ 451.00')).toBeInTheDocument()
-    expect(screen.getByText('$ 103.73')).toBeInTheDocument()
-    expect(screen.getByText('$ 554.73')).toBeInTheDocument()
+    expect(await screen.findByText('$ 451.00')).toBeInTheDocument()
+    expect(await screen.findByText('$ 103.73')).toBeInTheDocument()
+    expect(await screen.findByText('$ 554.73')).toBeInTheDocument()
   })
 
   it('Should set checkout button as disabled while pending', async () => {
@@ -200,7 +208,9 @@ describe('Checkout form', () => {
     )
 
     const user = userEvent.setup()
-    const submitButton = screen.getByRole('button', { name: /Confirm order/i })
+    const submitButton = await screen.findByRole('button', {
+      name: /Confirm order/i,
+    })
 
     await user.click(submitButton)
 
@@ -240,14 +250,16 @@ describe('Checkout form', () => {
 
     const user = userEvent.setup()
 
-    await user.type(screen.getByLabelText(/Full name/i), 'Vincent')
-    await user.type(screen.getByLabelText(/Email/i), 'v@nightcity.nc')
-    await user.type(screen.getByLabelText(/Shipping address/i), 'H10')
-    await user.type(screen.getByLabelText(/City/i), 'Night City')
-    await user.type(screen.getByLabelText(/Zip code/i), '00-000')
-    await user.type(screen.getByLabelText(/Phone number/i), '123456789')
+    await user.type(await screen.findByLabelText(/Full name/i), 'Vincent')
+    await user.type(await screen.findByLabelText(/Email/i), 'v@nightcity.nc')
+    await user.type(await screen.findByLabelText(/Shipping address/i), 'H10')
+    await user.type(await screen.findByLabelText(/City/i), 'Night City')
+    await user.type(await screen.findByLabelText(/Zip code/i), '00-000')
+    await user.type(await screen.findByLabelText(/Phone number/i), '123456789')
 
-    const submitButton = screen.getByRole('button', { name: /Confirm order/i })
+    const submitButton = await screen.findByRole('button', {
+      name: /Confirm order/i,
+    })
     await user.click(submitButton)
 
     expect(checkout).toHaveBeenCalled()
@@ -262,5 +274,71 @@ describe('Checkout form', () => {
       { productSlug: 'neuro-processor', quantity: 2 },
       { productSlug: 'optic-cable', quantity: 1 },
     ])
+  })
+
+  it('Should generate and include security token in form payload', async () => {
+    render(<CheckoutForm userEmail={null} canceled={false} draftData={null} />)
+    const user = userEvent.setup()
+
+    const submitButton = await screen.findByRole('button', {
+      name: /Confirm order/i,
+    })
+    await user.click(submitButton)
+
+    await waitFor(() => {
+      expect(checkout).toHaveBeenCalled()
+    })
+
+    const calls = vi.mocked(checkout).mock.calls
+    const formData = calls[calls.length - 1][2] as FormData
+
+    const token = formData.get('orderToken')
+
+    expect(token).toBeTruthy()
+    expect(typeof token).toBe('string')
+    expect((token as string).length).toBeGreaterThan(10)
+  })
+
+  it('Should correctly display Rate Limit error', async () => {
+    const rateLimitError =
+      'Uplink rejected: Rate limit exceeded. Try again in 60s.'
+
+    vi.mocked(checkout).mockResolvedValueOnce({
+      error: [rateLimitError],
+      fields: {},
+    })
+
+    render(<CheckoutForm userEmail={null} canceled={false} draftData={null} />)
+    const user = userEvent.setup()
+
+    const submitButton = await screen.findByRole('button', {
+      name: /Confirm order/i,
+    })
+    await user.click(submitButton)
+
+    expect(
+      await screen.findByText('[ ! ] Uplink_rejected: Data_corrupted'),
+    ).toBeInTheDocument()
+    expect(await screen.findByText(rateLimitError)).toBeInTheDocument()
+  })
+
+  it('Should correctly display duplicate transaction error', async () => {
+    const duplicateError =
+      'Uplink rejected: Duplicate transaction detected. Please wait'
+
+    vi.mocked(checkout).mockResolvedValueOnce({
+      error: [duplicateError],
+      fields: {},
+    })
+
+    render(<CheckoutForm userEmail={null} canceled={false} draftData={null} />)
+    const user = userEvent.setup()
+
+    const submitButton = await screen.findByRole('button', {
+      name: /Confirm order/i,
+    })
+    await user.click(submitButton)
+
+    expect(await screen.findByText(duplicateError)).toBeInTheDocument()
   })
 })

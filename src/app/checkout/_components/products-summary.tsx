@@ -1,5 +1,6 @@
 'use client'
 
+import { QuantityError } from '@/components/ui/quantity-error'
 import { useCart } from '@/hooks'
 
 export const ProductsSummary = () => {
@@ -22,22 +23,27 @@ export const ProductsSummary = () => {
           const total = item.price * item.quantity
 
           return (
-            <div key={item.slug} className="flex w-full items-end gap-2">
-              <div className="uppercase">
-                <span aria-hidden="true" className="mr-2">
-                  &gt;
-                </span>
-                <span className="wrap-break-word">{item.name} </span>
-                {item.quantity > 1 && (
-                  <span className="text-accent ml-2">x{item.quantity}</span>
-                )}
+            <div key={item.slug}>
+              <div className="flex w-full items-end gap-2">
+                <div className="uppercase">
+                  <span aria-hidden="true" className="mr-2">
+                    &gt;
+                  </span>
+                  <span className="wrap-break-word">{item.name} </span>
+                  {item.quantity > 1 && (
+                    <span className="text-accent ml-2">x{item.quantity}</span>
+                  )}
+                </div>
+
+                <div className="border-text-disabled mb-1.5 min-w-4 grow border-b-2 border-dotted" />
+
+                <p className="text-text-main shrink-0 whitespace-nowrap">
+                  $ {total.toFixed(2)}
+                </p>
               </div>
-
-              <div className="border-text-disabled mb-1.5 min-w-4 grow border-b-2 border-dotted" />
-
-              <p className="text-text-main shrink-0 whitespace-nowrap">
-                $ {total.toFixed(2)}
-              </p>
+              {item.quantity > (item.stock ?? Infinity) && (
+                <QuantityError stock={item.stock ?? Infinity} />
+              )}
             </div>
           )
         })}

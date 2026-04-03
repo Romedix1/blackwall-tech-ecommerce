@@ -13,4 +13,5 @@ export const checkoutSchema = z.object({
   city: z.string().trim().min(2, 'City required'),
   zipCode: z.string().trim().min(2, 'Zip code required'),
   phone: z.string().trim().min(9, 'Phone number too short'),
+  orderToken: z.uuid({ message: 'Critical Error: Missing security token' }),
 })

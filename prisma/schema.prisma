@@ -143,6 +143,7 @@ model OrderItem {
 model Order {
   id              String      @id @default(cuid())
   userId          String?
+  orderToken      String      @unique @default(uuid())
   email           String
   fullName        String
   phoneNumber     String

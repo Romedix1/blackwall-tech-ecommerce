@@ -100,3 +100,13 @@ export async function fetchCartFromDb() {
     return []
   }
 }
+
+export async function fetchProductsStock(slugs: string[]) {
+  return await prisma.product.findMany({
+    where: { slug: { in: slugs } },
+    select: {
+      slug: true,
+      quantity: true,
+    },
+  })
+}

@@ -11,6 +11,7 @@ type ProductType = {
   price: number
   image: string
   quantity?: number
+  stock: number
 }
 
 type AddToCartButtonProps = {
@@ -38,6 +39,7 @@ export const AddToCartButton = ({
       product.price,
       quantity,
       product.image,
+      product.stock,
       isAuth,
     )
   }

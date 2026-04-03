@@ -10,6 +10,7 @@ vi.mock('@/lib/prisma', () => ({
     },
     order: {
       create: vi.fn(),
+      findUnique: vi.fn().mockResolvedValue(null),
     },
     $transaction: vi.fn((callback) => callback(prisma)),
   },
@@ -26,11 +27,33 @@ vi.mock('@/lib/stripe', () => ({
 }))
 
 vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue({
+    get: vi.fn().mockReturnValue('127.0.0.1'),
+  }),
   cookies: vi.fn().mockResolvedValue({
     set: vi.fn(),
     get: vi.fn(),
-    delete: vi.fn(),
   }),
+}))
+
+vi.mock('@upstash/redis', () => ({
+  Redis: class MockRedis {
+    constructor() {}
+  },
+}))
+
+vi.mock('@upstash/ratelimit', () => ({
+  Ratelimit: class MockRatelimit {
+    constructor() {}
+
+    static slidingWindow() {
+      return vi.fn()
+    }
+
+    async limit() {
+      return { success: true }
+    }
+  },
 }))
 
 vi.mock('next/navigation', () => ({
@@ -47,10 +70,11 @@ describe('Checkout backend', () => {
     formData.append('city', 'Night City')
     formData.append('zipCode', 'NC-77')
     formData.append('phone', '555-000-000')
+    formData.append('orderToken', '03d78c13-9450-407e-a3cd-f6c95e254849')
 
     const result = await checkout([], { error: [], fields: {} }, formData)
 
-    expect(result.error).toContain('No items detected in cart')
+    expect(result.error).toContain('Uplink rejected: No items detected in cart')
   })
 
   it('Should return error when validation is failed', async () => {
@@ -82,6 +106,7 @@ describe('Checkout backend', () => {
     formData.append('city', 'Night City')
     formData.append('zipCode', 'NC-77')
     formData.append('phone', '555-000-000')
+    formData.append('orderToken', '03d78c13-9450-407e-a3cd-f6c95e254849')
 
     const result = await checkout(
       [
@@ -129,6 +154,7 @@ describe('Checkout backend', () => {
     formData.append('city', 'Night City')
     formData.append('zipCode', 'NC-77')
     formData.append('phone', '555-000-000')
+    formData.append('orderToken', '03d78c13-9450-407e-a3cd-f6c95e254849')
 
     const result = await checkout(
       [
@@ -183,6 +209,7 @@ describe('Checkout backend', () => {
     formData.append('city', 'Night City')
     formData.append('zipCode', 'NC-77')
     formData.append('phone', '555-000-000')
+    formData.append('orderToken', '03d78c13-9450-407e-a3cd-f6c95e254849')
 
     try {
       await checkout(
@@ -236,6 +263,7 @@ describe('Checkout backend', () => {
     formData.append('city', 'Night City')
     formData.append('zipCode', 'NC-77')
     formData.append('phone', '555-000-000')
+    formData.append('orderToken', '03d78c13-9450-407e-a3cd-f6c95e254849')
 
     try {
       await checkout(
@@ -298,6 +326,7 @@ describe('Checkout backend', () => {
     formData.append('city', 'Night City')
     formData.append('zipCode', 'NC-77')
     formData.append('phone', '555-000-000')
+    formData.append('orderToken', '03d78c13-9450-407e-a3cd-f6c95e254849')
 
     try {
       await checkout(
