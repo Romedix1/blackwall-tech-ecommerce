@@ -7,6 +7,7 @@ import { Dispatch, SetStateAction } from 'react'
 type AmountButtonProps = {
   slug: string
   className?: string
+  stock: number
   handleUpdate?: (slug: string, quantity: number, isAuth: boolean) => void
   quantity: number
   setQuantity?: Dispatch<SetStateAction<number>>
@@ -15,6 +16,7 @@ type AmountButtonProps = {
 export const AmountButton = ({
   className,
   slug,
+  stock,
   handleUpdate,
   quantity,
   setQuantity,
@@ -47,7 +49,7 @@ export const AmountButton = ({
       {quantity < 10 ? `0${quantity}` : quantity}
 
       <button
-        onClick={() => handleUpdateQuantity(quantity + 1)}
+        onClick={() => quantity < stock && handleUpdateQuantity(quantity + 1)}
         className={cn(BUTTON_STYLE)}
       >
         <span aria-hidden="true">[ + ]</span>

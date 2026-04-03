@@ -41,7 +41,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <div className="container mx-auto mt-16">
       <div className="lg:mb-24 lg:grid lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-x-16">
         <div className="col-start-2 mb-6 flex flex-col gap-2">
-          <PathNavigator productCategory={'gpu'} productName={product.slug} />
+          <PathNavigator
+            productCategory={product.category.slug}
+            productName={product.slug}
+          />
           <h1 className="text-2xl font-bold uppercase lg:text-4xl">
             {product.name}
           </h1>
@@ -67,8 +70,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <p className="text-text-second text-xs uppercase lg:text-sm">
               {product.quantity > 0 ? (
                 <>
-                  <span aria-hidden="true">[ in_stock ]</span>
-                  <span className="sr-only">in stock</span>
+                  <span aria-hidden="true">
+                    [ in_stock_{product.quantity} ]
+                  </span>
+                  <span className="sr-only">in stock {product.quantity}</span>
                 </>
               ) : (
                 <>
@@ -84,6 +89,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             slug={product.slug}
             name={product.name}
             price={product.price}
+            stock={product.quantity}
             imageUrl={imageUrl}
           />
         </div>

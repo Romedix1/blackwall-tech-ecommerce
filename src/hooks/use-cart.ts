@@ -1,4 +1,4 @@
-import { saveCartInDb } from '@/lib/actions/cart'
+import { fetchProductsStock, saveCartInDb } from '@/lib/actions/cart'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -8,18 +8,21 @@ type CartItem = {
   price: number
   quantity: number
   imgSrc: string
+  stock?: number
 }
 
 type CartStore = {
+  lastChecked: number
   items: CartItem[]
   isOpen: boolean
-  toggle: () => void
+  toggle: () => Promise<void>
   addItem: (
     slug: string,
     name: string,
     price: number,
     quantity: number,
     imgSrc: string,
+    stock?: number,
     isLoggedIn?: boolean,
   ) => Promise<void>
   updateQuantity: (
@@ -54,12 +57,44 @@ const debouncedSaveToDb = (items: CartItem[]) => {
 export const useCart = create<CartStore>()(
   persist(
     (set, get) => ({
-      items: [],
+      items: [] as CartItem[],
       isOpen: false,
-      toggle: () =>
-        set((state) => ({
-          isOpen: !state.isOpen,
-        })),
+      lastChecked: 0,
+      toggle: async () => {
+        const state = get()
+        const nextOpenState = !state.isOpen
+        const currentTime = Date.now()
+        const COOLDOWN = 20000
+
+        set(() => ({
+          isOpen: nextOpenState,
+        }))
+
+        if (
+          nextOpenState &&
+          currentTime - state.lastChecked > COOLDOWN &&
+          state.items.length > 0
+        ) {
+          try {
+            const slugs = state.items.map((item) => item.slug)
+
+            set({ lastChecked: currentTime })
+
+            const dbStock = await fetchProductsStock(slugs)
+
+            const updatedItems = get().items.map((item) => {
+              const dbInfo = dbStock.find((s) => s.slug === item.slug)
+              return dbInfo ? { ...item, stock: dbInfo.quantity } : item
+            })
+
+            set({ items: updatedItems, lastChecked: currentTime })
+          } catch (error) {
+            if (process.env.NODE_ENV === 'development') {
+              console.error('[ STOCK_FETCH_ERROR ]: ', error)
+            }
+          }
+        }
+      },
       setCart: (items) => set({ items }),
       addItem: async (
         slug,
@@ -67,6 +102,7 @@ export const useCart = create<CartStore>()(
         price,
         quantity,
         imgSrc,
+        stock,
         isLoggedIn = false,
       ) => {
         const currentItems = get().items
@@ -76,13 +112,20 @@ export const useCart = create<CartStore>()(
           set({
             items: currentItems.map((item) =>
               item.slug === slug
-                ? { ...item, quantity: item.quantity + quantity }
+                ? {
+                    ...item,
+                    quantity: item.quantity + quantity,
+                    stock: stock ?? item.stock,
+                  }
                 : item,
             ),
           })
         } else {
           set({
-            items: [...currentItems, { slug, name, price, quantity, imgSrc }],
+            items: [
+              ...currentItems,
+              { slug, name, price, quantity, stock, imgSrc },
+            ],
           })
         }
 
