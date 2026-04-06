@@ -5,6 +5,15 @@ export const getProcessors = (categoryIds: Record<string, string>) => [
     badge: 'zen 4 flagship',
     price: 549.0,
     quantity: 10,
+    technical: {
+      socket: 'am5',
+      ramGen: ['ddr5'],
+      cores: 16,
+      threads: 32,
+      tdp: 170,
+      maxTdp: 230,
+      integratedGraphics: true,
+    },
     specification: [
       {
         id: '01',
@@ -48,6 +57,15 @@ export const getProcessors = (categoryIds: Record<string, string>) => [
     badge: 'ai ready',
     price: 629.0,
     quantity: 5,
+    technical: {
+      socket: 'lga1851',
+      ramGen: ['ddr5'],
+      cores: 24,
+      threads: 24,
+      tdp: 125,
+      maxTdp: 250,
+      integratedGraphics: true,
+    },
     specification: [
       {
         id: '01',
@@ -91,6 +109,15 @@ export const getProcessors = (categoryIds: Record<string, string>) => [
     slug: 'intel-core-i9-13900k',
     price: 489.0,
     quantity: 7,
+    technical: {
+      socket: 'lga1700',
+      ramGen: ['ddr4', 'ddr5'],
+      cores: 24,
+      threads: 32,
+      tdp: 125,
+      maxTdp: 253,
+      integratedGraphics: true,
+    },
     specification: [
       {
         id: '01',
@@ -134,6 +161,15 @@ export const getProcessors = (categoryIds: Record<string, string>) => [
     slug: 'amd-ryzen-9-pro-7945',
     price: 579.0,
     quantity: 3,
+    technical: {
+      socket: 'am5',
+      ramGen: ['ddr5'],
+      cores: 12,
+      threads: 24,
+      tdp: 65,
+      maxTdp: 88,
+      integratedGraphics: true,
+    },
     specification: [
       {
         id: '01',
