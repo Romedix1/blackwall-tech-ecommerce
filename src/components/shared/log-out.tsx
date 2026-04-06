@@ -1,9 +1,18 @@
 'use client'
 
+import { cn } from '@/lib'
 import { signOut } from 'next-auth/react'
 import { useState } from 'react'
 
-export const LogOutButton = () => {
+type LogOutButtonProps = {
+  className?: string
+  isAdmin?: boolean
+}
+
+export const LogOutButton = ({
+  className,
+  isAdmin = false,
+}: LogOutButtonProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleLogout = async () => {
@@ -21,13 +30,25 @@ export const LogOutButton = () => {
 
   return (
     <button
-      className="text-error-text focus:bg-error-bg hover:bg-error-bg group cursor-pointer p-1 outline-none"
+      className={cn(
+        'text-error-text focus:bg-error-bg hover:bg-error-bg group cursor-pointer p-1 outline-none',
+        className,
+      )}
       disabled={isLoading}
       onClick={handleLogout}
     >
       <div className="group-hover:animate-glitch group-focus:animate-glitch text-left uppercase outline-none disabled:cursor-wait disabled:opacity-50 motion-reduce:animate-none motion-reduce:hover:animate-none motion-reduce:focus:animate-none">
-        <span className="sr-only">Log out (sever connection)</span>
-        <span aria-hidden="true">[ sever_connection ]</span>
+        {isAdmin ? (
+          <>
+            <span className="sr-only">[Log out (Terminate root session) ]</span>
+            <span aria-hidden="true">[ Terminate_root_session ]</span>
+          </>
+        ) : (
+          <>
+            <span className="sr-only">Log out (Sever connection)</span>
+            <span aria-hidden="true">[ Sever_connection ]</span>
+          </>
+        )}
       </div>
     </button>
   )
