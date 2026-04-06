@@ -1,4 +1,4 @@
-import { NavigationLinks } from '@/app/(dashboard)/dashboard/_components/navigation-links'
+import { NavigationLinks } from '@/app/(dashboard)/dashboard/_components'
 import { auth } from '@/auth'
 import { LogOutButton } from '@/components/shared'
 import { cn } from '@/lib'
