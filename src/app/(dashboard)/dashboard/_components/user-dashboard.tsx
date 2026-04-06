@@ -91,7 +91,12 @@ export const UserDashboard = async () => {
                     &gt;
                   </span>
                   Status: {status.label}
-                  (Eta: {getETA(order.createdAt)})
+                  <span aria-hidden="true">
+                    (Eta: {getETA(order.createdAt)})
+                  </span>
+                  <span className="sr-only">
+                    Estimated time of arrival: {getETA(order.createdAt)}
+                  </span>
                 </p>
               </Link>
             </li>
