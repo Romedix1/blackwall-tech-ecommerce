@@ -4,6 +4,7 @@ import { getMotherboards } from './motherboards'
 import { getPeripherals } from './peripherals'
 import { getPowerSupplies } from './power-supplies'
 import { getProcessors } from './processors'
+import { getStorage } from './storage'
 
 export const getAllProducts = (categoryIds: Record<string, string>) => [
   ...getGraphicsCards(categoryIds),
@@ -12,4 +13,5 @@ export const getAllProducts = (categoryIds: Record<string, string>) => [
   ...getPeripherals(categoryIds),
   ...getPowerSupplies(categoryIds),
   ...getMotherboards(categoryIds),
+  ...getStorage(categoryIds),
 ]

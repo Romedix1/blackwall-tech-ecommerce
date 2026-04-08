@@ -6,19 +6,14 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     price: 649.0,
     quantity: 12,
     technical: {
-      power: {
-        recommendedPSU: 750,
-        connectors: ['1x 16-pin'],
-        tdp: 220,
-      },
-      dimensions: {
-        length: 294,
-        slots: 2.5,
-      },
-      bus: {
-        interface: 'pcie 5.0',
-        width: 192,
-      },
+      vram: 12,
+      memoryType: 'gddr7',
+      chipset: 'rtx 5070',
+      interface: 'pcie 5.0',
+      tdp: 220,
+      psu: 750,
+      length: 294,
+      slots: 2.5,
     },
     specification: [
       {
@@ -66,19 +61,14 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     price: 599.0,
     quantity: 24,
     technical: {
-      power: {
-        recommendedPSU: 650,
-        connectors: ['1x 16-pin'],
-        tdp: 220,
-      },
-      dimensions: {
-        length: 267,
-        slots: 2,
-      },
-      bus: {
-        interface: 'pcie 4.0',
-        width: 192,
-      },
+      vram: 12,
+      memoryType: 'gddr6x',
+      chipset: 'rtx 4070 super',
+      interface: 'pcie 4.0',
+      tdp: 220,
+      psu: 650,
+      length: 267,
+      slots: 2,
     },
     specification: [
       {
@@ -126,19 +116,14 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     price: 1699.0,
     quantity: 5,
     technical: {
-      power: {
-        recommendedPSU: 1000,
-        connectors: ['1x 16-pin'],
-        tdp: 450,
-      },
-      dimensions: {
-        length: 336,
-        slots: 3.5,
-      },
-      bus: {
-        interface: 'pcie 4.0',
-        width: 384,
-      },
+      vram: 24,
+      memoryType: 'gddr6x',
+      chipset: 'rtx 4090',
+      interface: 'pcie 4.0',
+      tdp: 450,
+      psu: 1000,
+      length: 336,
+      slots: 3.5,
     },
     specification: [
       {
@@ -186,19 +171,14 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     price: 929.0,
     quantity: 9,
     technical: {
-      power: {
-        recommendedPSU: 850,
-        connectors: ['3x 8-pin'],
-        tdp: 355,
-      },
-      dimensions: {
-        length: 330,
-        slots: 2.8,
-      },
-      bus: {
-        interface: 'pcie 4.0',
-        width: 384,
-      },
+      vram: 24,
+      memoryType: 'gddr6',
+      chipset: 'rx 7900 xtx',
+      interface: 'pcie 4.0',
+      tdp: 355,
+      psu: 850,
+      length: 330,
+      slots: 2.8,
     },
     specification: [
       {

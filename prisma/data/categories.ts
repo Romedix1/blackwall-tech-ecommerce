@@ -5,4 +5,5 @@ export const categories = [
   { name: 'Memory', slug: 'memory' },
   { name: 'Motherboards', slug: 'motherboards' },
   { name: 'Power Supplies', slug: 'psu' },
+  { name: 'Storage', slug: 'storage' },
 ]
