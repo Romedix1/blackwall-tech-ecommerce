@@ -6,11 +6,11 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     quantity: 5,
     technical: {
       type: 'ddr5',
-      speed: 8200,
-      capacity: 48,
-      modules: 2,
+      speed: '8200',
+      capacity: '48',
+      modules: '2',
       profile: 'xmp',
-      voltage: 1.35,
+      voltage: '1.35',
     },
     specification: [
       {
@@ -44,11 +44,11 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     quantity: 8,
     technical: {
       type: 'ddr5',
-      speed: 6800,
-      capacity: 96,
-      modules: 2,
+      speed: '6800',
+      capacity: '96',
+      modules: '2',
       profile: 'xmp',
-      voltage: 1.4,
+      voltage: '1.4',
     },
     specification: [
       {
@@ -81,11 +81,11 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     quantity: 20,
     technical: {
       type: 'ddr4',
-      speed: 4000,
-      capacity: 16,
-      modules: 2,
+      speed: '4000',
+      capacity: '16',
+      modules: '2',
       profile: 'xmp',
-      voltage: 1.35,
+      voltage: '1.35',
     },
     specification: [
       {
@@ -118,11 +118,11 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     quantity: 15,
     technical: {
       type: 'ddr5',
-      speed: 5200,
-      capacity: 64,
-      modules: 2,
+      speed: '5200',
+      capacity: '64',
+      modules: '2',
       profile: 'expo',
-      voltage: 1.25,
+      voltage: '1.25',
     },
     specification: [
       {

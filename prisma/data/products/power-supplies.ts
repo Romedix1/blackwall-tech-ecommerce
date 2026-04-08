@@ -5,12 +5,12 @@ export const getPowerSupplies = (categoryIds: Record<string, string>) => [
     price: 459.0,
     quantity: 0,
     technical: {
-      wattage: 1300,
+      wattage: '1300',
       efficiency: '80 plus titanium',
       formFactor: 'atx',
       atx3_0: true,
       modularity: 'full',
-      length: 210,
+      length: '210',
     },
     specification: [
       {
@@ -31,12 +31,12 @@ export const getPowerSupplies = (categoryIds: Record<string, string>) => [
     price: 289.0,
     quantity: 0,
     technical: {
-      wattage: 1000,
+      wattage: '1000',
       efficiency: '80 plus titanium',
       formFactor: 'atx',
       atx3_0: true,
       modularity: 'full',
-      length: 175,
+      length: '175',
     },
     specification: [
       {
@@ -56,12 +56,12 @@ export const getPowerSupplies = (categoryIds: Record<string, string>) => [
     price: 209.0,
     quantity: 0,
     technical: {
-      wattage: 1000,
+      wattage: '1000',
       efficiency: '80 plus gold',
       formFactor: 'atx',
       atx3_0: true,
       modularity: 'full',
-      length: 180,
+      length: '180',
       special: 'side interface',
     },
     specification: [
@@ -82,12 +82,12 @@ export const getPowerSupplies = (categoryIds: Record<string, string>) => [
     price: 189.0,
     quantity: 0,
     technical: {
-      wattage: 1000,
+      wattage: '1000',
       efficiency: '80 plus gold',
       formFactor: 'atx',
       atx3_0: false,
       modularity: 'full',
-      length: 130,
+      length: '130',
     },
     specification: [
       {

@@ -10,7 +10,7 @@ export const getMotherboards = (categoryIds: Record<string, string>) => [
       ramGen: 'ddr5',
       formFactor: 'atx',
       pcieGen: '5.0',
-      m2Slots: 5,
+      m2Slots: '5',
     },
     specification: [
       {
@@ -44,7 +44,7 @@ export const getMotherboards = (categoryIds: Record<string, string>) => [
       ramGen: 'ddr5',
       formFactor: 'atx',
       pcieGen: '5.0',
-      m2Slots: 4,
+      m2Slots: '4',
     },
     specification: [
       {
@@ -70,7 +70,7 @@ export const getMotherboards = (categoryIds: Record<string, string>) => [
       ramGen: 'ddr5',
       formFactor: 'atx',
       pcieGen: '5.0',
-      m2Slots: 4,
+      m2Slots: '4',
     },
     specification: [
       {
@@ -96,7 +96,7 @@ export const getMotherboards = (categoryIds: Record<string, string>) => [
       ramGen: 'ddr5',
       formFactor: 'atx',
       pcieGen: '5.0',
-      m2Slots: 3,
+      m2Slots: '3',
     },
     specification: [
       {

@@ -9,8 +9,8 @@ export const getStorage = (categoryIds: Record<string, string>) => [
       capacity: '2 TB',
       type: 'NVMe SSD',
       interface: 'PCIe 4.0 x4',
-      readSpeed: 7450,
-      writeSpeed: 6900,
+      readSpeed: '7450',
+      writeSpeed: '6900',
       formFactor: 'M.2 2280',
     },
     specification: [
@@ -45,8 +45,8 @@ export const getStorage = (categoryIds: Record<string, string>) => [
       capacity: '1 TB',
       type: 'NVMe SSD',
       interface: 'PCIe 5.0 x4',
-      readSpeed: 14500,
-      writeSpeed: 12700,
+      readSpeed: '14500',
+      writeSpeed: '12700',
       formFactor: 'M.2 2280',
     },
     specification: [
@@ -72,8 +72,8 @@ export const getStorage = (categoryIds: Record<string, string>) => [
       capacity: '1 TB',
       type: 'SATA SSD',
       interface: 'SATA III',
-      readSpeed: 560,
-      writeSpeed: 520,
+      readSpeed: '560',
+      writeSpeed: '520',
       formFactor: '2.5 inch',
     },
     specification: [
@@ -98,8 +98,8 @@ export const getStorage = (categoryIds: Record<string, string>) => [
       capacity: '2 TB',
       type: 'NVMe SSD',
       interface: 'PCIe 4.0 x4',
-      readSpeed: 3500,
-      writeSpeed: 2800,
+      readSpeed: '3500',
+      writeSpeed: '2800',
       formFactor: 'M.2 2280',
     },
     specification: [

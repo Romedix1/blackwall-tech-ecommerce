@@ -1,5 +1,5 @@
 import { FilterCapsule } from '@/app/(home)/pc-builder/[category]/_components'
-import { SearchInput } from '@/components/shared'
+import { SearchShell } from '@/app/(home)/pc-builder/[category]/_components/search-shell'
 import { Button, ImageNotFound } from '@/components/ui'
 import { getImageUrl } from '@/lib'
 import { prisma } from '@/lib/prisma'
@@ -8,15 +8,47 @@ import Image from 'next/image'
 
 type BuilderCategoryPageProps = {
   params: Promise<{ category: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export default async function BuilderCategoryPage({
   params,
+  searchParams,
 }: BuilderCategoryPageProps) {
   const { category: categorySlug } = await params
+  const sParams = await searchParams
+
+  const { search, ...technicalFilters } = sParams
+
+  const searchQuery = typeof search === 'string' ? search : undefined
+
+  const technicalConditions = Object.entries(technicalFilters).map(
+    ([key, value]) => ({
+      technical: {
+        path: [key],
+        equals: value,
+      },
+    }),
+  )
+
+  const allCategoryProducts = await prisma.product.findMany({
+    where: {
+      category: { slug: categorySlug },
+    },
+    select: {
+      technical: true,
+    },
+  })
 
   const products = await prisma.product.findMany({
     where: {
+      AND: [
+        { category: { slug: categorySlug } },
+        searchQuery
+          ? { name: { contains: searchQuery, mode: 'insensitive' } }
+          : {},
+        ...technicalConditions,
+      ],
       category: {
         slug: categorySlug,
       },
@@ -44,18 +76,12 @@ export default async function BuilderCategoryPage({
 
   const availableFilters = keysToExtract.map((key) => {
     const uniqueValues = new Set(
-      products
-        .map((p) => {
-          if (
-            p.technical &&
-            typeof p.technical === 'object' &&
-            !Array.isArray(p.technical)
-          ) {
-            return (p.technical as Record<string, number | string>)[key]
-          }
-          return undefined
+      allCategoryProducts
+        .map((product) => {
+          const tech = product.technical as Record<string, string | number>
+          return tech ? tech[key] : undefined
         })
-        .filter(Boolean),
+        .filter((filter): filter is string | number => filter !== undefined),
     )
 
     return {
@@ -66,12 +92,7 @@ export default async function BuilderCategoryPage({
 
   return (
     <div className="flex flex-col gap-4">
-      <SearchInput
-        placeholder="Filter products (by name)"
-        ariaLabel="Filter products by name"
-        containerClassName="w-full xl:w-full"
-        variant="filter"
-      />
+      <SearchShell />
 
       <div className="flex gap-4 overflow-x-auto pb-2">
         {availableFilters.map((filter) =>

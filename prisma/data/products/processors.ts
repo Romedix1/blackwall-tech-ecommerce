@@ -8,10 +8,10 @@ export const getProcessors = (categoryIds: Record<string, string>) => [
     technical: {
       socket: 'am5',
       ramGen: ['ddr5'],
-      cores: 16,
-      threads: 32,
-      tdp: 170,
-      maxTdp: 230,
+      cores: '16',
+      threads: '32',
+      tdp: '170',
+      maxTdp: '230',
       integratedGraphics: true,
     },
     specification: [
@@ -60,10 +60,10 @@ export const getProcessors = (categoryIds: Record<string, string>) => [
     technical: {
       socket: 'lga1851',
       ramGen: ['ddr5'],
-      cores: 24,
-      threads: 24,
-      tdp: 125,
-      maxTdp: 250,
+      cores: '24',
+      threads: '24',
+      tdp: '125',
+      maxTdp: '250',
       integratedGraphics: true,
     },
     specification: [
@@ -112,10 +112,10 @@ export const getProcessors = (categoryIds: Record<string, string>) => [
     technical: {
       socket: 'lga1700',
       ramGen: ['ddr4', 'ddr5'],
-      cores: 24,
-      threads: 32,
-      tdp: 125,
-      maxTdp: 253,
+      cores: '24',
+      threads: '32',
+      tdp: '125',
+      maxTdp: '253',
       integratedGraphics: true,
     },
     specification: [
@@ -164,10 +164,10 @@ export const getProcessors = (categoryIds: Record<string, string>) => [
     technical: {
       socket: 'am5',
       ramGen: ['ddr5'],
-      cores: 12,
-      threads: 24,
-      tdp: 65,
-      maxTdp: 88,
+      cores: '12',
+      threads: '24',
+      tdp: '65',
+      maxTdp: '88',
       integratedGraphics: true,
     },
     specification: [
