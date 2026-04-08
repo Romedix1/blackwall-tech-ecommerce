@@ -1,5 +1,5 @@
 import { AddToCartButton } from '@/components/shared/add-to-cart-button'
-import { BackgroundGlow } from '@/components/ui'
+import { BackgroundGlow, ImageNotFound } from '@/components/ui'
 import { getImageUrl } from '@/lib'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -16,8 +16,8 @@ type ProductItemProps = {
   category: string
 }
 
-export const ProductItem = ({ product, category }: ProductItemProps) => {
-  const imageUrl = getImageUrl(category, product.slug)
+export const ProductItem = async ({ product, category }: ProductItemProps) => {
+  const imageUrl = await getImageUrl(category, product.slug)
 
   const cartProduct = {
     slug: product.slug,
@@ -33,14 +33,18 @@ export const ProductItem = ({ product, category }: ProductItemProps) => {
         className="group hover:border-accent focus:border-accent flex flex-col gap-6 border p-4 outline-none"
       >
         <div className="relative flex aspect-4/3 flex-col items-center justify-center">
-          <Image
-            alt={`${product.name} image`}
-            src={imageUrl}
-            className="relative z-20 object-contain"
-            width={300}
-            height={300}
-            priority={false}
-          />
+          {imageUrl ? (
+            <Image
+              alt={product.name}
+              src={imageUrl}
+              className="relative z-20 object-contain"
+              width={300}
+              height={300}
+              priority={false}
+            />
+          ) : (
+            <ImageNotFound />
+          )}
           <BackgroundGlow className="top-[60%] h-24 w-24 blur-[30px] group-hover:scale-200" />
         </div>
 
@@ -49,7 +53,7 @@ export const ProductItem = ({ product, category }: ProductItemProps) => {
           <p className="text-accent font-bold">$ {product.price.toFixed(2)}</p>
         </div>
 
-        <AddToCartButton product={cartProduct} />
+        <AddToCartButton product={{ ...cartProduct, stock: 1 }} />
       </Link>
     </article>
   )

@@ -23,8 +23,8 @@ export const BestSellersContainer = async () => {
 
   return (
     <div className="scrollbar-hide relative flex gap-3 overflow-x-scroll sm:gap-4">
-      {bestSellers.map((product) => {
-        const imageUrl = getImageUrl(product.category.slug, product.slug)
+      {bestSellers.map(async (product) => {
+        const imageUrl = await getImageUrl(product.category.slug, product.slug)
 
         return (
           <BestSellersCard
@@ -36,6 +36,7 @@ export const BestSellersContainer = async () => {
               slug: product.slug,
               specs: product.specification as SpecSection[],
               image: imageUrl,
+              stock: 1,
             }}
           />
         )

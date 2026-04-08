@@ -176,7 +176,7 @@ export async function checkout(
       return createdOrder
     })
 
-    // [ ARCHITECTURE NOTE FOR REVIEWERS ]
+    // @note PORTFOLIO_LIMITATION
     // Stripe Tax (automatic_tax) is intentionally disabled in this portfolio project.
     // Enabling it requires configuring legal tax registrations and physical origin addresses
     // In a production environment, this would be handled via Stripe Tax API based on customer location.

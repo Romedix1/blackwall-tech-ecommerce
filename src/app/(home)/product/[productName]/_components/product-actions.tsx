@@ -10,7 +10,7 @@ type ProductActionsProps = {
   name: string
   price: number
   stock: number
-  imageUrl: string
+  imageUrl: string | null
 }
 
 export const ProductActions = ({
@@ -28,7 +28,7 @@ export const ProductActions = ({
     stock: stock,
   }
 
-  const [quantity, setQuantity] = useState(111)
+  const [quantity, setQuantity] = useState(1)
 
   return (
     <div>

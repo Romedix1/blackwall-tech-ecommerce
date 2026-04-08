@@ -7,7 +7,10 @@ import { SessionProvider } from 'next-auth/react'
 
 export const Navbar = () => {
   return (
-    <nav className="bg-background sticky top-0 z-50 flex w-full items-center border-b p-3 lg:px-20 lg:py-2.5">
+    <nav
+      aria-label="Main navigation"
+      className="bg-background sticky top-0 z-50 flex w-full items-center border-b p-3 lg:px-20 lg:py-2.5"
+    >
       <div className="flex justify-start lg:flex-1">
         <NavbarLogo />
       </div>

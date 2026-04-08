@@ -5,6 +5,14 @@ export const getPeripherals = (categoryIds: Record<string, string>) => [
     badge: 'enthusiast grade',
     price: 229.0,
     quantity: 12,
+    technical: {
+      type: 'keyboard',
+      connectivity: 'wireless',
+      layout: '96%',
+      switches: 'mechanical',
+      hotswap: true,
+      rgb: 'aura sync',
+    },
     specification: [
       {
         id: '01',
@@ -34,6 +42,14 @@ export const getPeripherals = (categoryIds: Record<string, string>) => [
     badge: 'limited release',
     price: 199.0,
     quantity: 5,
+    technical: {
+      type: 'keyboard',
+      connectivity: 'wired',
+      layout: '100%',
+      switches: 'optical',
+      protection: 'ip57',
+      rgb: 'aura sync',
+    },
     specification: [
       {
         id: '01',
@@ -62,6 +78,14 @@ export const getPeripherals = (categoryIds: Record<string, string>) => [
     slug: 'steelseries-aerox-5-wired',
     price: 79.0,
     quantity: 30,
+    technical: {
+      type: 'mouse',
+      connectivity: 'wired',
+      sensor: 'optical',
+      weight: 66,
+      dpi: 18000,
+      buttons: 9,
+    },
     specification: [
       {
         id: '01',
@@ -84,12 +108,18 @@ export const getPeripherals = (categoryIds: Record<string, string>) => [
     ],
     categoryId: categoryIds['peripherals'],
   },
-
   {
     name: 'ROG Raikiri II Wireless Controller',
     slug: 'rog-raikiri-ii-wireless',
     price: 169.0,
     quantity: 15,
+    technical: {
+      type: 'controller',
+      connectivity: 'wireless',
+      platforms: ['pc', 'xbox'],
+      vibration: 'haptic',
+      display: 'oled',
+    },
     specification: [
       {
         id: '01',

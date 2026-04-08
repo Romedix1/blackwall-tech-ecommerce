@@ -5,6 +5,21 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     badge: 'new gen',
     price: 649.0,
     quantity: 12,
+    technical: {
+      power: {
+        recommendedPSU: 750,
+        connectors: ['1x 16-pin'],
+        tdp: 220,
+      },
+      dimensions: {
+        length: 294,
+        slots: 2.5,
+      },
+      bus: {
+        interface: 'pcie 5.0',
+        width: 192,
+      },
+    },
     specification: [
       {
         id: '01',
@@ -50,6 +65,21 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     badge: 'stable',
     price: 599.0,
     quantity: 24,
+    technical: {
+      power: {
+        recommendedPSU: 650,
+        connectors: ['1x 16-pin'],
+        tdp: 220,
+      },
+      dimensions: {
+        length: 267,
+        slots: 2,
+      },
+      bus: {
+        interface: 'pcie 4.0',
+        width: 192,
+      },
+    },
     specification: [
       {
         id: '01',
@@ -95,6 +125,21 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     badge: 'enthusiast',
     price: 1699.0,
     quantity: 5,
+    technical: {
+      power: {
+        recommendedPSU: 1000,
+        connectors: ['1x 16-pin'],
+        tdp: 450,
+      },
+      dimensions: {
+        length: 336,
+        slots: 3.5,
+      },
+      bus: {
+        interface: 'pcie 4.0',
+        width: 384,
+      },
+    },
     specification: [
       {
         id: '01',
@@ -140,6 +185,21 @@ export const getGraphicsCards = (categoryIds: Record<string, string>) => [
     badge: 'amd elite',
     price: 929.0,
     quantity: 9,
+    technical: {
+      power: {
+        recommendedPSU: 850,
+        connectors: ['3x 8-pin'],
+        tdp: 355,
+      },
+      dimensions: {
+        length: 330,
+        slots: 2.8,
+      },
+      bus: {
+        interface: 'pcie 4.0',
+        width: 384,
+      },
+    },
     specification: [
       {
         id: '01',

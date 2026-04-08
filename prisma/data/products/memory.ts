@@ -4,6 +4,14 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     slug: 'gskill-trident-z5-ck-black',
     price: 269.0,
     quantity: 5,
+    technical: {
+      type: 'ddr5',
+      speed: 8200,
+      capacity: 48,
+      modules: 2,
+      profile: 'xmp',
+      voltage: 1.35,
+    },
     specification: [
       {
         id: '01',
@@ -34,6 +42,14 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     badge: 'overclocking master',
     price: 389.0,
     quantity: 8,
+    technical: {
+      type: 'ddr5',
+      speed: 6800,
+      capacity: 96,
+      modules: 2,
+      profile: 'xmp',
+      voltage: 1.4,
+    },
     specification: [
       {
         id: '01',
@@ -63,6 +79,14 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     slug: 't-force-delta-rgb-ddr4-black',
     price: 94.0,
     quantity: 20,
+    technical: {
+      type: 'ddr4',
+      speed: 4000,
+      capacity: 16,
+      modules: 2,
+      profile: 'xmp',
+      voltage: 1.35,
+    },
     specification: [
       {
         id: '01',
@@ -92,6 +116,14 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     slug: 'gskill-flare-x5-ddr5-black',
     price: 184.0,
     quantity: 15,
+    technical: {
+      type: 'ddr5',
+      speed: 5200,
+      capacity: 64,
+      modules: 2,
+      profile: 'expo',
+      voltage: 1.25,
+    },
     specification: [
       {
         id: '01',
