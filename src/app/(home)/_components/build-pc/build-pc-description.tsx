@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui'
+import Link from 'next/link'
 
 export const BuildPcDescription = () => {
   return (
@@ -24,9 +25,14 @@ export const BuildPcDescription = () => {
         </p>
       </div>
 
-      <Button className="mt-6 lg:w-full 2xl:h-20 2xl:text-xl">
-        <span aria-hidden="true">[ Start_configuration ]</span>
-        <span className="sr-only">Start configuration</span>
+      <Button
+        asChild
+        className="mt-6 flex items-center justify-center lg:w-full 2xl:h-20 2xl:text-xl"
+      >
+        <Link href="/pc-builder/cpu">
+          <span aria-hidden="true">[ Start_configuration ]</span>
+          <span className="sr-only">Start configuration</span>
+        </Link>
       </Button>
     </div>
   )

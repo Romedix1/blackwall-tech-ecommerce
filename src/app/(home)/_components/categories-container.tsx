@@ -4,6 +4,9 @@ import { prisma } from '@/lib/prisma'
 
 export const CategoriesContainer = async () => {
   const categories = await prisma.category.findMany({
+    where: {
+      name: { in: ['Graphics cards', 'Peripherals', 'Processors', 'Memory'] },
+    },
     include: {
       _count: {
         select: { Product: true },

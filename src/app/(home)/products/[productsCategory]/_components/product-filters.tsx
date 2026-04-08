@@ -6,8 +6,8 @@ import { SearchProduct } from '@/app/(home)/products/[productsCategory]/_compone
 import { Button } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
-
+import { useEffect, useState } from 'react'
+// TODO: CHECK SPECIFICATION FILTERS OR REPLACE WITH TECHNICIAL
 type FilterEntry = {
   key: string
   values: string[]

@@ -22,7 +22,7 @@ export const NavbarCart = () => {
 
       <span
         className={cn(
-          'font-mono text-xs font-bold sm:text-base',
+          'text-xs font-bold sm:text-base',
           total > 99 && 'sm:text-xs',
         )}
       >
