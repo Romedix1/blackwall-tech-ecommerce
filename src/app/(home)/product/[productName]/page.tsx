@@ -2,7 +2,7 @@ import { PerformanceBenchmark } from '@/app/(home)/product/[productName]/_compon
 import { SpecificationList } from '@/app/(home)/product/[productName]/_components'
 import { ProductActions } from '@/app/(home)/product/[productName]/_components/product-actions'
 import { PathNavigator } from '@/components/shared'
-import { Separator } from '@/components/ui'
+import { ImageNotFound, Separator } from '@/components/ui'
 import { ImageCorner } from '@/components/ui/image-corner'
 import { getImageUrl } from '@/lib'
 import { prisma } from '@/lib/prisma'
@@ -35,7 +35,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   if (!product) return null
 
-  const imageUrl = getImageUrl(product.category.slug, product.slug)
+  const imageUrl = await getImageUrl(product.category.slug, product.slug)
 
   return (
     <div className="container mx-auto mt-16">
@@ -51,15 +51,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         <div className="bg-surface relative row-span-2 row-start-1 flex items-center justify-center">
-          <Image
-            src={imageUrl}
-            alt={product.name}
-            className="scale-80 object-contain xl:scale-90"
-            width={400}
-            height={400}
-          />
-          <ImageCorner className="absolute top-0.5 left-0 rotate-90" />
-          <ImageCorner className="absolute right-0 bottom-0.5 rotate-270" />
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={product.name}
+              className="scale-80 object-contain xl:scale-90"
+              width={400}
+              height={400}
+            />
+          ) : (
+            <ImageNotFound />
+          )}
+
+          <ImageCorner className="absolute top-0.5 left-0 z-30 rotate-90" />
+          <ImageCorner className="absolute right-0 bottom-0.5 z-30 rotate-270" />
         </div>
 
         <div className="mt-6">

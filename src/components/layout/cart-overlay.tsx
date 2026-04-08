@@ -1,7 +1,7 @@
 'use client'
 
 import { AmountButton } from '@/components/shared'
-import { Button, Separator } from '@/components/ui'
+import { Button, ImageNotFound, Separator } from '@/components/ui'
 import { QuantityError } from '@/components/ui/quantity-error'
 import { useCart } from '@/hooks'
 import { fetchCartFromDb } from '@/lib/actions'
@@ -29,7 +29,13 @@ export const CartOverlay = () => {
         try {
           const dbItems = await fetchCartFromDb()
           if (dbItems && dbItems.length > 0) {
-            setCart(dbItems)
+            const resolvedItems = await Promise.all(
+              dbItems.map(async (item) => ({
+                ...item,
+                imgSrc: await item.imgSrc,
+              })),
+            )
+            setCart(resolvedItems)
           }
         } catch (error) {
           if (process.env.NODE_ENV === 'development') {
@@ -111,13 +117,17 @@ export const CartOverlay = () => {
 
                     <div className="flex items-center gap-6">
                       <div className="relative flex h-20 w-24 shrink-0 items-center justify-center 2xl:h-32 2xl:w-36">
-                        <Image
-                          src={item.imgSrc}
-                          width={144}
-                          height={144}
-                          alt={item.name}
-                          className="object-contain"
-                        />
+                        {item.imgSrc ? (
+                          <Image
+                            src={item.imgSrc}
+                            width={144}
+                            height={144}
+                            alt={item.name}
+                            className="object-contain"
+                          />
+                        ) : (
+                          <ImageNotFound />
+                        )}
                       </div>
                       <p className="text-accent text-xl font-bold">
                         $ {item.price.toFixed(2)}

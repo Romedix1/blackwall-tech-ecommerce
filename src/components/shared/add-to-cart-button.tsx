@@ -9,7 +9,7 @@ type ProductType = {
   slug: string
   name: string
   price: number
-  image: string
+  image: string | null
   quantity?: number
   stock: number
 }

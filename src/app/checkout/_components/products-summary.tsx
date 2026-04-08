@@ -1,6 +1,6 @@
 'use client'
 
-import { QuantityError } from '@/components/ui/quantity-error'
+import { QuantityError } from '@/components/ui'
 import { useCart } from '@/hooks'
 
 export const ProductsSummary = () => {

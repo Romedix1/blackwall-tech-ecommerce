@@ -7,7 +7,7 @@ type CartItem = {
   name: string
   price: number
   quantity: number
-  imgSrc: string
+  imgSrc: string | null
   stock?: number
 }
 
@@ -21,7 +21,7 @@ type CartStore = {
     name: string,
     price: number,
     quantity: number,
-    imgSrc: string,
+    imgSrc: string | null,
     stock?: number,
     isLoggedIn?: boolean,
   ) => Promise<void>

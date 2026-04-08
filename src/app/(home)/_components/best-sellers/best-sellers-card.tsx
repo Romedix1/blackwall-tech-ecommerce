@@ -1,5 +1,5 @@
 import { AddToCartButton } from '@/components/shared/add-to-cart-button'
-import { BackgroundGlow } from '@/components/ui'
+import { BackgroundGlow, ImageNotFound } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { AttributeType, SpecSection } from '@/types'
 import Image from 'next/image'
@@ -12,7 +12,8 @@ type ProductType = {
   specs: SpecSection[]
   slug: string
   price: number
-  image: string
+  image: string | null
+  stock: number
 }
 
 type BestSellersCardType = {
@@ -25,6 +26,7 @@ export const BestSellersCard = ({ product }: BestSellersCardType) => {
     name: product.name,
     price: product.price,
     image: product.image,
+    stock: product.stock,
   }
 
   const flatSpecs = product.specs.flatMap(
@@ -42,18 +44,23 @@ export const BestSellersCard = ({ product }: BestSellersCardType) => {
       >
         <div>
           <div className="relative mb-8 flex h-48 w-full items-center justify-center lg:h-56">
-            <Image
-              src={product.image}
-              alt={product.name}
-              className={cn(
-                'relative z-20 h-full w-full object-contain drop-shadow-xl',
-              )}
-              width={1600}
-              height={1200}
-              sizes="(max-width: 1024px) 100vw, 1200px"
-              priority
-              quality={80}
-            />
+            {product.image ? (
+              <Image
+                src={product.image}
+                alt={product.name}
+                className={cn(
+                  'relative z-20 h-full w-full object-contain drop-shadow-xl',
+                )}
+                width={1600}
+                height={1200}
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                priority
+                quality={80}
+              />
+            ) : (
+              <ImageNotFound />
+            )}
+
             <BackgroundGlow className="bg-accent/30 top-1/2 left-1/2 z-10 h-[80%] w-[70%] -translate-x-1/2 -translate-y-1/2 rotate-150 blur-2xl group-hover:scale-145 group-focus:scale-145 lg:h-full lg:w-full lg:blur-2xl" />
           </div>
 
@@ -83,7 +90,7 @@ export const BestSellersCard = ({ product }: BestSellersCardType) => {
             $ {Number(product.price).toFixed(2)}
           </p>
 
-          <AddToCartButton product={cartProduct} />
+          <AddToCartButton product={{ ...cartProduct, stock: 1 }} />
         </div>
       </Link>
     </article>
