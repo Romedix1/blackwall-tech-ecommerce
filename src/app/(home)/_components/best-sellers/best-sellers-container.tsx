@@ -4,7 +4,7 @@ import { getImageUrl } from '@/lib'
 import { SpecSection } from '@/types'
 
 export const BestSellersContainer = async () => {
-  const bestSellers = await prisma.product.findMany({
+  const bestSellersData = await prisma.product.findMany({
     take: 4,
     where: { badge: { not: null } },
     select: {
@@ -21,25 +21,26 @@ export const BestSellersContainer = async () => {
     },
   })
 
+  const bestSellers = await Promise.all(
+    bestSellersData.map(async (product) => {
+      const imageUrl = await getImageUrl(product.category.slug, product.slug)
+
+      return {
+        name: product.name,
+        price: product.price,
+        badge: product.badge,
+        slug: product.slug,
+        specs: (product.specification as unknown as SpecSection[]) ?? [],
+        image: imageUrl,
+        stock: 1,
+      }
+    }),
+  )
+
   return (
     <div className="scrollbar-hide relative flex gap-3 overflow-x-scroll sm:gap-4">
       {bestSellers.map(async (product) => {
-        const imageUrl = await getImageUrl(product.category.slug, product.slug)
-
-        return (
-          <BestSellersCard
-            key={product.slug}
-            product={{
-              name: product.name,
-              price: product.price,
-              badge: product.badge,
-              slug: product.slug,
-              specs: product.specification as SpecSection[],
-              image: imageUrl,
-              stock: 1,
-            }}
-          />
-        )
+        return <BestSellersCard key={product.slug} product={product} />
       })}
     </div>
   )
