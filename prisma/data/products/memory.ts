@@ -3,14 +3,14 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     name: 'G.Skill Trident Z5 CK Black',
     slug: 'gskill-trident-z5-ck-black',
     price: 269.0,
-    quantity: 5,
+    quantity: 50,
     technical: {
-      type: 'ddr5',
-      speed: 8200,
-      capacity: 48,
-      modules: 2,
+      ramGen: 'ddr5',
+      speed: '8200',
+      capacity: '48',
+      modules: '2',
       profile: 'xmp',
-      voltage: 1.35,
+      voltage: '1.35',
     },
     specification: [
       {
@@ -35,20 +35,18 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     ],
     categoryId: categoryIds['memory'],
   },
-
   {
     name: 'T-Force XTREEM DDR5 White',
     slug: 't-force-xtreem-ddr5-white',
-    badge: 'overclocking master',
     price: 389.0,
-    quantity: 8,
+    quantity: 50,
     technical: {
-      type: 'ddr5',
-      speed: 6800,
-      capacity: 96,
-      modules: 2,
+      ramGen: 'ddr5',
+      speed: '6800',
+      capacity: '96',
+      modules: '2',
       profile: 'xmp',
-      voltage: 1.4,
+      voltage: '1.4',
     },
     specification: [
       {
@@ -73,19 +71,18 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     ],
     categoryId: categoryIds['memory'],
   },
-
   {
     name: 'T-Force DELTA RGB DDR4 Black',
     slug: 't-force-delta-rgb-ddr4-black',
     price: 94.0,
-    quantity: 20,
+    quantity: 50,
     technical: {
-      type: 'ddr4',
-      speed: 4000,
-      capacity: 16,
-      modules: 2,
+      ramGen: 'ddr4',
+      speed: '4000',
+      capacity: '16',
+      modules: '2',
       profile: 'xmp',
-      voltage: 1.35,
+      voltage: '1.35',
     },
     specification: [
       {
@@ -110,19 +107,18 @@ export const getMemory = (categoryIds: Record<string, string>) => [
     ],
     categoryId: categoryIds['memory'],
   },
-
   {
     name: 'G.Skill Flare X5 Black',
     slug: 'gskill-flare-x5-ddr5-black',
     price: 184.0,
-    quantity: 15,
+    quantity: 50,
     technical: {
-      type: 'ddr5',
-      speed: 5200,
-      capacity: 64,
-      modules: 2,
+      ramGen: 'ddr5',
+      speed: '5200',
+      capacity: '64',
+      modules: '2',
       profile: 'expo',
-      voltage: 1.25,
+      voltage: '1.25',
     },
     specification: [
       {

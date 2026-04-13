@@ -12,6 +12,8 @@ const buttonVariants = cva(
           'bg-accent disabled:cursor-wait disabled:bg-primary-active/60 text-background active:bg-primary-active/60 hover:bg-primary-hover/70 hover:text-text-main focus:bg-primary-hover/70 focus:text-text-main ',
         secondary:
           'border disabled:cursor-wait disabled:text-text-disabled border-accent bg-transparent text-accent active:bg-primary-active hover:bg-accent hover:text-background focus:bg-accent focus:text-background ',
+        delete:
+          'bg-error-text text-text-main hover:bg-error-text/60 focus:bg-error-text/60 active:bg-error-bg',
       },
     },
     defaultVariants: {

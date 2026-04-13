@@ -62,6 +62,7 @@ model User {
   sessions      Session[]
   Product       Product[]
   Cart          Cart?
+  Build         Build?
 }
 
 model VerificationToken {
@@ -83,21 +84,22 @@ model Category {
 }
 
 model Product {
-  id            String     @id @default(uuid())
+  id            String      @id @default(uuid())
   name          String
-  slug          String     @unique
+  slug          String      @unique
   badge         String?
   price         Float
-  quantity      Int        @default(0)
+  quantity      Int         @default(0)
   technical     Json
   specification Json
   performance   Json?
   categoryId    String
-  category      Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  createdAt     DateTime   @default(now())
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
   createdById   String?
-  creator       User?      @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  creator       User?       @relation(fields: [createdById], references: [id], onDelete: SetNull)
   CartItem      CartItem[]
+  BuildItem     BuildItem[]
 }
 
 model CartItem {
@@ -120,6 +122,28 @@ model Cart {
   items     CartItem[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+}
+
+model BuildItem {
+  id          String   @id @default(uuid())
+  quantity    Int      @default(1)
+  buildId     String
+  build       Build    @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  productSlug String
+  product     Product  @relation(fields: [productSlug], references: [slug], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([buildId, productSlug])
+}
+
+model Build {
+  id        String      @id @default(uuid())
+  userId    String      @unique
+  createdBy User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     BuildItem[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }
 
 enum OrderStatus {

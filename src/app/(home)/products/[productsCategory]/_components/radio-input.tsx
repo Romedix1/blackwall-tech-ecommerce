@@ -27,7 +27,7 @@ export const RadioInput = ({ label, onToggle, ...props }: RadioInputProps) => {
 
   return (
     <label
-      className="group flex cursor-pointer items-center gap-x-1 font-mono uppercase"
+      className="group flex cursor-pointer items-center gap-x-1 uppercase"
       onClick={handleClick}
     >
       <input

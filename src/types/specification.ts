@@ -4,6 +4,7 @@ export type AttributeType = {
 }
 
 export type SpecSection = {
+  id: string
   label: string
   attributes: AttributeType[]
 }
