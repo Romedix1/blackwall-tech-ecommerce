@@ -30,7 +30,7 @@ export const BestSellersContainer = async () => {
         price: product.price,
         badge: product.badge,
         slug: product.slug,
-        specs: (product.specification as unknown as SpecSection[]) ?? [],
+        specs: (product.specification as SpecSection[]) ?? [],
         image: imageUrl,
         stock: 1,
       }

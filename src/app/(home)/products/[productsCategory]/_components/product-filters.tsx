@@ -7,7 +7,7 @@ import { Button } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-// TODO: CHECK SPECIFICATION FILTERS OR REPLACE WITH TECHNICIAL
+// TODO: CHECK SPECIFICATION FILTERS OR REPLACE WITH TECHNICAL
 type FilterEntry = {
   key: string
   values: string[]

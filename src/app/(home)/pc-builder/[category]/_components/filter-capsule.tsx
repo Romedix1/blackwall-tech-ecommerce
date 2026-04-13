@@ -32,7 +32,7 @@ export const FilterCapsule = ({ categoryKey, option }: FilterCapsuleProps) => {
     <button
       onClick={handleClick}
       className={cn(
-        'terminal-hover border px-3 py-2 text-sm whitespace-nowrap uppercase transition-colors outline-none',
+        'terminal-hover cursor-pointer border px-3 py-2 text-sm whitespace-nowrap uppercase transition-colors outline-none',
         isActive && 'bg-accent text-surface',
       )}
     >
