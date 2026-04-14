@@ -3,12 +3,14 @@
 import { SearchInput } from '@/components/shared'
 import { useDebounce } from '@/hooks'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export const SearchShell = () => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+
+  const searchRef = useRef<HTMLInputElement>(null)
 
   const [searchValue, setSearchValue] = useState(
     searchParams.get('search') || '',
@@ -28,9 +30,22 @@ export const SearchShell = () => {
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
   }, [debouncedValue, pathname, router])
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === '/') {
+        e.preventDefault()
+        searchRef.current?.focus()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   return (
     <SearchInput
       value={searchValue}
+      ref={searchRef}
       onChange={(e) => setSearchValue(e.target.value)}
       placeholder="Filter products (by name)"
       ariaLabel="Filter products by name"
