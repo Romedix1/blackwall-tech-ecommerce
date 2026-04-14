@@ -33,4 +33,5 @@ vi.mock('@/lib/actions', () => ({
 
 afterEach(() => {
   cleanup()
+  vi.clearAllMocks()
 })
