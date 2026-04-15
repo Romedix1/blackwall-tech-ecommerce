@@ -1,4 +1,5 @@
 import { RecordBlock } from '@/app/(dashboard)/dashboard/_components'
+import { DashboardHeader } from '@/app/(dashboard)/dashboard/_components/dashboard-header'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
@@ -22,7 +23,17 @@ export default async function DashboardHistoryPage() {
   })
 
   return (
-    <div>
+    <>
+      <DashboardHeader>
+        <span aria-hidden="true">
+          {'//'} Procurement_logs
+          <span className="text-accent"> [{userOrders.length}]</span>
+        </span>
+        <span className="sr-only">
+          Procurement logs, {userOrders.length} items found
+        </span>
+      </DashboardHeader>
+
       {userOrders.length > 1 ? (
         <ul className="flex max-h-100 flex-col gap-4 overflow-y-auto">
           {userOrders.map((order) => {
@@ -37,6 +48,6 @@ export default async function DashboardHistoryPage() {
           </p>
         </div>
       )}
-    </div>
+    </>
   )
 }

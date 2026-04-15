@@ -18,7 +18,7 @@ export default async function DashboardLayout({
         <DashboardNav />
       </aside>
 
-      <div className="lg:w-8/12">{children}</div>
+      <div className="flex flex-col gap-8 lg:w-8/12">{children}</div>
     </div>
   )
 }
