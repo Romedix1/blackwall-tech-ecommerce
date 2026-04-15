@@ -140,6 +140,7 @@ model BuildItem {
 model Build {
   id        String      @id @default(uuid())
   userId    String      @unique
+  status    String
   createdBy User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     BuildItem[]
   createdAt DateTime    @default(now())

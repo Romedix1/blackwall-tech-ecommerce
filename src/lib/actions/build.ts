@@ -3,12 +3,12 @@
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 
-type BuildItem = {
-  slug: string
-  quantity: number
+type SaveBuildInput = {
+  items: { slug: string; quantity: number }[]
+  status: string
 }
 
-export async function saveBuildToDb(build: BuildItem[]) {
+export async function saveBuildToDb(data: SaveBuildInput) {
   const session = await auth()
 
   if (!session?.user.id) {
@@ -21,9 +21,10 @@ export async function saveBuildToDb(build: BuildItem[]) {
     await prisma.build.upsert({
       where: { userId: userId },
       update: {
+        status: data.status,
         items: {
           deleteMany: {},
-          create: build.map((item) => ({
+          create: data.items.map((item) => ({
             productSlug: item.slug,
             quantity: item.quantity,
           })),
@@ -31,8 +32,9 @@ export async function saveBuildToDb(build: BuildItem[]) {
       },
       create: {
         userId: userId,
+        status: data.status,
         items: {
-          create: build.map((item) => ({
+          create: data.items.map((item) => ({
             productSlug: item.slug,
             quantity: item.quantity,
           })),

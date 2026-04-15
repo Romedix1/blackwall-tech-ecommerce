@@ -1,17 +1,18 @@
-import { cn } from '@/lib'
+import { cn, getStatusTextColor } from '@/lib'
 import Link from 'next/link'
 
-type OrderType = {
+type RecordType = {
   id: string
   status: string
   createdAt: Date
 }
 
 type OrderBlockProps = {
-  order: OrderType
+  record: RecordType
+  type: 'build' | 'order'
 }
 
-export const OrderBlock = ({ order }: OrderBlockProps) => {
+export const RecordBlock = ({ record, type }: OrderBlockProps) => {
   const getStatusData = (status: string) => {
     const statusMap: Record<string, { label: string; color: string }> = {
       pending: { label: 'AWAITING_HANDSHAKE', color: 'text-blue-400' },
@@ -41,10 +42,10 @@ export const OrderBlock = ({ order }: OrderBlockProps) => {
     return diffDays > 0 ? `${diffDays}_days` : 'Delivered'
   }
 
-  const status = getStatusData(order.status)
+  const status = getStatusData(record.status)
 
   return (
-    <li key={order.id}>
+    <li key={record.id}>
       <Link
         href={'/'}
         className="bg-surface flex flex-col gap-2.5 border p-4 lg:flex-row lg:justify-between lg:gap-10 lg:p-6"
@@ -53,23 +54,34 @@ export const OrderBlock = ({ order }: OrderBlockProps) => {
           <span className="mr-2" aria-hidden="true">
             &gt;
           </span>
-          Directive: order #{order.id}
+          Directive: {type === 'build' ? 'configuration' : 'order'} #{record.id}
         </p>
 
         <p
           className={cn(
             'text-xs break-all uppercase lg:text-sm 2xl:text-base',
-            status.color,
+            type === 'build' ? getStatusTextColor(record.status) : status.color,
           )}
         >
-          <span className="mr-2" aria-hidden="true">
-            &gt;
-          </span>
-          Status: {status.label}
-          <span aria-hidden="true">(Eta: {getETA(order.createdAt)})</span>
-          <span className="sr-only">
-            Estimated time of arrival: {getETA(order.createdAt)}
-          </span>
+          {type === 'order' ? (
+            <>
+              <span className="mr-2" aria-hidden="true">
+                &gt;
+              </span>
+              Status: {status.label}
+              <span aria-hidden="true">(Eta: {getETA(record.createdAt)})</span>
+              <span className="sr-only">
+                Estimated time of arrival: {getETA(record.createdAt)}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="mr-2" aria-hidden="true">
+                &gt;
+              </span>
+              Status: {record.status}
+            </>
+          )}
         </p>
       </Link>
     </li>

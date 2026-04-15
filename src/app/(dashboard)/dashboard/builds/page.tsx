@@ -1,4 +1,4 @@
-import { OrderBlock } from '@/app/(dashboard)/dashboard/_components'
+import { RecordBlock } from '@/app/(dashboard)/dashboard/_components'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
@@ -10,7 +10,7 @@ export default async function DashboardHistoryPage() {
     redirect('/')
   }
 
-  const userOrders = await prisma.order.findMany({
+  const userBuilds = await prisma.build.findMany({
     where: { userId: user.user.id },
     select: {
       id: true,
@@ -24,8 +24,8 @@ export default async function DashboardHistoryPage() {
   return (
     <div>
       <ul className="flex max-h-100 flex-col gap-4 overflow-y-auto">
-        {userOrders.map((order) => {
-          return <OrderBlock key={order.id} order={order} />
+        {userBuilds.map((build) => {
+          return <RecordBlock key={build.id} record={build} type="build" />
         })}
       </ul>
     </div>

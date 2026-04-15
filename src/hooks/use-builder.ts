@@ -1,3 +1,4 @@
+import { getBuildStatus, getPowerStats } from '@/lib'
 import { saveBuildToDb } from '@/lib/actions'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
@@ -37,7 +38,7 @@ type BuilderStore = {
 
 let timeoutId: ReturnType<typeof setTimeout>
 
-const debouncedSaveToDb = (items: BuilderItem[]) => {
+const debouncedSaveToDb = (items: BuilderItem[], status: string) => {
   clearTimeout(timeoutId)
 
   timeoutId = setTimeout(async () => {
@@ -46,7 +47,11 @@ const debouncedSaveToDb = (items: BuilderItem[]) => {
         slug: item.slug,
         quantity: item.quantity,
       }))
-      await saveBuildToDb(itemsToSave)
+
+      await saveBuildToDb({
+        items: itemsToSave,
+        status,
+      })
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('[ BUILD_SYNC_ERROR ]: ', error)
@@ -72,29 +77,20 @@ export const useBuilder = create<BuilderStore>()(
         isLoggedIn = false,
       ) => {
         const currentItems = get().items
-        const existingItem = currentItems.find((item) => item.slug === slug)
+        if (currentItems.find((item) => item.slug === slug)) return
 
-        if (existingItem) {
-          return
-        } else {
-          set({
-            items: [
-              ...currentItems,
-              {
-                slug,
-                name,
-                price,
-                quantity,
-                stock,
-                imgSrc,
-                technical,
-                category,
-              },
-            ],
-          })
-        }
+        const newItems = [
+          ...currentItems,
+          { slug, name, price, quantity, stock, imgSrc, technical, category },
+        ]
 
-        if (isLoggedIn) debouncedSaveToDb(get().items)
+        set({ items: newItems })
+
+        const powerStats = getPowerStats(newItems)
+        const statusResult = getBuildStatus(newItems, powerStats)
+        const currentStatus = statusResult.status || 'idle'
+
+        if (isLoggedIn) debouncedSaveToDb(newItems, currentStatus)
       },
 
       removeItem: async (slug, isLoggedIn = false) => {
@@ -102,7 +98,13 @@ export const useBuilder = create<BuilderStore>()(
           items: state.items.filter((item) => item.slug !== slug),
         }))
 
-        if (isLoggedIn) debouncedSaveToDb(get().items)
+        const items = get().items
+
+        const powerStats = getPowerStats(items)
+        const statusResult = getBuildStatus(items, powerStats)
+        const currentStatus = statusResult.status || 'idle'
+
+        if (isLoggedIn) debouncedSaveToDb(items, currentStatus)
       },
 
       updateQuantity: async (slug, quantity, isLoggedIn = false) => {
@@ -114,7 +116,13 @@ export const useBuilder = create<BuilderStore>()(
           ),
         }))
 
-        if (isLoggedIn) debouncedSaveToDb(get().items)
+        const items = get().items
+
+        const powerStats = getPowerStats(items)
+        const statusResult = getBuildStatus(items, powerStats)
+        const currentStatus = statusResult.status || 'idle'
+
+        if (isLoggedIn) debouncedSaveToDb(items, currentStatus)
       },
     }),
     {

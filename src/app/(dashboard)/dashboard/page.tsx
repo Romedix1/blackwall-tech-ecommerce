@@ -1,5 +1,7 @@
-import { OrderBlock } from '@/app/(dashboard)/dashboard/_components'
-import { UserActivity } from '@/app/(dashboard)/dashboard/_components'
+import {
+  RecordBlock,
+  UserActivity,
+} from '@/app/(dashboard)/dashboard/_components'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
@@ -35,11 +37,20 @@ export default async function UserDashboardPage() {
         {user.user.name}
       </h1>
 
-      <ul className="flex flex-col gap-4">
-        {userOrders.map((order) => {
-          return <OrderBlock key={order.id} order={order} />
-        })}
-      </ul>
+      {userOrders.length > 1 ? (
+        <ul className="flex flex-col gap-4">
+          {userOrders.map((order) => {
+            return <RecordBlock key={order.id} record={order} type="order" />
+          })}
+        </ul>
+      ) : (
+        <div className="text-warning text-sm lg:text-base">
+          <p className="uppercase">
+            <span aria-hidden="true">[ No_orders_found_in_history ] </span>
+            <span className="sr-only">No orders found in history</span>
+          </p>
+        </div>
+      )}
 
       <UserActivity />
     </div>
