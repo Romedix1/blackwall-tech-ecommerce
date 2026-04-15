@@ -13,7 +13,7 @@ const buttonVariants = cva(
         secondary:
           'border disabled:cursor-wait disabled:text-text-disabled border-accent bg-transparent text-accent active:bg-primary-active hover:bg-accent hover:text-background focus:bg-accent focus:text-background ',
         delete:
-          'bg-error-text text-text-main hover:bg-error-text/60 focus:bg-error-text/60 active:bg-error-bg',
+          'bg-transparent border text-error-text border-error-text hover:bg-error-text/60 focus:bg-error-text/60 active:bg-error-bg hover:text-text-main focus:text-text-main active:text-text-main',
       },
     },
     defaultVariants: {
