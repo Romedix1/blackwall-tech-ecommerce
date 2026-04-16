@@ -1,9 +1,8 @@
-import { DashboardHeader } from '@/app/(dashboard)/dashboard/_components/dashboard-header'
+import { DashboardHeader } from '@/app/dashboard/(dashboard)/_components'
 import {
   SettingsHeader,
   SettingsSection,
-} from '@/app/(dashboard)/dashboard/settings/_components'
-import { auth } from '@/auth'
+} from '@/app/dashboard/(dashboard)/settings/_components'
 import { TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
 

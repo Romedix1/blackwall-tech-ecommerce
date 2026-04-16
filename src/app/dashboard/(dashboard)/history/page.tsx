@@ -1,13 +1,12 @@
 import {
+  DashboardHeader,
   RecordBlock,
-  UserActivity,
-} from '@/app/(dashboard)/dashboard/_components'
-import { DashboardHeader } from '@/app/(dashboard)/dashboard/_components/dashboard-header'
+} from '@/app/dashboard/(dashboard)/_components'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
 
-export default async function UserDashboardPage() {
+export default async function DashboardHistoryPage() {
   const user = await auth()
 
   if (!user) {
@@ -25,21 +24,20 @@ export default async function UserDashboardPage() {
     orderBy: { createdAt: 'desc' },
   })
 
-  //  @note PORTFOLIO_SIMULATION
-  //  In production, ETA is fetched via a Logistics API (e.g., DHL/InPost).
-  //  This is a deterministic simulation using the Order ID as a seed to
-  //  ensure UI consistency across sessions without random "jumps" on refresh.
-
   return (
     <>
       <DashboardHeader>
-        <span aria-hidden="true">{'//'} Welcome_back, </span>
-        <span className="sr-only">Welcome back, </span>
-        {user.user.name}
+        <span aria-hidden="true">
+          {'//'} Procurement_logs
+          <span className="text-accent"> [{userOrders.length}]</span>
+        </span>
+        <span className="sr-only">
+          Procurement logs, {userOrders.length} items found
+        </span>
       </DashboardHeader>
 
       {userOrders.length > 1 ? (
-        <ul className="flex flex-col gap-4">
+        <ul className="flex max-h-100 flex-col gap-4 overflow-y-auto">
           {userOrders.map((order) => {
             return <RecordBlock key={order.id} record={order} type="order" />
           })}
@@ -52,8 +50,6 @@ export default async function UserDashboardPage() {
           </p>
         </div>
       )}
-
-      <UserActivity />
     </>
   )
 }

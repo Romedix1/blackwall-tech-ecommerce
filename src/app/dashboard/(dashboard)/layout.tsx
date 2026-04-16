@@ -1,4 +1,4 @@
-import { DashboardNav } from '@/app/(dashboard)/dashboard/_components'
+import { DashboardNav } from '@/app/dashboard/(dashboard)/_components'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 

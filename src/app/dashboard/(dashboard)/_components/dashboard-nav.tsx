@@ -45,6 +45,7 @@ export const DashboardNav = async () => {
     },
     { href: '/dashboard/settings', label: '[ Settings ]', sr: 'Settings' },
   ]
+  // TODO: ADD ACTIVITY LGOS
 
   const links = isAdmin ? ADMIN_LINKS : USER_LINKS
 

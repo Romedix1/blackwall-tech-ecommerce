@@ -1,5 +1,7 @@
-import { RecordBlock } from '@/app/(dashboard)/dashboard/_components'
-import { DashboardHeader } from '@/app/(dashboard)/dashboard/_components/dashboard-header'
+import {
+  DashboardHeader,
+  RecordBlock,
+} from '@/app/dashboard/(dashboard)/_components'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
