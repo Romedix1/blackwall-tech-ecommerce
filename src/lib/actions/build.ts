@@ -1,25 +1,29 @@
 'use server'
 
 import { auth } from '@/auth'
+import { generateBuildName } from '@/lib/builder'
 import { prisma } from '@/lib/prisma'
+import { revalidatePath } from 'next/cache'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { redirect } from 'next/navigation'
 
 type SaveBuildInput = {
   items: { slug: string; quantity: number }[]
   status: string
 }
 
-export async function saveBuildToDb(data: SaveBuildInput) {
+export async function saveBuildToDb(data: SaveBuildInput, buildId: string) {
   const session = await auth()
 
-  if (!session?.user.id) {
-    return { error: 'Unauthorized' }
+  if (!session?.user?.id) {
+    redirect('/login')
   }
 
   const userId = session.user.id
 
   try {
     await prisma.build.upsert({
-      where: { userId: userId },
+      where: { userId: userId, AND: { id: buildId } },
       update: {
         status: data.status,
         items: {
@@ -34,7 +38,7 @@ export async function saveBuildToDb(data: SaveBuildInput) {
         userId: userId,
         status: data.status,
         items: {
-          create: data.items.map((item) => ({
+          create: build.map((item) => ({
             productSlug: item.slug,
             quantity: item.quantity,
           })),
@@ -44,13 +48,19 @@ export async function saveBuildToDb(data: SaveBuildInput) {
 
     return { success: true }
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error
+    }
+
     if (process.env.NODE_ENV === 'development') {
       console.error('[ BUILD_SAVING_ERROR ]:', error)
     }
+
+    return { error: 'INTERNAL_SERVER_ERROR' }
   }
 }
 
-export async function fetchCartFromDb() {
+export async function fetchBuildFromDb(buildId: string) {
   try {
     const session = await auth()
 
@@ -60,8 +70,8 @@ export async function fetchCartFromDb() {
 
     const userId = session.user.id
 
-    const build = await prisma.build.findUnique({
-      where: { userId: userId },
+    const build = await prisma.build.findFirst({
+      where: { id: buildId, userId: userId },
       include: {
         items: {
           include: {
@@ -94,5 +104,75 @@ export async function fetchCartFromDb() {
       console.error('[ FETCH_BUILD_ERROR ]:', error)
     }
     return []
+  }
+}
+
+export async function initiateBuildConfig() {
+  const session = await auth()
+
+  if (!session) {
+    const guestId = crypto.randomUUID()
+    redirect(`/pc-builder/cpu/${guestId}`)
+  }
+
+  const newBuild = await prisma.build.create({
+    data: {
+      name: generateBuildName(),
+      userId: session.user.id,
+      status: 'idle',
+    },
+    select: { id: true },
+  })
+
+  redirect(`/pc-builder/cpu/${newBuild.id}`)
+}
+
+export async function toggleBuildVisibility(buildId: string) {
+  const COOLDOWN_MS = 5000
+
+  const build = await prisma.build.findUnique({
+    where: { id: buildId },
+    select: { updatedAt: true, public: true },
+  })
+
+  if (!build) throw new Error('Build not found')
+
+  const now = new Date().getTime()
+  const lastUpdate = new Date(build.updatedAt).getTime()
+
+  if (now - lastUpdate < COOLDOWN_MS) {
+    throw new Error(
+      'RECALIBRATING_SYSTEM: Please wait before next broadcast change',
+    )
+  }
+
+  return await prisma.build.update({
+    where: { id: buildId },
+    data: { public: !build.public },
+  })
+}
+
+export async function deleteBuild(buildId: string) {
+  const session = await auth()
+
+  if (!session) {
+    return []
+  }
+
+  const userId = session.user.id
+
+  try {
+    await prisma.build.delete({
+      where: { id: buildId, AND: { userId } },
+    })
+
+    revalidatePath('/dashboard/builds')
+    return { success: true }
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[ DELETE_BUILD_ERROR ]:', error)
+    }
+
+    return { success: false }
   }
 }

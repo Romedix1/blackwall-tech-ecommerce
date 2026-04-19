@@ -18,9 +18,10 @@ export default async function DashboardHistoryPage() {
     select: {
       id: true,
       status: true,
+      public: true,
+      name: true,
       createdAt: true,
     },
-    take: 3,
     orderBy: { createdAt: 'desc' },
   })
 
