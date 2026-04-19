@@ -2,6 +2,7 @@ import { DashboardHeader } from '@/app/dashboard/(dashboard)/_components'
 import {
   SettingsHeader,
   SettingsSection,
+  UsernameSection,
 } from '@/app/dashboard/(dashboard)/settings/_components'
 import { TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
@@ -15,23 +16,7 @@ export default async function SettingsPage() {
       </DashboardHeader>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <SettingsSection>
-          <SettingsHeader>
-            <span aria-hidden="true">[ Identity ]</span>
-            <span className="sr-only">User nick</span>
-          </SettingsHeader>
-
-          <div className="flex flex-col gap-4">
-            <TerminalInput
-              placeholder={`Change_username`}
-              ariaLabel={`Change username`}
-            />
-            <Button className="text-sm" variant="secondary">
-              <span aria-hidden="true">[ Change ]</span>
-              <span className="sr-only">Change</span>
-            </Button>
-          </div>
-        </SettingsSection>
+        <UsernameSection />
 
         <SettingsSection>
           <SettingsHeader>

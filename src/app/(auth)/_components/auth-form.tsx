@@ -2,7 +2,7 @@
 
 import { RegisterSuccess } from '@/app/(auth)/register/_components/register-success'
 import { signIn } from 'next-auth/react'
-import { ErrorText, TerminalInput } from '@/components/shared'
+import { StatusAlert, TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
 import { LoginUser, RegisterUser } from '@/lib/actions'
 import Link from 'next/link'
@@ -188,7 +188,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
           })}
         </div>
 
-        {state?.error && <ErrorText text={state.error} />}
+        {state?.error && <StatusAlert variant="error" text={state.error} />}
 
         <p className="text-text-second mt-6 text-sm sm:text-center md:mt-8">
           <span aria-hidden="true">

@@ -8,18 +8,20 @@ import { getStatusData } from '@/lib/dashboard'
 import Link from 'next/link'
 import { useState } from 'react'
 
-type RecordType = {
+type BaseRecordType = {
   id: string
   status: string
-  public: boolean
-  name: string
   createdAt: Date
 }
 
-type OrderBlockProps = {
-  record: RecordType
-  type: 'build' | 'order'
+type BuildRecordType = BaseRecordType & {
+  public: boolean
+  name: string
 }
+
+type OrderBlockProps =
+  | { type: 'build'; record: BuildRecordType }
+  | { type: 'order'; record: BaseRecordType }
 
 export const RecordBlock = ({ record, type }: OrderBlockProps) => {
   const [isSharing, setIsSharing] = useState(false)
@@ -38,7 +40,7 @@ export const RecordBlock = ({ record, type }: OrderBlockProps) => {
 
   const status = getStatusData(record.status)
 
-  if (isSharing) {
+  if (isSharing && type === 'build') {
     return (
       <ShareModal
         buildId={record.id}
@@ -48,7 +50,7 @@ export const RecordBlock = ({ record, type }: OrderBlockProps) => {
     )
   }
 
-  if (isDeleting) {
+  if (isDeleting && type === 'build') {
     return (
       <DeleteModal
         buildId={record.id}

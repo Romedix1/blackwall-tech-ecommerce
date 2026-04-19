@@ -1,3 +1,4 @@
+import { UsernameSchema } from '@/lib/zod/schemas'
 import * as z from 'zod'
 
 const PASSWORD_REGEX =
@@ -5,10 +6,7 @@ const PASSWORD_REGEX =
 
 export const RegisterSchema = z
   .object({
-    username: z
-      .string()
-      .min(3, 'Username must be at least 3 characters long')
-      .trim(),
+    username: UsernameSchema,
     email: z.email('Invalid email address'),
     password: z
       .string()

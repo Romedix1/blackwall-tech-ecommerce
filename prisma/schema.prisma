@@ -49,20 +49,21 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  username      String    @unique
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          Role      @default(user)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  accounts      Account[]
-  sessions      Session[]
-  Product       Product[]
-  Cart          Cart?
-  Build         Build?
+  id                String    @id @default(cuid())
+  username          String    @unique
+  usernameUpdatedAt DateTime?
+  email             String?   @unique
+  emailVerified     DateTime?
+  image             String?
+  password          String?
+  role              Role      @default(user)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  accounts          Account[]
+  sessions          Session[]
+  Product           Product[]
+  Cart              Cart?
+  Build             Build[]
 }
 
 model VerificationToken {
@@ -139,7 +140,9 @@ model BuildItem {
 
 model Build {
   id        String      @id @default(uuid())
-  userId    String      @unique
+  userId    String
+  name      String
+  public    Boolean     @default(false)
   status    String
   createdBy User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     BuildItem[]
