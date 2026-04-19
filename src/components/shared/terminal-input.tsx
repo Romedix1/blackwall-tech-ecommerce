@@ -2,11 +2,22 @@ import { Input } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import { InputHTMLAttributes, Ref } from 'react'
 
-interface TerminalInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  placeholder: string
+type BaseProps = InputHTMLAttributes<HTMLInputElement> & {
   ariaLabel: string
   ref?: Ref<HTMLInputElement>
 }
+
+type EditableInputProps = BaseProps & {
+  readOnly?: false
+  placeholder: string
+}
+
+type ReadOnlyInputProps = BaseProps & {
+  readOnly: true
+  placeholder?: string
+}
+
+type TerminalInputProps = EditableInputProps | ReadOnlyInputProps
 
 const TerminalInput = ({
   className,

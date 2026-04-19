@@ -9,11 +9,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          'bg-accent disabled:cursor-wait disabled:bg-primary-active/60 text-background active:bg-primary-active/60 hover:bg-primary-hover/70 hover:text-text-main focus:bg-primary-hover/70 focus:text-text-main ',
+          'bg-accent disabled:cursor-not-allowed disabled:bg-primary-active/60 text-background active:bg-primary-active/60 hover:bg-primary-hover/70 hover:text-text-main focus:bg-primary-hover/70 focus:text-text-main ',
         secondary:
-          'border disabled:cursor-wait disabled:text-text-disabled border-accent bg-transparent text-accent active:bg-primary-active hover:bg-accent hover:text-background focus:bg-accent focus:text-background ',
+          'border disabled:cursor-not-allowed disabled:text-text-disabled border-accent bg-transparent text-accent active:bg-primary-active hover:bg-accent hover:text-background focus:bg-accent focus:text-background ',
         delete:
-          'bg-transparent border text-error-text border-error-text hover:bg-error-text/60 focus:bg-error-text/60 active:bg-error-bg hover:text-text-main focus:text-text-main active:text-text-main',
+          'bg-transparent disabled:cursor-not-allowed disabled:border-error-text/60 disabled:text-error-text/60 border text-error-text border-error-text hover:bg-error-text/60 focus:bg-error-text/60 active:bg-error-bg hover:text-text-main focus:text-text-main active:text-text-main',
       },
     },
     defaultVariants: {

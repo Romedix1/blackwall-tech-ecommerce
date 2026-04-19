@@ -1,15 +1,46 @@
-import { ReactNode } from 'react'
+'use client'
+
+import { Button } from '@/components/ui'
+import { ReactNode, useEffect, useRef } from 'react'
 
 type InformationModalProps = {
   children: ReactNode
+  onClose: () => void
 }
-// TODO: LOCK TAB IN MODAL
-export const InformationModal = ({ children }: InformationModalProps) => {
+export const InformationModal = ({
+  children,
+  onClose,
+}: InformationModalProps) => {
+  const dialogRef = useRef<HTMLDialogElement>(null)
+
+  useEffect(() => {
+    dialogRef.current?.showModal()
+  }, [])
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    if (e.target === dialogRef.current) {
+      onClose()
+    }
+  }
+
   return (
-    <div className="bg-background/90 absolute top-0 left-0 flex h-full w-full items-center justify-center">
-      <section className="bg-surface relative w-11/12 p-6 lg:w-7/12 lg:max-w-200">
+    <dialog
+      ref={dialogRef}
+      onClose={onClose}
+      onClick={handleBackdropClick}
+      className="bg-surface backdrop:bg-background/95 border-accent/20 m-auto w-11/12 border-2 shadow-2xl outline-none backdrop:backdrop-blur-sm lg:w-7/12 lg:max-w-200"
+    >
+      <div className="h-full w-full p-6">
+        <button
+          onClick={onClose}
+          className="text-error-text hover:text-error-text/50 outline-error-text focus-visible:text-error-text/50 mb-6 cursor-pointer font-bold"
+        >
+          <span aria-hidden="true">[ X ]</span>
+          <span className="sr-only">close</span>
+        </button>
+
         {children}
-      </section>
-    </div>
+      </div>
+    </dialog>
   )
 }
