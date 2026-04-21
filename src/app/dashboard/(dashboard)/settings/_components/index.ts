@@ -1,3 +1,5 @@
 export * from './settings-header'
 export * from './settings-section'
 export * from './username-section'
+export * from './security-section'
+export * from './change-password-modal'

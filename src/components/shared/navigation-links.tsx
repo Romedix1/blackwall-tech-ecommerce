@@ -25,18 +25,18 @@ export const NavigationLinks = ({ links }: NavigationLinksProps) => {
             key={link.sr}
             className={cn(
               'text-xs font-bold uppercase lg:text-sm 2xl:text-base',
-              pathname === link.href && 'text-accent',
+              pathname === `${link.href}` && 'text-accent',
             )}
           >
             <Link
-              href={link.href}
+              href={`${link.href}`}
               className="terminal-hover group overflow-hidden whitespace-nowrap"
             >
               <span aria-hidden="true">
                 <span
                   className={cn(
                     'mr-2 hidden group-hover:inline-block group-focus:inline-block',
-                    pathname === link.href && 'inline-block',
+                    pathname === `${link.href}` && 'inline-block',
                   )}
                 >
                   &gt;

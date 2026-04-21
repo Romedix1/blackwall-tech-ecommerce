@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@/auth'
-import { generateBuildName } from '@/lib/builder'
+// import { generateBuildName } from '@/lib/builder'
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
@@ -22,8 +22,17 @@ export async function saveBuildToDb(data: SaveBuildInput, buildId: string) {
   const userId = session.user.id
 
   try {
+    const existingBuild = await prisma.build.findUnique({
+      where: { id: buildId },
+      select: { userId: true },
+    })
+
+    if (existingBuild && existingBuild.userId !== userId) {
+      return { error: 'Unauthorized' }
+    }
+
     await prisma.build.upsert({
-      where: { userId: userId, AND: { id: buildId } },
+      where: { id: buildId },
       update: {
         status: data.status,
         items: {
@@ -37,8 +46,9 @@ export async function saveBuildToDb(data: SaveBuildInput, buildId: string) {
       create: {
         userId: userId,
         status: data.status,
+        name: 'tempname',
         items: {
-          create: build.map((item) => ({
+          create: data.items.map((item) => ({
             productSlug: item.slug,
             quantity: item.quantity,
           })),
@@ -117,7 +127,7 @@ export async function initiateBuildConfig() {
 
   const newBuild = await prisma.build.create({
     data: {
-      name: generateBuildName(),
+      name: ' generateBuildName()',
       userId: session.user.id,
       status: 'idle',
     },

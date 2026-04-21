@@ -22,7 +22,7 @@ export const RegisterSuccess = ({ email }: { email: string }) => {
 
           <Link
             href="/login"
-            className="text-text-second text-hover text-xs uppercase md:text-base"
+            className="text-text-second text-hover terminal-hover hover:text-background focus:text-background text-xs uppercase md:text-base"
           >
             <span className="whitespace-nowrap" aria-hidden="true">
               [ Inititate_uplink ]

@@ -61,13 +61,44 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user?: User }) {
+    async jwt({
+      token,
+      user,
+      trigger,
+      session,
+    }: {
+      token: JWT
+      user?: User
+      trigger?: string
+      session?: Session
+    }) {
       if (user) {
         token.id = user.id ?? ''
         token.name = user.username || user.name
         token.email = user.email
         token.role = user.role ?? 'user'
+        token.passwordChangedAt = user.passwordChangedAt
       }
+
+      if (trigger === 'update' && session?.passwordChangedAt) {
+        token.passwordChangedAt = session.passwordChangedAt
+      }
+
+      const dbUser = await prisma.user.findUnique({
+        where: { id: token.id },
+        select: { passwordChangedAt: true },
+      })
+
+      if (dbUser?.passwordChangedAt && token.iat) {
+        const dbChangeTimestamp = Math.floor(
+          dbUser.passwordChangedAt.getTime() / 1000,
+        )
+
+        if (token.iat < dbChangeTimestamp) {
+          return null
+        }
+      }
+
       return token
     },
 

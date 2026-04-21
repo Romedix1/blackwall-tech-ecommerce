@@ -2,7 +2,10 @@
 
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
-import { UsernameSchema } from '@/lib/zod'
+import { UsernameField } from '@/lib/zod'
+import { ResetPasswordSchema } from '@/lib/zod/reset-password-schema'
+import { FormState } from '@/types'
+import bcrypt from 'bcryptjs'
 import { revalidatePath } from 'next/cache'
 
 export async function changeUsername(newUsername: string) {
@@ -15,7 +18,7 @@ export async function changeUsername(newUsername: string) {
     return { message: 'Unauthorized', success: false }
   }
 
-  const validation = UsernameSchema.safeParse({ username: newUsername })
+  const validation = UsernameField.safeParse(newUsername)
 
   if (!validation.success) {
     return {
@@ -24,7 +27,7 @@ export async function changeUsername(newUsername: string) {
     }
   }
 
-  const validatedUsername = validation.data.username
+  const validatedUsername = validation.data
 
   try {
     const existingUsername = await prisma.user.findFirst({
@@ -72,4 +75,93 @@ export async function changeUsername(newUsername: string) {
 
     return { message: '', success: false }
   }
+}
+
+export async function ResetPassword(
+  prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const rawData = Object.fromEntries(formData.entries()) as Record<
+    string,
+    string
+  >
+
+  const dataToValidate = {
+    currentPassword: rawData.currentPassword,
+    password: rawData.newPassword,
+    confirmPassword: rawData.confirmNewPassword,
+  }
+
+  const validatedData = ResetPasswordSchema.safeParse(dataToValidate)
+
+  if (!validatedData.success) {
+    const errorArray = validatedData.error.issues.map((issue) => issue.message)
+    return {
+      error: errorArray,
+      fields: rawData,
+    }
+  }
+
+  try {
+    const user = await auth()
+    const userId = user?.user.id
+
+    if (!userId) {
+      return { error: 'Unauthorized', fields: rawData }
+    }
+
+    const dbUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        password: true,
+      },
+    })
+
+    if (!dbUser?.password) {
+      return {
+        error: 'External accounts (OAuth) cannot modify passwords here',
+        fields: rawData,
+      }
+    }
+
+    const passwordIsCorrect = await bcrypt.compare(
+      validatedData.data.currentPassword,
+      dbUser.password,
+    )
+
+    if (!passwordIsCorrect) {
+      return { error: 'Invalid current password', fields: rawData }
+    }
+
+    const hashedNewPassword = await bcrypt.hash(validatedData.data.password, 12)
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedNewPassword, passwordChangedAt: new Date() },
+    })
+
+    return { success: true, message: 'Uplink initiated', fields: rawData }
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[ RESET_PASSWORD_ERROR ]:', error)
+    }
+    return { error: 'Protocol error: Password reset failed', fields: rawData }
+  }
+}
+
+export const isOAuthUser = async (): Promise<boolean> => {
+  const user = await auth()
+
+  const userId = user?.user.id
+
+  if (!userId) {
+    return false
+  }
+
+  const account = await prisma.account.findFirst({
+    where: { userId },
+    select: { id: true },
+  })
+
+  return !!account
 }

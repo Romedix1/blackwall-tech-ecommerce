@@ -2,12 +2,16 @@ import { DashboardHeader } from '@/app/dashboard/(dashboard)/_components'
 import {
   SettingsHeader,
   SettingsSection,
+  SecuritySection,
   UsernameSection,
 } from '@/app/dashboard/(dashboard)/settings/_components'
 import { TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
+import { isOAuthUser } from '@/lib/actions/dashboard'
 
 export default async function SettingsPage() {
+  const isOAuth = await isOAuthUser()
+
   return (
     <>
       <DashboardHeader>
@@ -18,25 +22,7 @@ export default async function SettingsPage() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <UsernameSection />
 
-        <SettingsSection>
-          <SettingsHeader>
-            <span aria-hidden="true">[ Security_protocols ]</span>
-            <span className="sr-only">Security protocols</span>
-          </SettingsHeader>
-
-          <div className="flex flex-col gap-4 md:flex-row lg:flex-col">
-            <Button className="text-sm">
-              <span aria-hidden="true">&gt; Rotate_access_keys</span>
-              <span className="sr-only">Change password</span>
-            </Button>
-            <Button variant="delete" className="px-4 text-sm">
-              <span aria-hidden="true" className="inline-block break-all">
-                &gt; Terminate_all_remote_sessions
-              </span>
-              <span className="sr-only">Terminate all sessions</span>
-            </Button>
-          </div>
-        </SettingsSection>
+        {!isOAuth && <SecuritySection />}
 
         <SettingsSection>
           <SettingsHeader>

@@ -31,6 +31,11 @@ vi.mock('@/lib/actions', () => ({
   RegisterUser: vi.fn().mockResolvedValue({ success: true }),
 }))
 
+beforeAll(() => {
+  HTMLDialogElement.prototype.showModal = vi.fn()
+  HTMLDialogElement.prototype.close = vi.fn()
+})
+
 afterEach(() => {
   cleanup()
   vi.clearAllMocks()
