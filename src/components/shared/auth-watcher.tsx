@@ -1,11 +1,13 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
 export const AuthWatcher = () => {
   const { status } = useSession()
 
+  const pathname = usePathname()
   const wasAuthenticated = useRef(false)
 
   useEffect(() => {
@@ -16,9 +18,11 @@ export const AuthWatcher = () => {
     if (status === 'unauthenticated' && wasAuthenticated.current) {
       wasAuthenticated.current = false
 
-      window.location.reload()
+      if (pathname !== '/login') {
+        signOut({ callbackUrl: '/login?error=session-expired' })
+      }
     }
-  }, [status])
+  }, [pathname, status])
 
   return null
 }

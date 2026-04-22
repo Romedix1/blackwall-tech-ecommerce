@@ -15,6 +15,7 @@ declare module 'next-auth' {
     username?: string | null
     role?: Role
     passwordChangedAt?: Date | null
+    tokenVersion?: number
   }
 }
 
@@ -25,5 +26,6 @@ declare module 'next-auth/jwt' {
     role: Role
     passwordChangedAt?: Date | null
     iat?: number
+    tokenVersion?: number
   }
 }

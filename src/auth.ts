@@ -78,6 +78,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.email = user.email
         token.role = user.role ?? 'user'
         token.passwordChangedAt = user.passwordChangedAt
+        token.tokenVersion = user.tokenVersion
       }
 
       if (trigger === 'update' && session?.passwordChangedAt) {
@@ -86,7 +87,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       const dbUser = await prisma.user.findUnique({
         where: { id: token.id },
-        select: { passwordChangedAt: true },
+        select: { passwordChangedAt: true, tokenVersion: true },
       })
 
       if (dbUser?.passwordChangedAt && token.iat) {
@@ -97,6 +98,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (token.iat < dbChangeTimestamp) {
           return null
         }
+      }
+
+      if (dbUser?.tokenVersion && dbUser.tokenVersion !== token.tokenVersion) {
+        return null
       }
 
       return token

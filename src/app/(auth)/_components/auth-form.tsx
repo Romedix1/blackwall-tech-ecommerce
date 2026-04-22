@@ -6,7 +6,7 @@ import { StatusAlert, TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
 import { LoginUser, RegisterUser } from '@/lib/actions'
 import Link from 'next/link'
-import { useActionState, useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { SiGmail } from 'react-icons/si'
 
@@ -46,6 +46,12 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (state?.success && state?.message === 'User logged in') {
+      window.location.replace('/')
+    }
+  }, [state])
 
   if (state?.success && state?.fields?.email) {
     return <RegisterSuccess email={state.fields.email} />

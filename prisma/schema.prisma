@@ -54,6 +54,7 @@ model User {
   usernameUpdatedAt DateTime?
   email             String?   @unique
   emailVerified     DateTime?
+  tokenVersion      Int       @default(0)
   image             String?
   password          String?
   passwordChangedAt DateTime? @default(now())
@@ -68,12 +69,13 @@ model User {
 }
 
 model VerificationToken {
-  id         String   @id @default(cuid())
-  identifier String
-  token      String   @unique
-  expires    DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id           String   @id @default(cuid())
+  identifier   String
+  token        String   @unique
+  tokenVersion Int      @default(0)
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@unique([identifier, token])
 }

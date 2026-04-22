@@ -5,11 +5,13 @@ import {
   SettingsHeader,
   SettingsSection,
 } from '@/app/dashboard/(dashboard)/settings/_components'
+import { TerminateSessionsModal } from '@/app/dashboard/(dashboard)/settings/_components/terminate-sessions-modal'
 import { Button } from '@/components/ui'
 import { useState } from 'react'
 
 export const SecuritySection = () => {
   const [isChangingPassword, setIsChangingPassword] = useState(false)
+  const [isTerminatingSessions, setIsTerminatingSessions] = useState(false)
 
   return (
     <SettingsSection>
@@ -24,7 +26,11 @@ export const SecuritySection = () => {
           <span className="sr-only">Change password</span>
         </Button>
 
-        <Button variant="delete" className="px-4 text-sm">
+        <Button
+          onClick={() => setIsTerminatingSessions(true)}
+          variant="delete"
+          className="px-4 text-sm"
+        >
           <span aria-hidden="true" className="inline-block break-all">
             &gt; Terminate_all_remote_sessions
           </span>
@@ -34,6 +40,11 @@ export const SecuritySection = () => {
 
       {isChangingPassword && (
         <ChangePasswordModal onClose={() => setIsChangingPassword(false)} />
+      )}
+      {isTerminatingSessions && (
+        <TerminateSessionsModal
+          onClose={() => setIsTerminatingSessions(false)}
+        />
       )}
     </SettingsSection>
   )

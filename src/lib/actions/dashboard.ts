@@ -1,12 +1,13 @@
 'use server'
 
-import { auth } from '@/auth'
+import { auth, signOut } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { UsernameField } from '@/lib/zod'
 import { ResetPasswordSchema } from '@/lib/zod/reset-password-schema'
 import { FormState } from '@/types'
 import bcrypt from 'bcryptjs'
 import { revalidatePath } from 'next/cache'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
 
 export async function changeUsername(newUsername: string) {
   const session = await auth()
@@ -103,8 +104,8 @@ export async function ResetPassword(
   }
 
   try {
-    const user = await auth()
-    const userId = user?.user.id
+    const session = await auth()
+    const userId = session?.user.id
 
     if (!userId) {
       return { error: 'Unauthorized', fields: rawData }
@@ -150,9 +151,9 @@ export async function ResetPassword(
 }
 
 export const isOAuthUser = async (): Promise<boolean> => {
-  const user = await auth()
+  const session = await auth()
 
-  const userId = user?.user.id
+  const userId = session?.user.id
 
   if (!userId) {
     return false
@@ -164,4 +165,37 @@ export const isOAuthUser = async (): Promise<boolean> => {
   })
 
   return !!account
+}
+
+export async function LogoutAllSessions() {
+  const session = await auth()
+
+  const userId = session?.user.id
+
+  if (!userId) {
+    return { error: 'Unauthorized' }
+  }
+
+  try {
+    const result = await prisma.user.update({
+      where: { id: userId },
+      data: { tokenVersion: { increment: 1 } },
+    })
+
+    if (result) {
+      await signOut({ redirectTo: '/login' })
+    }
+
+    return { success: true }
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[ GLOBAL_LOGOUT_ERROR ]:', error)
+    }
+
+    return { error: 'Protocol error: Failed to sever connections' }
+  }
 }

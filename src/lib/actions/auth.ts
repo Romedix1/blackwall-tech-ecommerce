@@ -8,6 +8,7 @@ import { signIn, signOut } from '@/auth'
 import { LoginSchema } from '@/lib/zod'
 import { AuthError } from 'next-auth'
 import { FormState } from '@/types'
+import { revalidatePath } from 'next/cache'
 
 export const RegisterUser = async (
   prevState: FormState,
@@ -119,10 +120,12 @@ export const LoginUser = async (
   const email = rawEmail.toLowerCase()
 
   try {
+    // revalidatePath('/', 'layout')
+
     await signIn('credentials', {
       email,
       password,
-      redirectTo: '/',
+      redirect: false,
     })
 
     return { success: true, message: 'User logged in' }

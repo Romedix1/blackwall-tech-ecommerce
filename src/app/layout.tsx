@@ -26,7 +26,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={cn(robotoMono.variable, 'antialiased')}>
-        <SessionProvider refetchInterval={30}>
+        <SessionProvider refetchInterval={30} refetchOnWindowFocus={true}>
           <Navbar />
           <AuthWatcher />
           <CartOverlay />
