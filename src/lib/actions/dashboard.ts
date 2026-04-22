@@ -6,7 +6,6 @@ import { UsernameField } from '@/lib/zod'
 import { ResetPasswordSchema } from '@/lib/zod/reset-password-schema'
 import { FormState } from '@/types'
 import bcrypt from 'bcryptjs'
-import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 
 export async function changeUsername(newUsername: string) {
@@ -28,11 +27,14 @@ export async function changeUsername(newUsername: string) {
     }
   }
 
-  const validatedUsername = validation.data
+  const validatedUsername = validation.data.toLowerCase()
 
   try {
     const existingUsername = await prisma.user.findFirst({
-      where: { username: validatedUsername, NOT: { id: userId } },
+      where: {
+        username: { equals: validatedUsername, mode: 'insensitive' },
+        NOT: { id: userId },
+      },
     })
 
     if (existingUsername) {
@@ -66,9 +68,11 @@ export async function changeUsername(newUsername: string) {
       data: { username: validatedUsername, usernameUpdatedAt: new Date() },
     })
 
-    revalidatePath('/dashboard/settings')
-
-    return { message: 'Identity recalibrated', success: true }
+    return {
+      message: 'Identity recalibrated',
+      success: true,
+      newUsername: validatedUsername,
+    }
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
       console.log('[ CHANGE_USERNAME_ERROR ]:', error)

@@ -7,9 +7,15 @@ import {
 import { StatusAlert, TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
 import { changeUsername } from '@/lib/actions/dashboard'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 
 export const UsernameSection = () => {
+  const { update } = useSession()
+
+  const router = useRouter()
+
   const [newUsername, setNewUsername] = useState('')
   const [feedback, setFeedback] = useState<{
     message: string
@@ -27,6 +33,15 @@ export const UsernameSection = () => {
 
     startTransition(async () => {
       const result = await changeUsername(newUsername)
+
+      if (result.success && result.newUsername) {
+        await update({
+          user: { username: result.newUsername },
+        })
+
+        router.refresh()
+      }
+
       setFeedback({ message: result.message, success: result.success })
     })
   }

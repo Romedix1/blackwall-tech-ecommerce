@@ -85,6 +85,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.passwordChangedAt = session.passwordChangedAt
       }
 
+      if (trigger === 'update' && session?.user) {
+        const freshUser = await prisma.user.findUnique({
+          where: { id: token.id },
+          select: { username: true },
+        })
+
+        if (freshUser) {
+          token.name = freshUser.username
+        }
+      }
+
       const dbUser = await prisma.user.findUnique({
         where: { id: token.id },
         select: { passwordChangedAt: true, tokenVersion: true },
