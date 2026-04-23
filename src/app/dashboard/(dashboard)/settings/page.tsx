@@ -4,13 +4,27 @@ import {
   SettingsSection,
   SecuritySection,
   UsernameSection,
+  AddressSection,
 } from '@/app/dashboard/(dashboard)/settings/_components'
-import { TerminalInput } from '@/components/shared'
+import { auth } from '@/auth'
 import { Button } from '@/components/ui'
 import { isOAuthUser } from '@/lib/actions/dashboard'
+import { prisma } from '@/lib/prisma'
 
 export default async function SettingsPage() {
   const isOAuth = await isOAuthUser()
+
+  const session = await auth()
+  const userId = session?.user.id
+
+  const userAddress = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      shippingAddress: true,
+      zipCode: true,
+      city: true,
+    },
+  })
 
   return (
     <>
@@ -24,30 +38,7 @@ export default async function SettingsPage() {
 
         {!isOAuth && <SecuritySection />}
 
-        <SettingsSection>
-          <SettingsHeader>
-            <span aria-hidden="true">[ Logistic ]</span>
-            <span className="sr-only">Logistic</span>
-          </SettingsHeader>
-
-          <div className="flex flex-col gap-4">
-            <TerminalInput
-              placeholder="Shipping_address"
-              ariaLabel="Shipping address"
-              className="col-span-2"
-            />
-
-            <div className="flex gap-2">
-              <TerminalInput placeholder="Zip_code" ariaLabel="Zip code" />
-              <TerminalInput placeholder="City" ariaLabel="City" />
-            </div>
-
-            <Button className="text-sm">
-              <span aria-hidden="true">[ Update_data]</span>
-              <span className="sr-only">Update data</span>
-            </Button>
-          </div>
-        </SettingsSection>
+        <AddressSection userAddress={userAddress} />
 
         <SettingsSection>
           <SettingsHeader>

@@ -1,18 +1,21 @@
 'use server'
 
 import { auth, signOut } from '@/auth'
+import { checkUpdateCooldown } from '@/lib/check-update-cooldown'
 import { prisma } from '@/lib/prisma'
-import { UsernameField } from '@/lib/zod'
+import { addressSchema, UsernameField } from '@/lib/zod'
 import { ResetPasswordSchema } from '@/lib/zod/reset-password-schema'
 import { FormState } from '@/types'
 import bcrypt from 'bcryptjs'
+import { error } from 'console'
+import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
+
+const UPDATE_COOLDOWN = 60 * 60 * 1000
 
 export async function changeUsername(newUsername: string) {
   const session = await auth()
   const userId = session?.user.id
-
-  const UPDATE_COOLDOWN = 60 * 60 * 1000
 
   if (!userId) {
     return { message: 'Unauthorized', success: false }
@@ -49,15 +52,13 @@ export async function changeUsername(newUsername: string) {
     })
 
     if (user?.usernameUpdatedAt) {
-      const now = Date.now()
       const lastUpdated = user.usernameUpdatedAt.getTime()
-      const diff = now - lastUpdated
 
-      if (diff < UPDATE_COOLDOWN) {
-        const remainingMin = Math.ceil((UPDATE_COOLDOWN - diff) / (1000 * 60))
+      const canUpdate = checkUpdateCooldown(lastUpdated, UPDATE_COOLDOWN)
 
+      if (!canUpdate.success) {
         return {
-          message: `System lock: Wait ${remainingMin}m for next calibration`,
+          message: `System lock: Wait ${canUpdate.remainingMin}m for next calibration`,
           success: false,
         }
       }
@@ -78,7 +79,10 @@ export async function changeUsername(newUsername: string) {
       console.log('[ CHANGE_USERNAME_ERROR ]:', error)
     }
 
-    return { message: '', success: false }
+    return {
+      message: '[SYSTEM_FAILURE]: Unexpected database desync.',
+      success: false,
+    }
   }
 }
 
@@ -119,8 +123,21 @@ export async function ResetPassword(
       where: { id: userId },
       select: {
         password: true,
+        passwordChangedAt: true,
       },
     })
+
+    if (dbUser?.passwordChangedAt) {
+      const lastUpdated = dbUser.passwordChangedAt.getTime()
+
+      const canUpdate = checkUpdateCooldown(lastUpdated, UPDATE_COOLDOWN)
+
+      if (!canUpdate.success) {
+        return {
+          error: `System lock: Wait ${canUpdate.remainingMin}m for next calibration`,
+        }
+      }
+    }
 
     if (!dbUser?.password) {
       return {
@@ -202,4 +219,84 @@ export async function LogoutAllSessions() {
 
     return { error: 'Protocol error: Failed to sever connections' }
   }
+}
+
+export async function ChangeAddress(
+  prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const session = await auth()
+
+  const userId = session?.user.id
+
+  const rawData = Object.fromEntries(formData.entries()) as Record<
+    string,
+    string
+  >
+
+  if (!userId) {
+    return { error: 'Unauthorized', fields: rawData }
+  }
+
+  const validatedData = addressSchema.safeParse(rawData)
+
+  if (!validatedData.success) {
+    return {
+      error: validatedData.error.issues.map((issue) => issue.message),
+      fields: rawData,
+    }
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      addressUpdatedAt: true,
+    },
+  })
+
+  if (user?.addressUpdatedAt) {
+    const lastUpdated = user.addressUpdatedAt.getTime()
+
+    const canUpdate = checkUpdateCooldown(lastUpdated, UPDATE_COOLDOWN)
+
+    if (!canUpdate.success) {
+      return {
+        error: `System lock: Wait ${canUpdate.remainingMin}m for next calibration`,
+      }
+    }
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      shippingAddress: validatedData.data.shippingAddress,
+      city: validatedData.data.city,
+      zipCode: validatedData.data.zipCode,
+    },
+  })
+
+  revalidatePath('/', 'page')
+
+  return { success: true, message: 'Address updated' }
+}
+
+export async function fetchAddress() {
+  const session = await auth()
+
+  const userId = session?.user.id
+
+  if (!userId) {
+    return { error: 'Unauthorized' }
+  }
+
+  const userAddress = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      shippingAddress: true,
+      zipCode: true,
+      city: true,
+    },
+  })
+
+  return userAddress
 }

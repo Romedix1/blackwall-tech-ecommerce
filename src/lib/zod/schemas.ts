@@ -31,3 +31,9 @@ export const passwordMatchError = {
   message: 'Passwords do not match',
   path: ['confirmPassword'],
 }
+
+export const addressSchema = z.object({
+  shippingAddress: z.string().trim().min(3, 'Address too short'),
+  city: z.string().trim().min(2, 'City required'),
+  zipCode: z.string().trim().min(2, 'Zip code required'),
+})

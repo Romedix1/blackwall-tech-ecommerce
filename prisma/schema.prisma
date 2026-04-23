@@ -54,6 +54,10 @@ model User {
   usernameUpdatedAt DateTime?
   email             String?   @unique
   emailVerified     DateTime?
+  shippingAddress   String?
+  city              String?
+  zipCode           String?
+  addressUpdatedAt  DateTime  @default(now())
   tokenVersion      Int       @default(0)
   image             String?
   password          String?
