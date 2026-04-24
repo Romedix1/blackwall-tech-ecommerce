@@ -140,18 +140,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       }
 
-      if (trigger === 'update' && session?.passwordChangedAt) {
-        token.passwordChangedAt = session.passwordChangedAt
-      }
+      if (trigger === 'update' && session) {
+        if (session.user?.username) {
+          token.name = session.user.username
+        }
 
-      if (trigger === 'update' && session?.user) {
-        const freshUser = await prisma.user.findUnique({
-          where: { id: token.id },
-          select: { username: true },
-        })
-
-        if (freshUser) {
-          token.name = freshUser.username
+        if (session.passwordChangedAt) {
+          token.passwordChangedAt = session.passwordChangedAt
         }
       }
 
