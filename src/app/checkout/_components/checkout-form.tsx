@@ -147,7 +147,7 @@ export const CheckoutForm = ({
           defaultValue={state?.fields?.fullName || draftData?.fullName || ''}
           placeholder="Full_name"
           name="fullName"
-          ariaLabel="Full name"
+          aria-label="Full name"
           className="pr-4"
         />
         <TerminalInput
@@ -155,7 +155,7 @@ export const CheckoutForm = ({
             state?.fields.shippingAddress || draftData?.shippingAddress || ''
           }
           placeholder="Shipping_address"
-          ariaLabel="Shipping address"
+          aria-label="Shipping address"
           name="shippingAddress"
           className="pr-4"
         />
@@ -165,7 +165,7 @@ export const CheckoutForm = ({
             state?.fields?.email || draftData?.email || userEmail || ''
           }
           placeholder="Email"
-          ariaLabel="Email"
+          aria-label="Email"
           name="email"
           className="pr-4"
         />
@@ -175,14 +175,14 @@ export const CheckoutForm = ({
             placeholder="City"
             defaultValue={state?.fields.city || draftData?.city || ''}
             name="city"
-            ariaLabel="City"
+            aria-label="City"
             className="pr-4"
           />
           <TerminalInput
             defaultValue={state?.fields.zipCode || draftData?.zipCode || ''}
             placeholder="Zip_code"
             name="zipCode"
-            ariaLabel="Zip code"
+            aria-label="Zip code"
             className="pr-4"
           />
         </div>
@@ -192,7 +192,7 @@ export const CheckoutForm = ({
           defaultValue={state?.fields.phone || draftData?.phone || ''}
           placeholder="Phone_number"
           name="phone"
-          ariaLabel="Phone number"
+          aria-label="Phone number"
           className="pr-4"
         />
 

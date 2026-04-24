@@ -25,7 +25,7 @@ export const NavbarSearch = ({ variant = 'default' }: NavbarSearchProps) => {
   return (
     <div>
       <SearchInput
-        ariaLabel="Search in database"
+        aria-label="Search in database"
         ref={inputRef}
         variant={variant}
         containerClassName="hidden lg:block"

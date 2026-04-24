@@ -101,7 +101,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
               type="text"
               name="username"
               autoComplete="username"
-              ariaLabel="Insert username"
+              aria-label="Insert username"
             />
           )}
           <TerminalInput
@@ -110,7 +110,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             type="email"
             name="email"
             autoComplete="email"
-            ariaLabel="Insert email"
+            aria-label="Insert email"
           />
           <TerminalInput
             defaultValue={state?.fields?.password || ''}
@@ -118,7 +118,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             type="password"
             name="password"
             autoComplete={isLogin ? 'current-password' : 'new-password'}
-            ariaLabel="Insert password"
+            aria-label="Insert password"
           />
           {isLogin && (
             <Link
@@ -140,7 +140,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
               type="password"
               name="confirmPassword"
               autoComplete="new-password"
-              ariaLabel="Confirm password"
+              aria-label="Confirm password"
             />
           )}
         </div>

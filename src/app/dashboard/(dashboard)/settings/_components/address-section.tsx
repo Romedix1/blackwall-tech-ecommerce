@@ -34,7 +34,7 @@ export const AddressSection = ({ userAddress }: AddresSection) => {
             state?.fields?.shippingAddress || userAddress?.shippingAddress || ''
           }
           placeholder="Shipping_address"
-          ariaLabel="Shipping address"
+          aria-label="Shipping address"
           className="col-span-2"
         />
 
@@ -43,13 +43,13 @@ export const AddressSection = ({ userAddress }: AddresSection) => {
             name="city"
             defaultValue={state?.fields?.city || userAddress?.city || ''}
             placeholder="City"
-            ariaLabel="City"
+            aria-label="City"
           />
           <TerminalInput
             name="zipCode"
             defaultValue={state?.fields?.zipCode || userAddress?.zipCode || ''}
             placeholder="Zip_code"
-            ariaLabel="Zip code"
+            aria-label="Zip code"
           />
         </div>
 

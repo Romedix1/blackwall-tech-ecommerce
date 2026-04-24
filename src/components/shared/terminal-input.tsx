@@ -3,7 +3,6 @@ import { cn } from '@/lib/utils'
 import { InputHTMLAttributes, Ref } from 'react'
 
 type BaseProps = InputHTMLAttributes<HTMLInputElement> & {
-  ariaLabel: string
   ref?: Ref<HTMLInputElement>
 }
 
@@ -23,7 +22,6 @@ const TerminalInput = ({
   className,
   type,
   placeholder,
-  ariaLabel,
   ref,
   ...props
 }: TerminalInputProps) => {
@@ -34,7 +32,6 @@ const TerminalInput = ({
         ref={ref}
         type={type}
         placeholder=" "
-        aria-label={ariaLabel}
         className={cn(
           'peer bg-background hover:border-primary-hover caret-accent h-12 w-full rounded-none border pr-4 pl-4 text-sm transition-colors duration-200 focus-visible:ring-0 sm:pr-26',
           className,

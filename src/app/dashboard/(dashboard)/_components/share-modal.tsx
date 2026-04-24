@@ -35,8 +35,10 @@ export const ShareModal = ({
       copyBtnRef.current.focus()
     }
 
+    const interval = intervalRef.current
+
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
+      if (interval) clearInterval(interval)
     }
   }, [])
 
@@ -64,6 +66,10 @@ export const ShareModal = ({
         })
       }, 1000)
     } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[ SHARING_BUILD_ERROR ]: ', error)
+      }
+
       setIsCooldown(false)
       setTimer(0)
     }
@@ -99,7 +105,7 @@ export const ShareModal = ({
                   <span className="sr-only">
                     System is recalibrating. Please wait.
                   </span>
-                  <span aria-hidden="true">RECALIBRATING...</span>
+                  <span aria-hidden="true">Recalibrating...</span>
                 </>
               ) : isPublic ? (
                 <>
@@ -150,7 +156,7 @@ export const ShareModal = ({
             <TerminalInput
               readOnly
               value={shareLink}
-              ariaLabel="Publish link"
+              aria-label="Publish link"
               className="text-text-main"
             />
             <Button

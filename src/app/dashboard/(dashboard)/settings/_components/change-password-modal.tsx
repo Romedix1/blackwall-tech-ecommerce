@@ -64,21 +64,21 @@ export const ChangePasswordModal = ({ onClose }: TerminateModalProps) => {
             <TerminalInput
               type="password"
               name="currentPassword"
-              ariaLabel="Current password"
+              aria-label="Current password"
               placeholder="Current password"
               defaultValue={state?.fields?.currentPassword || ''}
             />
             <TerminalInput
               type="password"
               name="newPassword"
-              ariaLabel="New password"
+              aria-label="New password"
               placeholder="New password"
               defaultValue={state?.fields?.newPassword || ''}
             />
             <TerminalInput
               type="password"
               name="confirmNewPassword"
-              ariaLabel="Confirm new password"
+              aria-label="Confirm new password"
               placeholder="Confirm password"
               defaultValue={state?.fields?.confirmNewPassword || ''}
             />

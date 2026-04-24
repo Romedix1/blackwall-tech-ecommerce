@@ -60,7 +60,7 @@ export const UsernameSection = () => {
             value={newUsername}
             onChange={(e) => setNewUsername(e.target.value)}
             placeholder={`Change_username`}
-            ariaLabel={`Change username`}
+            aria-label={`Change username`}
           />
 
           <Button disabled={isPending}>

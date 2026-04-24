@@ -21,7 +21,6 @@ interface SearchInputProps extends ComponentPropsWithoutRef<'input'> {
   containerClassName?: string
   placeholder?: string
   id?: string
-  ariaLabel: string
 }
 
 type SearchResultItem = {
@@ -41,7 +40,6 @@ export const SearchInput = ({
   containerClassName,
   placeholder,
   id: customId,
-  ariaLabel,
   ...props
 }: SearchInputProps) => {
   const generateId = useId()
@@ -90,7 +88,6 @@ export const SearchInput = ({
           onBlur={() => setIsFocus(false)}
           onChange={(e) => setValue(e.target.value)}
           placeholder=" "
-          aria-label={ariaLabel}
           {...props}
           className={cn(
             'peer bg-surface hover:border-primary-hover caret-accent h-10 rounded-none border py-2.5 pr-26 pl-4 text-sm transition-colors duration-200 placeholder-shown:caret-transparent focus-visible:ring-0 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none',
