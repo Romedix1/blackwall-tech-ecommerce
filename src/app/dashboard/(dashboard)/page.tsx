@@ -3,6 +3,7 @@ import {
   UserActivity,
 } from '@/app/dashboard/(dashboard)/_components'
 import { DashboardHeader } from '@/app/dashboard/(dashboard)/_components'
+import { RenderRecords } from '@/app/dashboard/(dashboard)/settings/_components/render-records'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
@@ -12,6 +13,7 @@ export default async function UserDashboardPage() {
 
   if (!user) {
     redirect('/')
+    return null
   }
 
   const userOrders = await prisma.order.findMany({
@@ -38,21 +40,7 @@ export default async function UserDashboardPage() {
         {user.user.name}
       </DashboardHeader>
 
-      {userOrders.length > 1 ? (
-        <ul className="flex flex-col gap-4">
-          {userOrders.map((order) => {
-            return <RecordBlock key={order.id} record={order} type="order" />
-          })}
-        </ul>
-      ) : (
-        <div className="text-warning text-sm lg:text-base">
-          <p className="uppercase">
-            <span aria-hidden="true">[ No_orders_found_in_history ] </span>
-            <span className="sr-only">No orders found in history</span>
-          </p>
-        </div>
-      )}
-
+      <RenderRecords type="order" records={userOrders} />
       <UserActivity />
     </>
   )

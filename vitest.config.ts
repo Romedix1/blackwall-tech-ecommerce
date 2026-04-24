@@ -7,6 +7,8 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   resolve: {
     alias: {
+      '@': path.resolve(__dirname, './src'),
+      'next/server': path.resolve(__dirname, 'node_modules/next/server.js'),
       'server-only': path.resolve(__dirname, './tests/empty-module.js'),
     },
   },
@@ -14,5 +16,10 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './tests/setup.js',
+    server: {
+      deps: {
+        inline: ['next-auth'],
+      },
+    },
   },
 } as UserConfig)

@@ -5,19 +5,9 @@ import { ShareModal } from '@/components/shared'
 import { Button } from '@/components/ui'
 import { cn, getStatusTextColor } from '@/lib'
 import { getStatusData } from '@/lib/dashboard'
+import { BaseRecordType, BuildRecordType } from '@/types/record'
 import Link from 'next/link'
 import { useState } from 'react'
-
-type BaseRecordType = {
-  id: string
-  status: string
-  createdAt: Date
-}
-
-type BuildRecordType = BaseRecordType & {
-  public: boolean
-  name: string
-}
 
 type OrderBlockProps =
   | { type: 'build'; record: BuildRecordType }
