@@ -1,7 +1,7 @@
 'use client'
 
 import { DeleteModal } from '@/app/dashboard/(dashboard)/_components/delete-modal'
-import { ShareModal } from '@/components/shared'
+import { ShareModal } from '@/app/dashboard/(dashboard)/_components/share-modal'
 import { Button } from '@/components/ui'
 import { cn, getStatusTextColor } from '@/lib'
 import { getStatusData } from '@/lib/dashboard'
@@ -15,7 +15,7 @@ type OrderBlockProps =
 
 export const RecordBlock = ({ record, type }: OrderBlockProps) => {
   const [isSharing, setIsSharing] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(true)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const getETA = (createdAt: Date) => {
     const deliveryDate = new Date(createdAt)
@@ -25,7 +25,7 @@ export const RecordBlock = ({ record, type }: OrderBlockProps) => {
     const diffTime = deliveryDate.getTime() - now.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-    return diffDays > 0 ? `${diffDays}_days` : 'Delivered'
+    return diffDays > 0 ? `${diffDays} days` : 'Delivered'
   }
 
   const status = getStatusData(record.status)
@@ -87,7 +87,9 @@ export const RecordBlock = ({ record, type }: OrderBlockProps) => {
                 &gt;
               </span>
               Status: {status.label}
-              <span aria-hidden="true">(Eta: {getETA(record.createdAt)})</span>
+              <span aria-hidden="true">
+                (Eta: {getETA(record.createdAt).replace(/\s+/g, '_')})
+              </span>
               <span className="sr-only">
                 Estimated time of arrival: {getETA(record.createdAt)}
               </span>

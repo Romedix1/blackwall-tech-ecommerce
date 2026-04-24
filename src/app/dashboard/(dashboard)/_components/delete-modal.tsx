@@ -48,7 +48,7 @@ export const DeleteModal = ({
             id="delete-title"
             className="text-error-text text-lg font-bold tracking-tighter break-all lg:text-2xl"
           >
-            [ SYSTEM_PURGE_INITIATED ]
+            [ System_purge_initiated ]
           </h2>
         </div>
 
@@ -93,7 +93,7 @@ export const DeleteModal = ({
             disabled={isDeleting}
           >
             {isDeleting ? (
-              <span aria-hidden="true">WIPING_DATA...</span>
+              <span aria-hidden="true">Wiping_data...</span>
             ) : (
               <>
                 <span className="sr-only">Confirm delete</span>

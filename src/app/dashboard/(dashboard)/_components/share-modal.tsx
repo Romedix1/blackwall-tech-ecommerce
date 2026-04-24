@@ -86,7 +86,7 @@ export const ShareModal = ({
               <span aria-hidden="true">Current status:</span>
             </span>
             <span
-              className={`text-sm font-bold tracking-wider lg:text-base ${
+              className={`text-sm font-bold tracking-wider uppercase lg:text-base ${
                 isCooldown
                   ? 'text-warning'
                   : isPublic
@@ -104,25 +104,25 @@ export const ShareModal = ({
               ) : isPublic ? (
                 <>
                   <span className="sr-only">Broadcast is live.</span>
-                  <span aria-hidden="true">LIVE_UPLINK_ACTIVE</span>
+                  <span aria-hidden="true">Live_uplink_active</span>
                 </>
               ) : (
                 <>
                   <span className="sr-only">Connection is private.</span>
-                  <span aria-hidden="true">LOCAL_ENCRYPTION_ONLY</span>
+                  <span aria-hidden="true">Local_encryption_only</span>
                 </>
               )}
             </span>
           </div>
           <Button
             variant={isPublic ? 'delete' : 'secondary'}
-            className="h-10 text-[10px] sm:h-12 sm:w-60 lg:text-sm"
+            className="h-10 text-[10px] uppercase sm:h-12 sm:w-60 lg:text-sm"
             onClick={handleSwitchAccess}
             disabled={isCooldown}
           >
             {isCooldown ? (
               <>
-                <span aria-hidden="true">[ COOLDOWN: {timer}S ]</span>
+                <span aria-hidden="true">[ Cooldown: {timer}S ]</span>
                 <span className="sr-only">Cooldown: {timer}S</span>
               </>
             ) : isPublic ? (

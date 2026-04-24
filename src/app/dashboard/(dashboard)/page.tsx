@@ -1,9 +1,6 @@
-import {
-  RecordBlock,
-  UserActivity,
-} from '@/app/dashboard/(dashboard)/_components'
+import { UserActivity } from '@/app/dashboard/(dashboard)/_components'
 import { DashboardHeader } from '@/app/dashboard/(dashboard)/_components'
-import { RenderRecords } from '@/app/dashboard/(dashboard)/settings/_components/render-records'
+import { RenderRecords } from '@/app/dashboard/(dashboard)/_components/render-records'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
