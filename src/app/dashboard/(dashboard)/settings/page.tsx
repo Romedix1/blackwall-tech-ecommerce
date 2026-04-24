@@ -6,6 +6,7 @@ import {
   UsernameSection,
   AddressSection,
 } from '@/app/dashboard/(dashboard)/settings/_components'
+import { ActiveSessions } from '@/app/dashboard/(dashboard)/settings/_components/active-sessions'
 import { auth } from '@/auth'
 import { Button } from '@/components/ui'
 import { isOAuthUser } from '@/lib/actions/dashboard'
@@ -40,33 +41,7 @@ export default async function SettingsPage() {
 
         <AddressSection userAddress={userAddress} />
 
-        <SettingsSection>
-          <SettingsHeader>
-            <span aria-hidden="true">[ Active_uplinks ]</span>
-            <span className="sr-only">Active uplinks</span>
-          </SettingsHeader>
-
-          <div className="border-accent bg-accent/10 border p-3 text-xs">
-            <div className="mb-2 flex items-start justify-between">
-              <div className="text-accent font-bold">CURRENT_SESSION</div>
-              <div className="text-text-second">{'192.168.1.1'} </div>
-            </div>
-            <p className="uppercase">Chrome / Windows 11</p>
-            <p className="text-text-second mt-1">
-              &gt; Uplink_Location: {'city'}, {'country'}
-            </p>
-          </div>
-
-          <div className="my-3 text-xs font-bold">Other_sessions</div>
-
-          <div className="border p-3 text-xs">
-            <div className="mb-1 flex justify-between">
-              <span>Mobile_App_Node</span>
-              <span>192.168.1.44</span>
-            </div>
-            <p className="uppercase">Safari / iPhone 15</p>
-          </div>
-        </SettingsSection>
+        <ActiveSessions />
 
         <section className="border-error-text/40 bg-error-bg/15 mt-10 border p-6 lg:col-span-2">
           <div className="flex flex-col gap-4">

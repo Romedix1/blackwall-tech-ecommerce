@@ -7,7 +7,6 @@ import { addressSchema, UsernameField } from '@/lib/zod'
 import { ResetPasswordSchema } from '@/lib/zod/reset-password-schema'
 import { FormState } from '@/types'
 import bcrypt from 'bcryptjs'
-import { error } from 'console'
 import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 
@@ -107,7 +106,7 @@ export async function ResetPassword(
     const errorArray = validatedData.error.issues.map((issue) => issue.message)
     return {
       error: errorArray,
-      fields: rawData,
+      fields: { currentPassword: '', newPassword: '', confirmNewPassword: '' },
     }
   }
 
@@ -116,7 +115,14 @@ export async function ResetPassword(
     const userId = session?.user.id
 
     if (!userId) {
-      return { error: 'Unauthorized', fields: rawData }
+      return {
+        error: 'Unauthorized',
+        fields: {
+          currentPassword: '',
+          newPassword: '',
+          confirmNewPassword: '',
+        },
+      }
     }
 
     const dbUser = await prisma.user.findUnique({
@@ -142,7 +148,11 @@ export async function ResetPassword(
     if (!dbUser?.password) {
       return {
         error: 'External accounts (OAuth) cannot modify passwords here',
-        fields: rawData,
+        fields: {
+          currentPassword: '',
+          newPassword: '',
+          confirmNewPassword: '',
+        },
       }
     }
 
@@ -152,7 +162,14 @@ export async function ResetPassword(
     )
 
     if (!passwordIsCorrect) {
-      return { error: 'Invalid current password', fields: rawData }
+      return {
+        error: 'Invalid current password',
+        fields: {
+          currentPassword: '',
+          newPassword: '',
+          confirmNewPassword: '',
+        },
+      }
     }
 
     const hashedNewPassword = await bcrypt.hash(validatedData.data.password, 12)
@@ -162,12 +179,27 @@ export async function ResetPassword(
       data: { password: hashedNewPassword, passwordChangedAt: new Date() },
     })
 
-    return { success: true, message: 'Uplink initiated', fields: rawData }
+    return {
+      success: true,
+      message: 'Uplink initiated',
+      fields: {
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: '',
+      },
+    }
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
       console.error('[ RESET_PASSWORD_ERROR ]:', error)
     }
-    return { error: 'Protocol error: Password reset failed', fields: rawData }
+    return {
+      error: 'Protocol error: Password reset failed',
+      fields: {
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: '',
+      },
+    }
   }
 }
 
@@ -180,12 +212,20 @@ export const isOAuthUser = async (): Promise<boolean> => {
     return false
   }
 
-  const account = await prisma.account.findFirst({
-    where: { userId },
-    select: { id: true },
-  })
+  try {
+    const account = await prisma.account.findFirst({
+      where: { userId },
+      select: { id: true },
+    })
 
-  return !!account
+    return !!account
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[ OAUTH_CHECK_FAILED ]: ', error)
+    }
+
+    return false
+  }
 }
 
 export async function LogoutAllSessions() {
@@ -201,6 +241,10 @@ export async function LogoutAllSessions() {
     const result = await prisma.user.update({
       where: { id: userId },
       data: { tokenVersion: { increment: 1 } },
+    })
+
+    await prisma.activeConnection.deleteMany({
+      where: { userId: userId },
     })
 
     if (result) {
@@ -247,37 +291,44 @@ export async function ChangeAddress(
     }
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      addressUpdatedAt: true,
-    },
-  })
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        addressUpdatedAt: true,
+      },
+    })
 
-  if (user?.addressUpdatedAt) {
-    const lastUpdated = user.addressUpdatedAt.getTime()
+    if (user?.addressUpdatedAt) {
+      const lastUpdated = user.addressUpdatedAt.getTime()
 
-    const canUpdate = checkUpdateCooldown(lastUpdated, UPDATE_COOLDOWN)
+      const canUpdate = checkUpdateCooldown(lastUpdated, UPDATE_COOLDOWN)
 
-    if (!canUpdate.success) {
-      return {
-        error: `System lock: Wait ${canUpdate.remainingMin}m for next calibration`,
+      if (!canUpdate.success) {
+        return {
+          error: `System lock: Wait ${canUpdate.remainingMin}m for next calibration`,
+        }
       }
     }
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        shippingAddress: validatedData.data.shippingAddress,
+        city: validatedData.data.city,
+        zipCode: validatedData.data.zipCode,
+        addressUpdatedAt: new Date(),
+      },
+    })
+
+    revalidatePath('/', 'page')
+
+    return { success: true, message: 'Address updated' }
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development')
+      console.error('[ ADDRESS_UPDATE_ERROR ]:', error)
+    return { error: 'Protocol error: Database update failed', fields: rawData }
   }
-
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      shippingAddress: validatedData.data.shippingAddress,
-      city: validatedData.data.city,
-      zipCode: validatedData.data.zipCode,
-    },
-  })
-
-  revalidatePath('/', 'page')
-
-  return { success: true, message: 'Address updated' }
 }
 
 export async function fetchAddress() {
@@ -289,14 +340,56 @@ export async function fetchAddress() {
     return { error: 'Unauthorized' }
   }
 
-  const userAddress = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      shippingAddress: true,
-      zipCode: true,
-      city: true,
-    },
-  })
+  try {
+    return await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        shippingAddress: true,
+        zipCode: true,
+        city: true,
+      },
+    })
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[ FETCH_ADDRESS_ERROR ]:', error)
+    }
+    return null
+  }
+}
 
-  return userAddress
+export async function TerminateSession(
+  prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const connectionId = formData.get('connectionId') as string
+
+  const session = await auth()
+  const userId = session?.user?.id
+
+  if (!connectionId) {
+    return { error: 'Unauthorized' }
+  }
+
+  try {
+    const deletion = await prisma.activeConnection.deleteMany({
+      where: {
+        sessionToken: connectionId,
+        userId: userId,
+      },
+    })
+
+    if (deletion.count === 0) {
+      return { error: 'Uplink not found or already terminated' }
+    }
+
+    revalidatePath('/dashboard/settings')
+
+    return { success: true, message: 'Connection severed successfully' }
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[ TERMINATE_SESSION_ERROR ]:', error)
+    }
+
+    return { error: 'Critical failure: Could not sever uplink' }
+  }
 }

@@ -4,6 +4,7 @@ import { Role } from '../../generated/prisma'
 declare module 'next-auth' {
   interface Session {
     passwordChangedAt?: Date | null
+    connectionId?: string
     user: {
       id: string
       username?: string | null
@@ -16,6 +17,7 @@ declare module 'next-auth' {
     role?: Role
     passwordChangedAt?: Date | null
     tokenVersion?: number
+    connectionId?: string
   }
 }
 
@@ -27,5 +29,6 @@ declare module 'next-auth/jwt' {
     passwordChangedAt?: Date | null
     iat?: number
     tokenVersion?: number
+    connectionId?: string
   }
 }

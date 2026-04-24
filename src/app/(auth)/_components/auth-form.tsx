@@ -26,7 +26,7 @@ const SOCIAL_PROVIDERS = [
     icon: SiGmail,
   },
 ]
-
+// TODO: ADD LOGIN SUCCESS INFORMATION
 export const AuthForm = ({ mode }: AuthFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
