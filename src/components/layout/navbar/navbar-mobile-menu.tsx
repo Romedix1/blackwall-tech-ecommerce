@@ -28,7 +28,7 @@ export const MobileMenu = () => {
       <div className="flex w-full flex-col px-2 py-4">
         <SearchInput
           ref={inputRef}
-          ariaLabel="Search in database"
+          aria-label="Search in database"
           containerClassName="w-full mb-2"
         />
 

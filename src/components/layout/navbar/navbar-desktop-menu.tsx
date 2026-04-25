@@ -1,3 +1,5 @@
+'use client'
+
 import { LogOutButton, NavLink } from '@/components/shared'
 import { Separator } from '@/components/ui'
 import { useSession } from 'next-auth/react'
@@ -8,9 +10,11 @@ const LINKS = [
 ]
 
 export const DesktopMenu = () => {
-  const session = useSession()
+  const { data: session, status } = useSession()
 
-  if (!session) return null
+  if (!session || !session.user) {
+    return null
+  }
 
   return (
     <div className="bg-surface top-18 right-20 hidden max-w-lg px-4.5 py-2 lg:fixed lg:block">
@@ -23,12 +27,12 @@ export const DesktopMenu = () => {
 
           <p className="text-text-second uppercase">
             <span aria-hidden="true">&gt;</span> Auth:{' '}
-            <span className="truncate">{session.data?.user.email}</span>
+            <span className="truncate">{session.user.email}</span>
           </p>
           <p className="text-text-second uppercase">
             <span aria-hidden="true">&gt;</span> Clearance:{' '}
-            <span className="sr-only">{session.data?.user.role}</span>
-            <span aria-hidden="true">[ {session.data?.user.role} ]</span>
+            <span className="sr-only">{session.user.role}</span>
+            <span aria-hidden="true">[ {session.user.role} ]</span>
           </p>
         </div>
 

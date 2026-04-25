@@ -98,7 +98,7 @@ describe('Search Functionality', () => {
       categories: [],
     })
 
-    render(<SearchInput ariaLabel="Search database" />)
+    render(<SearchInput aria-label="Search database" />)
 
     const searchInput = screen.getByLabelText('Search database')
 
@@ -122,7 +122,7 @@ describe('Search Functionality', () => {
       categories: [{ name: 'processors', slug: 'cpu' }],
     })
 
-    render(<SearchInput ariaLabel="Search database" />)
+    render(<SearchInput aria-label="Search database" />)
 
     const searchInput = screen.getByLabelText('Search database')
 
@@ -148,7 +148,7 @@ describe('Search Functionality', () => {
       categories: [{ name: 'Graphics Cards', slug: 'gpu' }],
     })
 
-    render(<SearchInput ariaLabel="Search database" />)
+    render(<SearchInput aria-label="Search database" />)
 
     const searchInput = screen.getByLabelText('Search database')
 

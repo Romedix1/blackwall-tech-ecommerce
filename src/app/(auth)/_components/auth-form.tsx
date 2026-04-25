@@ -2,11 +2,11 @@
 
 import { RegisterSuccess } from '@/app/(auth)/register/_components/register-success'
 import { signIn } from 'next-auth/react'
-import { ErrorText, TerminalInput } from '@/components/shared'
+import { StatusAlert, TerminalInput } from '@/components/shared'
 import { Button } from '@/components/ui'
 import { LoginUser, RegisterUser } from '@/lib/actions'
 import Link from 'next/link'
-import { useActionState, useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { SiGmail } from 'react-icons/si'
 
@@ -26,7 +26,7 @@ const SOCIAL_PROVIDERS = [
     icon: SiGmail,
   },
 ]
-
+// TODO: ADD LOGIN SUCCESS INFORMATION
 export const AuthForm = ({ mode }: AuthFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -46,6 +46,12 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (state?.success && state?.message === 'User logged in') {
+      window.location.replace('/')
+    }
+  }, [state])
 
   if (state?.success && state?.fields?.email) {
     return <RegisterSuccess email={state.fields.email} />
@@ -95,7 +101,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
               type="text"
               name="username"
               autoComplete="username"
-              ariaLabel="Insert username"
+              aria-label="Insert username"
             />
           )}
           <TerminalInput
@@ -104,7 +110,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             type="email"
             name="email"
             autoComplete="email"
-            ariaLabel="Insert email"
+            aria-label="Insert email"
           />
           <TerminalInput
             defaultValue={state?.fields?.password || ''}
@@ -112,7 +118,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
             type="password"
             name="password"
             autoComplete={isLogin ? 'current-password' : 'new-password'}
-            ariaLabel="Insert password"
+            aria-label="Insert password"
           />
           {isLogin && (
             <Link
@@ -134,7 +140,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
               type="password"
               name="confirmPassword"
               autoComplete="new-password"
-              ariaLabel="Confirm password"
+              aria-label="Confirm password"
             />
           )}
         </div>
@@ -188,7 +194,7 @@ export const AuthForm = ({ mode }: AuthFormProps) => {
           })}
         </div>
 
-        {state?.error && <ErrorText text={state.error} />}
+        {state?.error && <StatusAlert variant="error" text={state.error} />}
 
         <p className="text-text-second mt-6 text-sm sm:text-center md:mt-8">
           <span aria-hidden="true">

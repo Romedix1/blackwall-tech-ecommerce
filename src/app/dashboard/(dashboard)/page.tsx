@@ -1,5 +1,6 @@
-import { OrderBlock } from '@/app/(dashboard)/dashboard/_components'
-import { UserActivity } from '@/app/(dashboard)/dashboard/_components'
+import { UserActivity } from '@/app/dashboard/(dashboard)/_components'
+import { DashboardHeader } from '@/app/dashboard/(dashboard)/_components'
+import { RenderRecords } from '@/app/dashboard/(dashboard)/_components/render-records'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
@@ -9,6 +10,7 @@ export default async function UserDashboardPage() {
 
   if (!user) {
     redirect('/')
+    return null
   }
 
   const userOrders = await prisma.order.findMany({
@@ -28,20 +30,15 @@ export default async function UserDashboardPage() {
   //  ensure UI consistency across sessions without random "jumps" on refresh.
 
   return (
-    <div className="flex flex-col gap-8">
-      <h1 className="text-text-second text-lg font-bold lg:text-xl 2xl:text-2xl">
+    <>
+      <DashboardHeader>
         <span aria-hidden="true">{'//'} Welcome_back, </span>
         <span className="sr-only">Welcome back, </span>
         {user.user.name}
-      </h1>
+      </DashboardHeader>
 
-      <ul className="flex flex-col gap-4">
-        {userOrders.map((order) => {
-          return <OrderBlock key={order.id} order={order} />
-        })}
-      </ul>
-
+      <RenderRecords type="order" records={userOrders} />
       <UserActivity />
-    </div>
+    </>
   )
 }

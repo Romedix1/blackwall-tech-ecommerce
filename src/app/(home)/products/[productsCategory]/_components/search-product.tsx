@@ -36,7 +36,7 @@ export const SearchProduct = ({
       onChange={(e) => setSearchValue(e.target.value)}
       ref={searchRef}
       placeholder="Filter products"
-      ariaLabel="Filter products"
+      aria-label="Filter products"
       containerClassName="w-full xl:w-full"
       variant="filter"
     />

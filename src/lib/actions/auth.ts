@@ -122,7 +122,7 @@ export const LoginUser = async (
     await signIn('credentials', {
       email,
       password,
-      redirectTo: '/',
+      redirect: false,
     })
 
     return { success: true, message: 'User logged in' }

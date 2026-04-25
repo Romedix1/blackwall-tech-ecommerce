@@ -3,6 +3,7 @@ import { create } from 'zustand'
 type DesktopMenuStore = {
   isOpen: boolean
   toggle: () => void
+  close: () => void
 }
 
 export const useDesktopMenu = create<DesktopMenuStore>((set) => ({
@@ -11,5 +12,9 @@ export const useDesktopMenu = create<DesktopMenuStore>((set) => ({
     set((state) => ({
       isOpen: !state.isOpen,
       shouldFocusSearch: false,
+    })),
+  close: () =>
+    set(() => ({
+      isOpen: false,
     })),
 }))

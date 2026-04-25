@@ -48,7 +48,7 @@ export const SearchShell = () => {
       ref={searchRef}
       onChange={(e) => setSearchValue(e.target.value)}
       placeholder="Filter products (by name)"
-      ariaLabel="Filter products by name"
+      aria-label="Filter products by name"
       containerClassName="w-full xl:w-full"
       variant="filter"
     />

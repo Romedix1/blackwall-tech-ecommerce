@@ -19,5 +19,5 @@ export const NavbarUserProfile = async () => {
     )
   }
 
-  return <DesktopMenuButton user={session.user.name || 'Anonymous'} />
+  return <DesktopMenuButton user={session.user.username || 'Anonymous'} />
 }
