@@ -1,14 +1,9 @@
 'use client'
 
-import {
-  InformationModal,
-  StatusAlert,
-  TerminalInput,
-} from '@/components/shared'
+import { InformationModal, StatusAlert } from '@/components/shared'
 import { Button } from '@/components/ui'
-import { ResetPassword, TerminateSession } from '@/lib/actions/dashboard'
+import { TerminateSession } from '@/lib/actions/dashboard'
 import { SessionType } from '@/types'
-import { useSession } from 'next-auth/react'
 import { useActionState, useEffect, useRef } from 'react'
 
 type TerminateModalProps = {
