@@ -12,7 +12,7 @@ type productType = {
   slug: string
   name: string
   price: number
-  productImg: string | null
+  imgSrc: string | null
   specification: SpecSection[]
   quantity: number
   technical: Record<string, string>
@@ -41,9 +41,9 @@ export const ProductBlock = ({ product }: ProductBlockProps) => {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-6 sm:flex-row">
           <div className="relative aspect-video h-30 w-full shrink-0 sm:w-fit xl:h-36">
-            {product.productImg ? (
+            {product.imgSrc ? (
               <Image
-                src={product.productImg}
+                src={product.imgSrc}
                 alt={product.name}
                 fill
                 priority={false}
@@ -109,17 +109,7 @@ export const ProductBlock = ({ product }: ProductBlockProps) => {
           onClick={() =>
             isSelected
               ? removeItem(product.slug, isLogged)
-              : addItem(
-                  product.slug,
-                  product.name,
-                  product.price,
-                  quantity,
-                  product.productImg,
-                  product.category,
-                  product.technical,
-                  product.quantity,
-                  isLogged,
-                )
+              : addItem({ ...product, quantity: 1 }, isLogged)
           }
         >
           {isSelected ? (

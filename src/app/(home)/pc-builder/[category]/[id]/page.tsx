@@ -1,12 +1,14 @@
-import { FilterCapsule } from '@/app/(home)/pc-builder/[category]/_components'
-import { ProductBlock } from '@/app/(home)/pc-builder/[category]/_components/product-block'
-import { SearchShell } from '@/app/(home)/pc-builder/[category]/_components/search-shell'
-import { getImageUrl } from '@/lib'
+import { FilterCapsule } from '@/app/(home)/pc-builder/[category]/[id]/_components'
+import { ProductBlock } from '@/app/(home)/pc-builder/[category]/[id]/_components/product-block'
+import { SearchShell } from '@/app/(home)/pc-builder/[category]/[id]/_components/search-shell'
+import { auth } from '@/auth'
+import { generateBuildName, getImageUrl } from '@/lib'
 import { prisma } from '@/lib/prisma'
 import { SpecSection } from '@/types'
+import { redirect } from 'next/navigation'
 
 type BuilderCategoryPageProps = {
-  params: Promise<{ category: string }>
+  params: Promise<{ category: string; id: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
@@ -14,7 +16,23 @@ export default async function BuilderCategoryPage({
   params,
   searchParams,
 }: BuilderCategoryPageProps) {
-  const { category: categorySlug } = await params
+  const { category: categorySlug, id: buildId } = await params
+  const session = await auth()
+
+  if (buildId && session?.user.id) {
+    const existingBuild = await prisma.build.findFirst({
+      where: {
+        id: buildId,
+        userId: session.user.id,
+      },
+      select: { id: true },
+    })
+
+    if (!existingBuild) {
+      redirect('/')
+    }
+  }
+
   const sParams = await searchParams
 
   const { search, ...technicalFilters } = sParams
@@ -105,7 +123,7 @@ export default async function BuilderCategoryPage({
         name: product.name,
         price: product.price,
         quantity: product.quantity,
-        productImg,
+        imgSrc: productImg,
         category: product.category.slug,
         specification: (product.specification as SpecSection[]) ?? [],
         technical: (product.technical as Record<string, string>) ?? {},

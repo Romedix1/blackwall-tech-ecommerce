@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 
 type LinkType = {
   href: string
@@ -12,31 +12,41 @@ type LinkType = {
 
 type NavigationLinksProps = {
   links: LinkType[]
+  isPcBuilderLink?: boolean
 }
 
-export const NavigationLinks = ({ links }: NavigationLinksProps) => {
+export const NavigationLinks = ({
+  links,
+  isPcBuilderLink = false,
+}: NavigationLinksProps) => {
   const pathname = usePathname()
+
+  const params = useParams()
+  const id = params?.id as string
 
   return (
     <ul className="flex gap-3 overflow-x-auto pb-4 lg:w-full lg:flex-col">
       {links.map((link) => {
+        const fullHref = isPcBuilderLink ? `${link.href}/${id}` : link.href
+        const isActive = pathname === fullHref
+
         return (
           <li
             key={link.sr}
             className={cn(
               'text-xs font-bold uppercase lg:text-sm 2xl:text-base',
-              pathname === `${link.href}` && 'text-accent',
+              isActive && 'text-accent',
             )}
           >
             <Link
-              href={`${link.href}`}
+              href={fullHref}
               className="terminal-hover group overflow-hidden whitespace-nowrap"
             >
               <span aria-hidden="true">
                 <span
                   className={cn(
                     'mr-2 hidden group-hover:inline-block group-focus:inline-block',
-                    pathname === `${link.href}` && 'inline-block',
+                    isActive && 'inline-block',
                   )}
                 >
                   &gt;

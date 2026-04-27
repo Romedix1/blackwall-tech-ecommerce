@@ -1,7 +1,31 @@
-import { Button } from '@/components/ui'
-import Link from 'next/link'
+'use client'
 
-export const BuildPcDescription = () => {
+import { BuildLimitModal } from '@/app/(home)/_components/build-pc/build-limit-modal'
+import { Button } from '@/components/ui'
+import { initiateBuildConfig } from '@/lib/actions'
+import { useState, useTransition } from 'react'
+
+type BuildPcDescriptionProps = {
+  buildsCount: number
+}
+
+export const BuildPcDescription = ({
+  buildsCount,
+}: BuildPcDescriptionProps) => {
+  const [isPending, startTransition] = useTransition()
+  const [isLimitReached, setIsLimitReached] = useState(false)
+
+  const handleClick = () => {
+    startTransition(async () => {
+      if (buildsCount >= 5) {
+        setIsLimitReached(true)
+        return
+      }
+
+      await initiateBuildConfig()
+    })
+  }
+
   return (
     <div className="mt-8 font-medium uppercase lg:w-5/12">
       <p className="text-accent mb-1 text-xs sm:text-sm lg:mb-2 xl:mb-6 2xl:text-base">
@@ -25,14 +49,23 @@ export const BuildPcDescription = () => {
         </p>
       </div>
 
+      {isLimitReached && (
+        <BuildLimitModal onClose={() => setIsLimitReached(false)} />
+      )}
+
       <Button
-        asChild
+        onClick={handleClick}
+        disabled={isPending}
         className="mt-6 flex items-center justify-center lg:w-full 2xl:h-20 2xl:text-xl"
       >
-        <Link href="/pc-builder/cpu">
-          <span aria-hidden="true">[ Start_configuration ]</span>
-          <span className="sr-only">Start configuration</span>
-        </Link>
+        <span aria-hidden="true">
+          {isPending
+            ? '[ Initializing_Protocol... ]'
+            : '[ Start_configuration ]'}
+        </span>
+        <span className="sr-only">
+          {isPending ? 'Initializing' : 'Start configuration'}
+        </span>
       </Button>
     </div>
   )

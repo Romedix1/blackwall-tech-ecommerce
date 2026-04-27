@@ -1,7 +1,5 @@
 import { DashboardHeader } from '@/app/dashboard/(dashboard)/_components'
 import {
-  SettingsHeader,
-  SettingsSection,
   SecuritySection,
   UsernameSection,
   AddressSection,

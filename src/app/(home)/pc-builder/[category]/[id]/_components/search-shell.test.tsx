@@ -1,4 +1,4 @@
-import { SearchShell } from '@/app/(home)/pc-builder/[category]/_components'
+import { SearchShell } from '@/app/(home)/pc-builder/[category]/[id]/_components'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 

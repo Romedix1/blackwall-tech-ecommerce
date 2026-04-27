@@ -1,4 +1,4 @@
-import { FilterCapsule } from '@/app/(home)/pc-builder/[category]/_components/filter-capsule'
+import { FilterCapsule } from '@/app/(home)/pc-builder/[category]/[id]/_components/filter-capsule'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 

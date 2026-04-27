@@ -330,7 +330,7 @@ export default async function orderDetailsPage({
                       </td>
 
                       <td className="my-2 pb-2 uppercase sm:px-6 sm:py-5 sm:text-right">
-                        <p className="text-accent font-mono text-sm lg:text-base">
+                        <p className="text-accent text-sm lg:text-base">
                           <span className="sm:hidden">Price: </span>
                           <span className="inline-block">
                             $ {item.price.toFixed(2)}
