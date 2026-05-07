@@ -16,17 +16,9 @@ type BuilderItem = {
 
 type BuilderStore = {
   items: BuilderItem[]
-  addItem: (
-    slug: string,
-    name: string,
-    price: number,
-    quantity: number,
-    imgSrc: string | null,
-    category: string,
-    technical: Record<string, string>,
-    stock?: number,
-    isLoggedIn?: boolean,
-  ) => Promise<void>
+  buildId: string | null
+  setBuildId: (id: string) => void
+  addItem: (item: BuilderItem, isLoggedIn?: boolean) => Promise<void>
   removeItem: (slug: string, isLoggedIn?: boolean) => Promise<void>
   updateQuantity: (
     slug: string,
@@ -38,7 +30,13 @@ type BuilderStore = {
 
 let timeoutId: ReturnType<typeof setTimeout>
 
-const debouncedSaveToDb = (items: BuilderItem[], status: string) => {
+const debouncedSaveToDb = (
+  items: BuilderItem[],
+  status: string,
+  buildId: string | null,
+) => {
+  if (!buildId) return
+
   clearTimeout(timeoutId)
 
   timeoutId = setTimeout(async () => {
@@ -48,10 +46,13 @@ const debouncedSaveToDb = (items: BuilderItem[], status: string) => {
         quantity: item.quantity,
       }))
 
-      await saveBuildToDb({
-        items: itemsToSave,
-        status,
-      })
+      await saveBuildToDb(
+        {
+          items: itemsToSave,
+          status,
+        },
+        buildId,
+      )
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('[ BUILD_SYNC_ERROR ]: ', error)
@@ -62,72 +63,59 @@ const debouncedSaveToDb = (items: BuilderItem[], status: string) => {
 
 export const useBuilder = create<BuilderStore>()(
   persist(
-    (set, get) => ({
-      items: [] as BuilderItem[],
-      setItems: (items) => set({ items }),
-      addItem: async (
-        slug,
-        name,
-        price,
-        quantity,
-        imgSrc,
-        category,
-        technical,
-        stock,
-        isLoggedIn = false,
-      ) => {
-        const currentItems = get().items
-        if (currentItems.find((item) => item.slug === slug)) return
-
-        const newItems = [
-          ...currentItems,
-          { slug, name, price, quantity, stock, imgSrc, technical, category },
-        ]
-
+    (set, get) => {
+      const refreshAndSync = (newItems: BuilderItem[], isLoggedIn: boolean) => {
         set({ items: newItems })
 
         const powerStats = getPowerStats(newItems)
         const statusResult = getBuildStatus(newItems, powerStats)
         const currentStatus = statusResult.status || 'idle'
 
-        if (isLoggedIn) debouncedSaveToDb(newItems, currentStatus)
-      },
+        if (isLoggedIn) {
+          debouncedSaveToDb(newItems, currentStatus, get().buildId)
+        }
+      }
+      return {
+        items: [] as BuilderItem[],
+        buildId: null,
+        setBuildId: (id) => {
+          const currentId = get().buildId
 
-      removeItem: async (slug, isLoggedIn = false) => {
-        set((state) => ({
-          items: state.items.filter((item) => item.slug !== slug),
-        }))
+          if (id !== currentId) {
+            set({ buildId: id, items: [] })
+          } else {
+            set({ buildId: id })
+          }
+        },
 
-        const items = get().items
+        setItems: (items) => set({ items }),
+        addItem: async (item, isLoggedIn = false) => {
+          const currentItems = get().items
+          if (currentItems.find((i) => i.slug === item.slug)) return
 
-        const powerStats = getPowerStats(items)
-        const statusResult = getBuildStatus(items, powerStats)
-        const currentStatus = statusResult.status || 'idle'
+          const newItems = [...currentItems, item]
+          refreshAndSync(newItems, isLoggedIn)
+        },
 
-        if (isLoggedIn) debouncedSaveToDb(items, currentStatus)
-      },
+        removeItem: async (slug, isLoggedIn = false) => {
+          const newItems = get().items.filter((item) => item.slug !== slug)
+          refreshAndSync(newItems, isLoggedIn)
+        },
 
-      updateQuantity: async (slug, quantity, isLoggedIn = false) => {
-        set((state) => ({
-          items: state.items.map((item) =>
+        updateQuantity: async (slug, quantity, isLoggedIn = false) => {
+          const newItems = get().items.map((item) =>
             item.slug === slug
               ? { ...item, quantity: Math.max(1, quantity) }
               : item,
-          ),
-        }))
+          )
 
-        const items = get().items
-
-        const powerStats = getPowerStats(items)
-        const statusResult = getBuildStatus(items, powerStats)
-        const currentStatus = statusResult.status || 'idle'
-
-        if (isLoggedIn) debouncedSaveToDb(items, currentStatus)
-      },
-    }),
+          refreshAndSync(newItems, isLoggedIn)
+        },
+      }
+    },
     {
-      name: 'build',
-      partialize: (state) => ({ items: state.items }),
+      name: 'build-storage',
+      partialize: (state) => ({ items: state.items, buildId: state.buildId }),
     },
   ),
 )

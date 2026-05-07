@@ -51,7 +51,7 @@ export const BuilderNav = async () => {
         </h2>
 
         <div className="relative w-full min-w-0">
-          <NavigationLinks links={LINKS} />
+          <NavigationLinks links={LINKS} isPcBuilderLink={true} />
         </div>
       </>
     </nav>

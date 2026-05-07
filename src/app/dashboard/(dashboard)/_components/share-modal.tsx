@@ -157,7 +157,6 @@ export const ShareModal = ({
               readOnly
               value={shareLink}
               aria-label="Publish link"
-              className="text-text-main"
             />
             <Button
               onClick={() => navigator.clipboard.writeText(shareLink)}

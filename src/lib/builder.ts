@@ -174,8 +174,30 @@ export const getStatusTextColor = (status: string) => {
     case 'warning':
       return 'text-warning'
     case 'idle':
-      return 'text-indigo-600'
+      return 'text-blue-400'
     default:
       return 'text-accent'
   }
+}
+
+export const generateBuildName = () => {
+  const prefixes = [
+    'ALPHA',
+    'VOID',
+    'PHANTOM',
+    'NEON',
+    'CORE',
+    'GHOST',
+    'ZENITH',
+  ]
+  const suffixes = ['STRIKE', 'PROTOCOL', 'ZERO', 'LINK', 'DRIVE', 'GRID']
+  const hex = Math.floor(Math.random() * 0xfff)
+    .toString(16)
+    .toUpperCase()
+    .padStart(3, '0')
+
+  const p = prefixes[Math.floor(Math.random() * prefixes.length)]
+  const s = suffixes[Math.floor(Math.random() * suffixes.length)]
+
+  return `${p}_${s}-${hex}`
 }

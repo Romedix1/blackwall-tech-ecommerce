@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@/auth'
-// import { generateBuildName } from '@/lib/builder'
+import { generateBuildName } from '@/lib/builder'
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
@@ -127,7 +127,7 @@ export async function initiateBuildConfig() {
 
   const newBuild = await prisma.build.create({
     data: {
-      name: ' generateBuildName()',
+      name: generateBuildName(),
       userId: session.user.id,
       status: 'idle',
     },
@@ -185,4 +185,15 @@ export async function deleteBuild(buildId: string) {
 
     return { success: false }
   }
+}
+
+export async function updateBuildName(
+  buildId: string,
+  userId: string,
+  name: string,
+) {
+  return await prisma.build.update({
+    where: { id: buildId, userId: userId },
+    data: { name },
+  })
 }

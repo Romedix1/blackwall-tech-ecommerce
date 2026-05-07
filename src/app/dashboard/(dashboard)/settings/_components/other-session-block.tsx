@@ -1,6 +1,6 @@
 'use client'
 
-import { TerminateSingleSessionModal } from '@/app/dashboard/(dashboard)/settings/_components/terminate-single-session-modal.test'
+import { TerminateSingleSessionModal } from '@/app/dashboard/(dashboard)/settings/_components'
 import { SessionType } from '@/types'
 import { useState } from 'react'
 
